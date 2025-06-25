@@ -1,8 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from src.frangi import frangi_filter
+from src.enhancement.frangi import frangi_filter
 from time import time
-from pipeline import process_volume
+from src.pipeline import process_volume
 
 def scale_size_influence():
     scale_steps = [1, 2, 3, 4, 5] 
@@ -25,7 +25,7 @@ def scale_size_influence():
         
         # Parallel processing
         t3 = time()
-        process_volume(volume, chunk_size, scales)
+        process_volume(volume, chunk_size, {'scales': scales})
         t4 = time()
         
         # Save times
@@ -80,7 +80,7 @@ def volume_size_influence():
         
         # Parallel processing
         t3 = time()
-        process_volume(volume, chunk_size, scales)
+        process_volume(volume, chunk_size, {'scales': scales})
         t4 = time()
         
         # Save times
@@ -142,7 +142,7 @@ import matplotlib.pyplot as plt
 from time import time
 
 def chunk_size_influence():
-    volume_sizes = [100, 200, 300, 400, 500]
+    volume_sizes = [100, 200, 300]# , 400, 500]
     
     chunk_ratios = [15, 20, 25, 30, 35, 40, 45]
     all_times = []
@@ -154,7 +154,7 @@ def chunk_size_influence():
 
         for chunk_size in chunk_sizes:
             t1 = time()
-            process_volume(volume, chunk_size, scales)
+            process_volume(volume, chunk_size, {'scales': scales})
             t2 = time()
             times.append(t2 - t1)
         

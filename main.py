@@ -1,6 +1,6 @@
 from utils.loader import load
 from utils.viewer import display_animation, display_volume 
-from pipeline import *
+from utils.chunker import *
 from time import time
 import numpy as np
 

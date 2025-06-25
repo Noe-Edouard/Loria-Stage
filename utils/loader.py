@@ -6,15 +6,8 @@ import nibabel as nib
 import SimpleITK as sitk
 import os
 
-def crop_center(image: np.ndarray, target_shape: tuple) -> np.ndarray:
-    """Crop the center of the image to match the target shape."""
-    slices = tuple(
-        slice((s - t) // 2, (s - t) // 2 + t)
-        for s, t in zip(image.shape, target_shape)
-    )
-    return image[slices]
 
-def load(filename: str, crop_to: tuple = None) -> np.ndarray:
+def load(filename: str) -> np.ndarray:
     path = Path(filename)
     suffixes = path.suffixes
     print(f'Loading file {path.stem} ...')
@@ -45,12 +38,6 @@ def load(filename: str, crop_to: tuple = None) -> np.ndarray:
     else:
         raise ValueError('Unsupported file type. Use .jpg, .tif, .tiff, .nii(.gz), or .mhd')
 
-    # Crop image
-    if crop_to is not None:
-        if len(image.shape) < len(crop_to):
-            raise ValueError("Target crop shape has more dimensions than the image.")
-        print(f'Cropping to center with shape {crop_to} ...')
-        image = crop_center(image, crop_to)
 
     print(f'File {path.stem} loaded ! Volume shape: {image.shape}.')
     return image
@@ -64,15 +51,10 @@ def save(image: np.ndarray, filename: str):
         image_nii = nib.Nifti1Image(image, affine=np.eye(4))
         nib.save(image_nii, filename)
     else:
-        raise ValueError('Saving only supported for .nii format for now')
+        raise ValueError('Saving only supported for .nii format (for now...)')
 
     print(f'File {basename} saved!')
     
-
-from pathlib import Path
-from skimage import io
-import tifffile as tiff
-import nibabel as nib
 
 def get_metadata(filename):
     path = Path(filename)
