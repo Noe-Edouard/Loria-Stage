@@ -1,60 +1,86 @@
-import numpy as np
-from utils.chunker import chunk_volume, pad_volume, unchunk_volume, unpad_volume, crop_volume
-from concurrent.futures import ProcessPoolExecutor
-from src.enhancement.frangi import frangi_filter
-from tqdm import tqdm
+from pathlib import Path
+from utils.logger import setup_logger
+from utils.config import Config, ConfigParams
+from utils.decorator import log_call, log_time
+from datetime import datetime 
+from utils.io import DataIO
+from src.estimator import Estimator
+from src.enhancer import Enhancer 
+from src.segmenter import Segmenter
+from utils.viewer import Viewer
 
-import os
-import sys
-# sys.path.append(os.path.dirname().parent().parent())
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+class Pipeline:
+    @log_call
+    def __init__(self, config: Config):
+        self.config = config.config
+        
+        # Paths
+        self.run_name = datetime.now().strftime("%Y-%m-%d_%H-%M-%S_") + self.config.experiment.name
+        
+        self.input_file = self.config.experiment.input_file
+        self.output_file = self.config.experiment.output_file
+        
+        self.input_dir = Path(self.config.experiment.input_dir)
+        self.output_dir = Path(self.config.experiment.output_dir)
+        self.log_dir = Path(self.config.experiment.log_dir)
+        self.input_dir.mkdir(parents=True, exist_ok=True)
+        self.output_dir.mkdir(parents=True, exist_ok=True)
+        self.log_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Logger
+        self.debug_mode = self.config.experiment.debug_mode
+        self.logger = setup_logger("pipeline", log_dir=self.log_dir, debug_mode=self.debug_mode)
+        self. logger.info(f'[INIT] Pipeline initialized - Experiment {self.config.experiment.name}')
 
-from utils.logger import debug_logger
+        # Loader
+        self.io = DataIO(self.input_dir, self.output_dir, self.logger)
+        
+        # Estimator
+        self.estimator = Estimator(self.config.methods.estimator)
+        
+        # Enhancer
+        self.enhancer = Enhancer(self.config.methods.enhancer)
+        
+        # Segmenter
+        self.segmenter = Segmenter(self.config.methods.segmenter)
+        
+        # Viewer
+        self.viewer = Viewer()
+        
+    @log_time
+    @log_call
+    def run(self):
+        self.logger.info("[START] Pipeline execution start.")
+        data = self.io.load_data(
+            filename=self.input_file,
+            normalize=self.config.experiment.normalize,
+            crop=self.config.experiment.crop,
+            target_shape=self.config.experiment.target_shape,
+        )
+        self.config.enhancement.compute_hessian = self.estimator.compute_hessian()
+        enhanced_data = self.enhancer.enhance_data(
+            data=data,
+            processing_params=self.config.processing,
+            enhancement_params=self.config.enhancement,
+            hessian_params=self.config.hessian
+        )
+        
+        segmented_data = self.segmenter.segment_data(
+            data=enhanced_data,
+            segmentation_params=self.config.segmentation
+        )
+        
+        # Save data
+        self.path_enhancement = f'{self.run_name}_enhanced_{self.output_file}'
+        self.path_segmented = f'{self.run_name}_segmented_{self.output_file}'
+        self.io.save_data(enhanced_data, self.path_enhancement)
+        self.io.save_data(segmented_data, self.path_segmented)
+        
+        
+        self.viewer.display_histogram([data, enhanced_data, segmented_data], ['RAW', 'ENHANCED', 'SEGMENTED'])
+        self.viewer.display_slices([data, enhanced_data, segmented_data], ['RAW', 'ENHANCED', 'SEGMENTED'])
+        self.viewer.display_volume(volume=enhanced_data, threshold=self.config.segmentation.threshold)
+        
+        self.logger.info("[END] Pipelien execution end.")
 
-def apply_enhancement(volume, params, method='frangi', normalize=True):
-    if method == 'frangi':
-        print("Filtering Frangi")
-        scales = params.get('scales', np.arange(1, 10, 2))
-        alpha = params.get('alpha', 0.5)
-        beta = params.get('beta', 0.5)
-        gamma = params.get('gamma', None)
-        mode = params.get('mode', 'reflect')
-        cval = params.get('cval', 0)
-        enhanced_volume = frangi_filter(volume, scales, alpha, beta, gamma, mode, cval)
-    else:
-        raise ValueError(f'Method {method} not found. Only following methods are supported: "frangi"')
-    if normalize:
-        normalized_enhanced_volume = (enhanced_volume - np.min(enhanced_volume)) / (np.max(enhanced_volume) - np.min(enhanced_volume))
-    return normalized_enhanced_volume
-
-
-def pool_function(args):
-    chunk, params = args
-    print(type(chunk), type(params))
-    return apply_enhancement(chunk, params)
-
-# @debug_logger
-def process_volume(volume, chunk_size, params):
-    
-    # Pad volume
-    padded_volume, padding = pad_volume(volume, chunk_size)
-    
-    # Chunk volume 
-    chunks = chunk_volume(padded_volume, chunk_size)
-    flat_chunks = chunks.reshape(-1, *chunk_size)
-    
-    args = [(chunk, params) for chunk in flat_chunks]
-    with ProcessPoolExecutor() as executor:
-        processed_chunks = list(tqdm(executor.map(pool_function, args), total = len(args)))
-    
-    # Reshape chunks
-    processed_chunks = np.stack(processed_chunks)
-    processed_chunks = processed_chunks.reshape(chunks.shape)
-    
-    # Unchunk volume
-    processed_volume = unchunk_volume(processed_chunks)
-    
-    # Unpad volume
-    processed_volume = unpad_volume(processed_volume, padding)
-    
-    return processed_volume
+        return data, enhanced_data, segmented_data

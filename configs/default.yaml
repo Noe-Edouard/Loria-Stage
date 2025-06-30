@@ -1,0 +1,19 @@
+experiment_name: "test_rehaussement_vasculaire"
+
+paths:
+  data_dir: "../data"
+  output_dir: "../outputs/results"
+  log_dir: "../outputs/logs"
+
+enhancement:
+  method: "frangi"
+  scale_range: [1, 10]
+  beta: 0.5
+  alpha: 0.5
+
+hessian:
+  method: "farid"
+
+logging:
+  level: "INFO" # DEBUG, INFO, WARNING, ERROR
+

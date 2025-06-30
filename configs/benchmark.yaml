@@ -1,0 +1,37 @@
+experiment:
+  name: "test_run"
+  debug_mode: true
+  data: "data.nii"
+  input_dir: "data/raw"
+  output_dir: "outputs/results"
+  logs_dir: "outputs/logs"
+
+data:
+  input_path: "data/input_image.nii" # chemin vers les données à charger
+
+enhancement:
+  method: "frangi" # méthode de réhaussement (exemple)
+  parallelize: true
+  chunk_size: [100, 100, 100]
+  overlap_size: 10
+  params:
+    alpha: 0.5
+    beta: 0.5
+    gamma: null
+    mode: "reflect"
+    cval: null
+    scales_range: [1, 10]
+    scales_step: 2
+
+hessian:
+  method: "eigen" # méthode pour calcul de la matrice hessienne
+
+output:
+  save_format: "txt" # format de sauvegarde (txt, npy, etc.)
+
+viewer:
+  displays:
+    mip: true
+    volume: true
+    slice: true
+    histogram: true
