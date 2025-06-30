@@ -1,10 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from time import perf_counter
-from src.enhancer import Enhancer
-from tabulate import tabulate
 from pathlib import Path
 from typing import Sequence
+from tabulate import tabulate
+from time import perf_counter
+
+from src.enhancer import Enhancer
 from utils.logger import setup_logger
 
 logger = setup_logger(name='benchmark', debug_mode=True)

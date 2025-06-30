@@ -1,5 +1,5 @@
 import numpy as np
-from typing import Union, Tuple, Literal, Optional
+from typing import Tuple, Literal, Optional
 
 class Chunker:
     def __init__(

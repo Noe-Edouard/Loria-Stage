@@ -1,39 +1,41 @@
 experiment:
-  name: "test_experiment"
+  name: test_experiment
   debug_mode: true
   normalize: true
   crop: true
   target_shape: [64, 64, 64]
-  input_file: "input.nii.gz"
-  output_file: "output.nii.gz"
-  input_dir: "data/test"
-  output_dir: "outputs/test"
-  log_dir: "logs/test"
+  input_file: test.nii
+  log_file: test
+  input_dir: data/test
+  output_dir: outputs/test
+  log_dir: logs/test
 
 methods:
-  estimator: "default"
-  enhancer: "frangi"
-  segmenter: "tresholding"
+  derivator: default
+  enhancer: frangi
+  segmenter: thresholding
 
 hessian:
-  mode: "reflect"
+  mode: reflect
   cval: 0.0
   use_gaussian_derivatives: true
 
 processing:
   normalize: true
-  parallelize: false ########
-  chunk_size: [64, 64, 64]
+  parallelize: false
+  chunk_size: [32, 32, 32]
   overlap_size: 8
 
 enhancement:
   alpha: 0.5
   beta: 0.5
-  gamma: null
-  scales: [2, 4, 8]
-  scales_number: null ######
-  scales_range: null ######
+  gamma: 15
+  scales: [0, 2, 4, 6, 8]
+  scales_number: null
+  scales_range: null
+  black_ridges: false
+  skimage: false
 
 segmentation:
-  method: "thresholding"
+  method: thresholding
   threshold: 0.5

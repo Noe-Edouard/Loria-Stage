@@ -1,25 +1,27 @@
 import numpy as np
 import gc
-from skimage.feature import hessian_matrix, hessian_matrix_eigvals
-from typing import Callable, Optional, Sequence, Literal, Tuple, Dict, Any
-
 import dask.array as da
 from dask.diagnostics import ProgressBar
+from skimage.feature import hessian_matrix, hessian_matrix_eigvals
+from skimage.filters import frangi as frangi_skimage
+from typing import Callable, Optional, Sequence, Literal, Tuple
 
 from utils.decorator import log_call
 from utils.helpers import normalize_data
 from utils.config import HessianParams, EnhancementParams, ProcessingParams
+from utils.logger import Logger, setup_logger
 
 
 class Enhancer:
     
-    def __init__(self, method: Literal['frangi']):
+    def __init__(self, method: Literal['frangi'], logger : Logger = setup_logger()):
+        self.logger = logger
         self.method = method
         self.selector = {
-            'frangi': self.frangi
+            'frangi': self.frangi,
         }
 
-    @log_call
+    @log_call()
     def enhance_data(
         self, 
         data: np.ndarray, 
@@ -28,7 +30,6 @@ class Enhancer:
         hessian_params: HessianParams,
     ) -> np.ndarray:
         
-
         # Prepare params
         filter_params, enhancement_function, normalize, parallelize, chunk_size, overlap_size = self._prepare_enhancement(
             processing_params=processing_params,
@@ -138,64 +139,74 @@ class Enhancer:
             result = normalize_data(result)
         
         return result
-
-
-    @log_call
+    
+    
+    @log_call()
     def frangi(
         self,
         image: np.ndarray,
-        compute_hessian: Callable[..., list[np.ndarray]] = hessian_matrix,
-        scales: Optional[Sequence[int]] = range(1, 10, 2),
+        hessian_function: Callable[..., list[np.ndarray]] = hessian_matrix,
+        scales: Optional[Sequence[int]] = range(0, 10, 2),
         scales_number: Optional[int] = None,
         scales_range: Optional[Tuple[int, int]] = None,
         alpha: float = 0.5,
         beta: float = 0.5,
         gamma: Optional[float] = None,
-        hessian_params: dict = {'mode': 'reflect', 'cval': 0, 'use_gaussian_derivatives': False},
+        black_ridges: Optional[bool] = False,
+        hessian_params: dict = {'mode': 'reflect', 'cval': 0, 'use_gaussian_derivatives': True},
+        skimage = False,
     ) -> np.ndarray:
+                
         
-        if scales_number and scales_range:
-            scales = np.linspace(scales_range[0], scales_range[1], scales_number, dtype=int)
+        if skimage:
+            self.logger.info('The enhancement is done with frangi function from skimage.')
+            # use_gaussian_derivative=True by default (can't be changed)
+            return frangi_skimage(image, sigmas=scales, alpha=alpha, beta=beta, gamma=gamma, black_ridges = black_ridges)
         
-        image = image.astype(np.float32, copy=False)
-        filtered_image = np.zeros_like(image)
+        else:
+            
+            if scales_number and scales_range:
+                scales = np.linspace(scales_range[0], scales_range[1], scales_number, dtype=int)
         
-        for scale in scales:
-            hessian = compute_hessian(image, scale=scale, **hessian_params)
+            image = image.astype(np.float32, copy=False)
+            if not black_ridges:
+                image = -image
             
-            eigvals = hessian_matrix_eigvals(hessian)
-            # eigvals = np.take_along_axis(eigvals, np.abs(eigvals).argsort(0), axis=0)
-            eigvals = np.sort(np.abs(eigvals), axis=0)
-            
-            
-            # !div0
-            eigvals[eigvals == 0] = 1e-10
+            filtered_image = np.zeros_like(image)
+            for scale in scales:
+                hessian = hessian_function(image, sigma=scale, **hessian_params)
+                
+                eigvals = hessian_matrix_eigvals(hessian)
+                eigvals = np.take_along_axis(eigvals, np.abs(eigvals).argsort(0), axis=0)
+                # eigvals = np.sort(np.abs(eigvals), axis=0)
+                
+                # eigvals[eigvals <= 0] = 1e-10
+                if image.ndim == 2:
+                    lambda1, lambda2 = np.maximum(eigvals, 1e-10)
+                    r_a = np.inf
+                    r_b = lambda1 / lambda2
+                    
+                else:  # ndim == 3
+                    lambda1, lambda2, lambda3 = np.maximum(eigvals, 1e-10)
+                    r_a = lambda2 / lambda3
+                    r_b = lambda1 / np.sqrt(lambda2 * lambda3)
+                
+                s = np.sqrt((eigvals**2).sum(axis=0))
 
-            if image.ndim == 2:
-                lambda1, lambda2 = eigvals
-                r_b = np.abs(lambda1) / np.abs(lambda2)
-                vesselness = 1.0
-            else:  # ndim == 3
-                lambda1, lambda2, lambda3 = eigvals
-                r_a = np.abs(lambda2) / np.abs(lambda3)
-                r_b = np.abs(lambda1) / np.sqrt(np.abs(lambda2 * lambda3))
-                vesselness = 1.0 - np.exp(-(r_a**2) / (2 * alpha**2))    # Plateness
-            
-            s = np.sqrt((eigvals**2).sum(axis=0))
-
-            # Compute gamma
-            if gamma is None:
-                gamma = s.max() / 2 if s.max() != 0 else 1
-
-            vesselness *= np.exp(-(r_b**2) / (2 * beta**2))              # Blobness
-            vesselness *= (1.0 - np.exp(-(s**2) / (2 * gamma**2)))       # Brightness
-            
-            filtered_image = np.maximum(filtered_image, vesselness)
-            
-            # Free memory
-            del hessian, eigvals, vesselness, s
-            gc.collect()
-            
-        return filtered_image
-    
-    
+                # Compute gamma
+                if gamma is None:
+                    gamma = s.max() / 2 if s.max() != 0 else 1
+                self.logger.info(f'gamma = {gamma}')
+                vesselness = 1.0 - np.exp(-(r_a**2) / (2 * alpha**2))  # Plateness
+                vesselness *= np.exp(-(r_b**2) / (2 * beta**2))        # Blobness
+                vesselness *= (1.0 - np.exp(-(s**2) / (2 * gamma**2))) # Brightness
+                
+                filtered_image = np.maximum(filtered_image, vesselness)
+                
+                # Free memory
+                del hessian, eigvals, vesselness, s
+                gc.collect()
+                
+            return filtered_image
+        
+   

@@ -2,36 +2,35 @@ from pathlib import Path
 from src.pipeline import Pipeline
 from utils.config import Config
 import numpy as np
-import nibabel as nib
-from utils.viewer import Viewer
+
 
 def test_pipeline():
     config_dict = {
         "experiment": {
-            "name": "test_experiment",
+            "name": "test_pipeline",
             "debug_mode": True,
             "normalize": True,
-            "crop": False,
+            "crop": True,
             "target_shape": [64, 64, 64],
-            "input_file": "spiral.nii",
-            "output_file": "output.nii",
+            "input_file": "test.nii",
+            "log_file": "tests",
             "input_dir": "data/test",
             "output_dir": "outputs/test",
-            "log_dir": "logs/test"
+            "log_dir": "logs"
         },
         "methods": {
-            "estimator": "default",
+            "derivator": "default",
             "enhancer": "frangi",
             "segmenter": "thresholding"
         },
         "hessian": {
             "mode": "reflect",
             "cval": 0.0,
-            "use_gaussian_derivatives": False
+            "use_gaussian_derivatives": True
         },
         "processing": {
             "normalize": True,
-            "parallelize": True,
+            "parallelize": False,
             "chunk_size": [32, 32, 32],
             "overlap_size": 8
         },
@@ -41,11 +40,13 @@ def test_pipeline():
             "gamma": 15,
             "scales": np.arange(0, 10, 2),
             "scales_number": None,
-            "scales_range": None
+            "scales_range": None,
+            "black_ridges": False,
+            "skimage": False,
         },
         "segmentation": {
             "method": "thresholding",
-            "threshold": 0.1
+            "threshold": 0.8
         }
     }
 
@@ -54,6 +55,10 @@ def test_pipeline():
     pipeline = Pipeline(config)
     pipeline.run()
 
-    # viewer = Viewer()
-    # viewer.display_images([data, enhanced_data, segmented_data], ['data', 'enhanced_data', 'segmented_data'])
-    # viewer.display_slices([data, enhanced_data, segmented_data], ['data', 'enhanced_data', 'segmented_data'])
+    
+# ================== REMARQUES ================== # 
+
+# "use_gaussian_derivatives": False donne de mauvais résultats (notamment quand on crop trop fort)
+# Lorsque l'on utilise la parallelisation, il faut fixer gamma sinon il y a des problèmes d'intensité
+# il est très important d'initialiser les scales np.arange(0, 10, 2) et pas np.arange(1, 10, 2)
+# il est impératif de normaliser sinon les résultats sont  incohérents.

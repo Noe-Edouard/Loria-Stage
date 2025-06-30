@@ -1,0 +1,6 @@
+2025-06-30 18:26:26 - [DEBUG]: - [CALL] "__init__"
+          - args:   [<src.pipeline.Pipeline object at 0x00000247E25309B0>, <utils.config.Config object at 0x00000247E79AF560>]
+          - kwargs: { None }
+2025-06-30 18:33:27 - [DEBUG]: - [CALL] "__init__"
+          - args:   [<src.pipeline.Pipeline object at 0x0000019CA10E19A0>, <utils.config.Config object at 0x0000019C9B77DD60>]
+          - kwargs: { None }

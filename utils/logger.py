@@ -1,11 +1,12 @@
+import sys
+import colorlog
 import logging
 from logging.handlers import RotatingFileHandler
 from logging import Logger
 from pathlib import Path
-import sys
-import colorlog
 
-def setup_logger(name: str = "default", log_dir: str | Path = "outputs/logs", debug_mode: bool = False) -> Logger:
+
+def setup_logger(name: str = "default", log_dir: str | Path = "logs", debug_mode: bool = False) -> Logger:
     logger = logging.getLogger(name)
     logger.setLevel(logging.DEBUG)
 

@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
 from pathlib import Path
-from utils.io import DataIO
+from utils.loader import Loader
 
 import imageio.v3 as iio
 import nibabel as nib
@@ -26,12 +26,12 @@ def create_mhd(path):
     sitk.WriteImage(img, str(path))
 
 @pytest.fixture
-def dataio(tmp_path):
+def loader(tmp_path):
     input_dir = tmp_path / "input"
     output_dir = tmp_path / "output"
     input_dir.mkdir()
     output_dir.mkdir()
-    return DataIO(input_dir=input_dir, output_dir=output_dir)
+    return Loader(input_dir=input_dir)
 
 @pytest.mark.parametrize("ext,creator", [
     ("jpg", create_jpg),
@@ -39,27 +39,27 @@ def dataio(tmp_path):
     ("nii", create_nii),
     ("mhd", create_mhd),
 ])
-def test_load(dataio, tmp_path, ext, creator):
+def test_load(loader, tmp_path, ext, creator):
     filename = f"sample.{ext}"
     file_path = tmp_path / "input" / filename
     creator(file_path)
 
     # Test loading
-    data = dataio.load_data(filename)
+    data = loader.load_data(filename)
     assert isinstance(data, np.ndarray)
 
     # Test metadata extraction
-    metadata = dataio.get_metadata(filename)
+    metadata = loader.get_metadata(filename)
     assert isinstance(metadata, dict)
     assert len(metadata) > 0
 
 @pytest.mark.parametrize("creator", [create_nii])
-def test_save(dataio, tmp_path, creator):
+def test_save(loader, tmp_path, creator):
     filename = "test.nii"
     file_path = tmp_path / "input" / filename
     creator(file_path)
 
-    data = dataio.load_data(filename)
-    dataio.save_data(data, "saved_test.nii")
+    data = loader.load_data(filename)
+    loader.save_data(data, "saved_test.nii")
 
     assert (tmp_path / "output" / "saved_test.nii").exists()

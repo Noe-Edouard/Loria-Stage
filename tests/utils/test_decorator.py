@@ -3,7 +3,7 @@ from utils.decorator import format_arg
 import numpy as np
 
 def test_timer(caplog):
-    @log_time
+    @log_time()
     def dummy_func():
         return 42
 
@@ -12,7 +12,7 @@ def test_timer(caplog):
         assert result == 42
         
 def test_caller(caplog):
-    @log_call
+    @log_call()
     def dummy_func(a, b=2):
         return a + b
 

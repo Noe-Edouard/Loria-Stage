@@ -1,0 +1,85 @@
+2025-06-30 18:26:26 - [INFO]: - [INIT] Pipeline initialized - Experiment test_experiment
+2025-06-30 18:26:26 - [DEBUG]: - [CALL] "run"
+          - args:   [<src.pipeline.Pipeline object at 0x00000247E25309B0>]
+          - kwargs: { None }
+2025-06-30 18:26:26 - [INFO]: - [START] Pipeline execution start.
+2025-06-30 18:26:26 - [INFO]: - [LOAD] Data test.nii loaded with shape (195, 155, 150) and normalized.
+2025-06-30 18:26:26 - [DEBUG]: - [CALL] "enhance_data"
+          - args:   [<src.enhancer.Enhancer object at 0x00000247E7E3E120>]
+          - kwargs: { data=ndarray(shape=(195, 155, 150), dtype=float32), processing_params=ProcessingParams(normalize=True, parallelize=False, chunk_size=[32, 32, 32], overlap_size=8), enhancement_params=EnhancementParams(alpha=0.5, beta=0.5, gamma=15, scales=array([0, 2, 4, 6, 8]), scales_number=None, scales_range=None, black_ridges=False, hessian_function=<bound method Derivator.default of <src.derivator.Derivator object at 0x00000247E7E3E150>>, skimage=False), hessian_params=HessianParams(mode='reflect', cval=0.0, use_gaussian_derivatives=True) }
+2025-06-30 18:26:26 - [DEBUG]: - [CALL] "frangi"
+          - args:   [<src.enhancer.Enhancer object at 0x00000247E7E3E120>, ndarray(shape=(195, 155, 150), dtype=float32)]
+          - kwargs: { alpha=0.5, beta=0.5, gamma=15, scales=ndarray(shape=(5,), dtype=int32), scales_number=None, scales_range=None, black_ridges=False, hessian_function=<bound method Derivator.default of <src.derivator.Derivator object at 0x00000247E7C88D70>>, skimage=False, hessian_params=dict(keys=['mode', 'cval', 'use_gaussian_derivatives']) }
+2025-06-30 18:26:32 - [INFO]: - gamma = 15
+2025-06-30 18:26:40 - [INFO]: - gamma = 15
+2025-06-30 18:26:47 - [INFO]: - gamma = 15
+2025-06-30 18:26:56 - [INFO]: - gamma = 15
+2025-06-30 18:27:08 - [INFO]: - gamma = 15
+2025-06-30 18:27:08 - [DEBUG]: - [CALL] "segment_data"
+          - args:   [<src.segmenter.Segmenter object at 0x00000247E7E3E0C0>]
+          - kwargs: { data=ndarray(shape=(195, 155, 150), dtype=float32), segmentation_params=SegmentationParams(threshold=0.2) }
+2025-06-30 18:27:08 - [DEBUG]: - [CALL] "thresholding"
+          - args:   [<src.segmenter.Segmenter object at 0x00000247E7E3E0C0>, ndarray(shape=(195, 155, 150), dtype=float32)]
+          - kwargs: { threshold=0.2 }
+2025-06-30 18:27:08 - [INFO]: - [SAVE] Data file 2025-06-30_18-26-26_test_experiment_enhanced_20250630_182708.npz saved at outputs\test\data\2025-06-30_18-26-26_test_experiment_enhanced_20250630_182708.
+2025-06-30 18:27:09 - [INFO]: - [SAVE] Data file 2025-06-30_18-26-26_test_experiment_segmented_20250630_182708.npz saved at outputs\test\data\2025-06-30_18-26-26_test_experiment_segmented_20250630_182708.
+2025-06-30 18:33:27 - [INFO]: - [INIT] Pipeline initialized - Experiment test_experiment
+2025-06-30 18:33:27 - [DEBUG]: - [CALL] "run"
+          - args:   [<src.pipeline.Pipeline object at 0x0000019CA10E19A0>]
+          - kwargs: { None }
+2025-06-30 18:33:27 - [INFO]: - [START] Pipeline execution start.
+2025-06-30 18:33:27 - [INFO]: - [LOAD] Data test.nii loaded with shape (64, 64, 64) and normalized.
+2025-06-30 18:33:27 - [DEBUG]: - [CALL] "enhance_data"
+          - args:   [<src.enhancer.Enhancer object at 0x0000019CA10E1D30>]
+          - kwargs: { data=ndarray(shape=(64, 64, 64), dtype=float32), processing_params=ProcessingParams(normalize=True, parallelize=False, chunk_size=[32, 32, 32], overlap_size=8), enhancement_params=EnhancementParams(alpha=0.5, beta=0.5, gamma=15, scales=array([0, 2, 4, 6, 8]), scales_number=None, scales_range=None, black_ridges=False, hessian_function=<bound method Derivator.default of <src.derivator.Derivator object at 0x0000019CA10E1D90>>, skimage=False), hessian_params=HessianParams(mode='reflect', cval=0.0, use_gaussian_derivatives=True) }
+2025-06-30 18:33:27 - [DEBUG]: - [CALL] "frangi"
+          - args:   [<src.enhancer.Enhancer object at 0x0000019CA10E1D30>, ndarray(shape=(64, 64, 64), dtype=float32)]
+          - kwargs: { alpha=0.5, beta=0.5, gamma=15, scales=ndarray(shape=(5,), dtype=int32), scales_number=None, scales_range=None, black_ridges=False, hessian_function=<bound method Derivator.default of <src.derivator.Derivator object at 0x0000019CA0C03620>>, skimage=False, hessian_params=dict(keys=['mode', 'cval', 'use_gaussian_derivatives']) }
+2025-06-30 18:33:27 - [INFO]: - gamma = 15
+2025-06-30 18:33:28 - [INFO]: - gamma = 15
+2025-06-30 18:33:28 - [INFO]: - gamma = 15
+2025-06-30 18:33:29 - [INFO]: - gamma = 15
+2025-06-30 18:33:30 - [INFO]: - gamma = 15
+2025-06-30 18:33:30 - [DEBUG]: - [CALL] "segment_data"
+          - args:   [<src.segmenter.Segmenter object at 0x0000019CA10E1CD0>]
+          - kwargs: { data=ndarray(shape=(64, 64, 64), dtype=float32), segmentation_params=SegmentationParams(threshold=0.8) }
+2025-06-30 18:33:30 - [DEBUG]: - [CALL] "thresholding"
+          - args:   [<src.segmenter.Segmenter object at 0x0000019CA10E1CD0>, ndarray(shape=(64, 64, 64), dtype=float32)]
+          - kwargs: { threshold=0.8 }
+2025-06-30 18:33:30 - [INFO]: - [SAVE] Data file 2025-06-30_18-33-30__test_experiment_enhanced.npz saved at outputs\test\data\2025-06-30_18-33-30__test_experiment_enhanced.
+2025-06-30 18:33:30 - [INFO]: - [SAVE] Data file 2025-06-30_18-33-30__test_experiment_segmented.npz saved at outputs\test\data\2025-06-30_18-33-30__test_experiment_segmented.
+2025-06-30 18:33:44 - [INFO]: - [SAVE] Plot saved as 2025-06-30_18-33-42__test_experiment.
+2025-06-30 18:34:30 - [INFO]: - [SAVE] Animation saved as 2025-06-30_18-33-56__test_experiment.gif.
+2025-06-30 18:34:43 - [INFO]: - [SAVE] Plot saved as 2025-06-30_18-34-42__test_experiment.
+2025-06-30 18:34:43 - [INFO]: - [END] Pipelien execution end.
+2025-06-30 18:34:43 - [DEBUG]: - [TIMER] "run" executed in 75.7111 seconds
+2025-06-30 19:03:18 - [INFO]: - [LOAD] Data test.jpg loaded with shape (1320, 1500) and normalized.
+2025-06-30 19:03:18 - [DEBUG]: - [CALL] "frangi"
+                       - args:   [<src.enhancer.Enhancer object at 0x000001E0A6A50050>, ndarray(shape=(1320, 1500), dtype=float32)]
+                       - kwargs: { skimage=False }
+2025-06-30 19:03:18 - [INFO]: - gamma = 1.0
+2025-06-30 19:03:19 - [INFO]: - gamma = 1.0
+2025-06-30 19:03:19 - [INFO]: - gamma = 1.0
+2025-06-30 19:03:20 - [INFO]: - gamma = 1.0
+2025-06-30 19:03:21 - [INFO]: - gamma = 1.0
+2025-06-30 19:03:22 - [DEBUG]: - [CALL] "frangi"
+                       - args:   [<src.enhancer.Enhancer object at 0x000001E0A6A50050>, ndarray(shape=(1320, 1500), dtype=float32)]
+                       - kwargs: { skimage=True }
+2025-06-30 19:03:22 - [INFO]: - The enhancement is done with frangi function from skimage.
+2025-06-30 19:03:48 - [INFO]: - [SAVE] Plot saved as 2025-06-30_19-03-47_test_enhancer_2d_comparison.
+2025-06-30 19:03:49 - [INFO]: - [SAVE] Plot saved as 2025-06-30_19-03-48_test_enhance_2dr_histogram.
+2025-06-30 19:03:49 - [INFO]: - [LOAD] Data test.nii loaded with shape (64, 64, 64) and normalized.
+2025-06-30 19:03:49 - [DEBUG]: - [CALL] "frangi"
+                       - args:   [<src.enhancer.Enhancer object at 0x000001E0A6A50050>, ndarray(shape=(64, 64, 64), dtype=float32)]
+                       - kwargs: { skimage=False, gamma=15 }
+2025-06-30 19:03:49 - [INFO]: - gamma = 15
+2025-06-30 19:03:50 - [INFO]: - gamma = 15
+2025-06-30 19:03:50 - [INFO]: - gamma = 15
+2025-06-30 19:03:51 - [INFO]: - gamma = 15
+2025-06-30 19:03:52 - [INFO]: - gamma = 15
+2025-06-30 19:03:52 - [DEBUG]: - [CALL] "frangi"
+                       - args:   [<src.enhancer.Enhancer object at 0x000001E0A6A50050>, ndarray(shape=(64, 64, 64), dtype=float32)]
+                       - kwargs: { skimage=True, gamma=15 }
+2025-06-30 19:03:52 - [INFO]: - The enhancement is done with frangi function from skimage.
+2025-06-30 19:04:55 - [INFO]: - [SAVE] Animation saved as 2025-06-30_19-04-18_test_enhancer_3d_comparison.gif.
+2025-06-30 19:04:56 - [INFO]: - [SAVE] Plot saved as 2025-06-30_19-04-55_test_enhancer_3d_histogram.

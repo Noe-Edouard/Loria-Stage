@@ -6,14 +6,10 @@ import numpy as np
 from utils.viewer import Viewer  # adapte le chemin si besoin
 
 def debug():
-    from utils.viewer import Viewer
-    from utils.io import DataIO
 
-    io = DataIO("outputs/test")
-    data = io.load_data("2025-06-29_18-16-20test_experiment_enhanced_output.nii")
-    # Viewer().display_slices(data, 'enhanced')
-    # Viewer().display_volume(data, 0.1)
-    Viewer().display_mip(data)
+    data = np.random.rand(32, 32, 62)
+
+    Viewer().display_slices(data)
 
 DEBUG_MODE = False
 

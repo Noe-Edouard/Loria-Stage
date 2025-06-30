@@ -1,12 +1,10 @@
 import yaml
 from pathlib import Path
 from numpy import ndarray
-from typing import Any, Union, TypedDict, Literal, Callable, Sequence, Tuple, Optional
 from dataclasses import dataclass, asdict, is_dataclass, fields
 from typing import get_origin, get_args
+from typing import Any, Union, Literal, Callable, Sequence, Tuple, Optional
 
-
-DEBUG_MODE = False
 
 
 @dataclass
@@ -20,7 +18,7 @@ class Params:
     def to_dict(self):
         return asdict(self)
     
-    
+  
 @dataclass
 class ExperimentParams(Params):
     name: str
@@ -30,6 +28,7 @@ class ExperimentParams(Params):
     target_shape: Sequence[int]
     input_file: str
     output_file: str
+    log_file: str
     input_dir: str
     output_dir: str
     log_dir: str
@@ -37,7 +36,7 @@ class ExperimentParams(Params):
 
 @dataclass
 class MethodsParams(Params):
-    estimator: Literal['default', 'farid']
+    derivator: Literal['default', 'farid']
     enhancer: Literal['frangi']
     segmenter: Literal['thresholding']
 
@@ -57,7 +56,9 @@ class EnhancementParams(Params):
     scales: Optional[Sequence[int]] = None
     scales_number: Optional[int] = None
     scales_range: Optional[Tuple[int, int]] = None
-    compute_hessian: Optional[Callable[..., list[ndarray]]] = None
+    black_ridges: Optional[bool] = False
+    hessian_function: Optional[Callable[..., list[ndarray]]] = None
+    skimage: Optional[bool] = False
    
    
 @dataclass
