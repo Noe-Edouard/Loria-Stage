@@ -1,6 +1,6 @@
 import logging
 from logging.handlers import RotatingFileHandler
-from utils.logger import setup_logger
+from core.logger import setup_logger
 
 def test_logger(tmp_path):
     for debug_mode in [True, False]:

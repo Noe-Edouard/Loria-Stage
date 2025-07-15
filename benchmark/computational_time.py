@@ -5,10 +5,12 @@ from typing import Sequence
 from tabulate import tabulate
 from time import perf_counter
 
-from src.enhancer import Enhancer
-from utils.logger import setup_logger
+from pipeline.enhancer import Enhancer
+from core.logger import setup_logger
+
 
 logger = setup_logger(name='benchmark', debug_mode=True)
+
 
 def compute_time(function, *args, **kargs):
     start = perf_counter()
@@ -184,9 +186,6 @@ def volume_size_influence(
     return volume_sizes, times_sequential, times_parallel
 
 
-
-from tqdm import tqdm
-import json
 
 def chunk_number_influence(
     volume_sizes: Sequence[int] = [i**3 for i in range(3, 8)], 

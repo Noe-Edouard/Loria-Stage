@@ -28,3 +28,36 @@ def crop_data(data: np.ndarray, target_shape: Tuple[Optional[int], ...]) -> np.n
     )
 
     return data[slices]
+
+
+def create_error_map(ground_truth: np.ndarray, segmented: np.ndarray) -> np.ndarray:
+
+    if ground_truth.ndim == 2:
+        height, width = ground_truth.shape
+        error_map = np.zeros((height, width, 3), dtype=np.uint8)
+
+        true_positive =  (ground_truth == 1) & (segmented == 1)
+        true_negative =  (ground_truth == 0) & (segmented == 0)
+        false_negative = (ground_truth == 1) & (segmented == 0)
+        false_positive = (ground_truth == 0) & (segmented == 1)
+
+        error_map[true_positive | true_negative] = ground_truth[true_positive | true_negative][:, None] * 255
+        error_map[false_negative] = [255, 100, 100]
+        error_map[false_positive] = [100, 100, 255]
+
+        return error_map
+
+    elif ground_truth.ndim == 3:
+        depth, height, width = ground_truth.shape
+        error_map = np.zeros((depth, height, width, 3), dtype=np.uint8)
+
+        true_positive = (ground_truth == 1) & (segmented == 1)
+        true_negative = (ground_truth == 0) & (segmented == 0)
+        false_negative = (ground_truth == 1) & (segmented == 0)
+        false_positive = (ground_truth == 0) & (segmented == 1)
+
+        error_map[true_positive | true_negative] = ground_truth[true_positive | true_negative][..., None] * 255
+        error_map[false_negative] = [255, 100, 100]
+        error_map[false_positive] = [100, 100, 255]
+
+        return error_map

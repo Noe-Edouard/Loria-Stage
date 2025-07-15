@@ -1,15 +1,16 @@
 import numpy as np 
-
+from core.loader import Loader
 from benchmark.computational_time import chunk_number_influence
 
 import numpy as np
-from utils.viewer import Viewer  # adapte le chemin si besoin
+from view.viewer import Viewer  # adapte le chemin si besoin
 
 def debug():
 
-    data = np.random.rand(32, 32, 62)
-
-    Viewer().display_slices(data)
+    loader = Loader("data/test")
+    raw_data = loader.load_data('raw.png')
+    ground_truth = loader.load_data('gt.png')
+    Viewer().display_images([raw_data, ground_truth])
 
 DEBUG_MODE = False
 
