@@ -36,9 +36,8 @@ class Viewer():
                     titles: Union[list[str], str] = None,
                     cmap='gray', error_mode=False):
 
-        print("Titles: ", titles)
         images, titles, num_images = self._normalize_inputs(images, titles)
-        print("Titles: ", titles)
+
         max_cols = 5
         ncols = max_cols
         nrows = math.ceil((num_images + (1 if error_mode else 0)) / max_cols)

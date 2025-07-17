@@ -24,7 +24,6 @@ experiment:
   hessian:
     mode: reflect
     cval: 0.0
-    use_gaussian_derivatives: false
 
   processing:
     normalize: true
@@ -37,7 +36,7 @@ experiment:
     beta: 0.5
     gamma: 15
     # scales: [1, 2, 10]
-    scales: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20]
+    scales: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15]
     scales_number: null
     scales_range: null
     black_ridges: true
@@ -46,7 +45,7 @@ experiment:
   segmentation:
     threshold: null
 
-benchmark:
+runner:
   params_grid:
     alpha: [0.1, 0.5]
     beta: [0.1, 0.5]

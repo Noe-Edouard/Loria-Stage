@@ -70,7 +70,6 @@ def dummy_experiment_config():
         hessian=HessianConfig(
             mode="reflect",
             cval=0.0,
-            use_gaussian_derivatives=True
         ),
         enhancement=EnhancementConfig(
             alpha=1.0,

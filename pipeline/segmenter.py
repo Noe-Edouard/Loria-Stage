@@ -1,5 +1,6 @@
 import numpy as np
-from typing import Literal, Callable, Optional
+from numpy import ndarray
+from typing import Literal, Callable, Optional, Tuple
 from sklearn.metrics import precision_recall_curve
 
 from core.config import SegmentationConfig
@@ -16,7 +17,13 @@ class Segmenter:
         }
         
     @log_call()
-    def segment_data(self, data: np.ndarray, method: Literal['thresholding'], segmentation_params: SegmentationConfig, ground_truth: Optional[np.ndarray] = None) -> Callable[..., list[np.ndarray]]:
+    def segment_data(
+        self, 
+        data: ndarray, 
+        method: Literal['thresholding'], 
+        segmentation_params: SegmentationConfig, 
+        ground_truth: Optional[ndarray] = None
+    ) -> Callable[..., Tuple[ndarray, float]]:
         
         segmentation_params = segmentation_params or SegmentationConfig()
         
@@ -25,7 +32,12 @@ class Segmenter:
         return self.selector[method](data, ground_truth=ground_truth, **segmentation_params.to_dict())
     
     @log_call ()
-    def thresholding(self, array: np.ndarray, threshold: float = 0.5, ground_truth: Optional[np.ndarray] = None) -> np.ndarray:
+    def thresholding(
+        self, 
+        array: ndarray, 
+        threshold: float = 0.5, 
+        ground_truth: Optional[ndarray] = None
+    ) -> Tuple[ndarray, float]:
         # https://sirineamrane.medium.com/from-auc-roc-to-optimal-treshold-selection-a-guide-for-binary-classification-679bae8ea1bf
         arr_normalized = normalize_data(array)
         gt_normalized = normalize_data(ground_truth)

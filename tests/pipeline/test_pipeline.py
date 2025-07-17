@@ -26,7 +26,6 @@ def test_pipeline():
         "hessian": {
             "mode": "reflect",
             "cval": 0.0,
-            "use_gaussian_derivatives": True
         },
         "processing": {
             "normalize": True,

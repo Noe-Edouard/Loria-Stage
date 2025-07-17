@@ -1,33 +1,18 @@
-2025-07-14 13:49:43 - [DEBUG]: - [CALL] "__init__"
-                       - args:   [<pipeline.pipeline.Pipeline object at 0x0000026FF9C719D0>, SetupConfig(name='pipeline', input_dir='data/test', output_dir='outputs/pipeline', log_dir='logs', log_file='pipeline', debug_mode=False, display_mode=False, save_mode=False)]
-                       - kwargs: { None }
-2025-07-15 12:46:12 - [DEBUG]: - [CALL] "__init__"
-                       - args:   [<pipeline.pipeline.Pipeline object at 0x000001814A6E9D00>, SetupConfig(name='pipeline', input_dir='data/test', output_dir='outputs/pipeline', log_dir='logs', log_file='pipeline', debug_mode=False, display_mode=False, save_mode=False)]
-                       - kwargs: { None }
-2025-07-15 12:50:03 - [DEBUG]: - [CALL] "__init__"
-                       - args:   [<pipeline.pipeline.Pipeline object at 0x0000028AE156AAB0>, SetupConfig(name='pipeline', input_dir='data/test', output_dir='outputs/pipeline', log_dir='logs', log_file='pipeline', debug_mode=False, display_mode=False, save_mode=False)]
-                       - kwargs: { None }
-2025-07-15 12:52:16 - [DEBUG]: - [CALL] "__init__"
-                       - args:   [<pipeline.pipeline.Pipeline object at 0x0000028F79DB3DD0>, SetupConfig(name='pipeline', input_dir='data/test', output_dir='outputs/pipeline', log_dir='logs', log_file='pipeline', debug_mode=False, display_mode=False, save_mode=False)]
-                       - kwargs: { None }
-2025-07-15 12:52:43 - [DEBUG]: - [CALL] "__init__"
-                       - args:   [<pipeline.pipeline.Pipeline object at 0x000001F81D30C170>, SetupConfig(name='pipeline', input_dir='data/test', output_dir='outputs/pipeline', log_dir='logs', log_file='pipeline', debug_mode=False, display_mode=False, save_mode=False)]
-                       - kwargs: { None }
-2025-07-15 12:58:55 - [DEBUG]: - [CALL] "__init__"
-                       - args:   [<pipeline.pipeline.Pipeline object at 0x0000021C77485A30>, SetupConfig(name='pipeline', input_dir='data/test', output_dir='outputs/pipeline', log_dir='logs', log_file='pipeline', debug_mode=False, display_mode=False, save_mode=False)]
-                       - kwargs: { None }
-2025-07-15 13:00:01 - [DEBUG]: - [CALL] "__init__"
-                       - args:   [<pipeline.pipeline.Pipeline object at 0x000001C5D9481730>, SetupConfig(name='pipeline', input_dir='data/test', output_dir='outputs/pipeline', log_dir='logs', log_file='pipeline', debug_mode=False, display_mode=False, save_mode=False)]
-                       - kwargs: { None }
-2025-07-15 13:02:36 - [DEBUG]: - [CALL] "__init__"
-                       - args:   [<pipeline.pipeline.Pipeline object at 0x0000015BB7D8FD70>, SetupConfig(name='pipeline', input_dir='data/test', output_dir='outputs/pipeline', log_dir='logs', log_file='pipeline', debug_mode=False, display_mode=False, save_mode=False)]
-                       - kwargs: { None }
-2025-07-15 13:04:57 - [DEBUG]: - [CALL] "__init__"
-                       - args:   [<pipeline.pipeline.Pipeline object at 0x000001D302AFA600>, SetupConfig(name='pipeline', input_dir='data/test', output_dir='outputs/pipeline', log_dir='logs', log_file='pipeline', debug_mode=False, display_mode=False, save_mode=False)]
-                       - kwargs: { None }
-2025-07-15 13:06:23 - [DEBUG]: - [CALL] "__init__"
-                       - args:   [<pipeline.pipeline.Pipeline object at 0x000001EC668C5CA0>, SetupConfig(name='pipeline', input_dir='data/test', output_dir='outputs/pipeline', log_dir='logs', log_file='pipeline', debug_mode=False, display_mode=False, save_mode=False)]
-                       - kwargs: { None }
-2025-07-15 13:14:28 - [DEBUG]: - [CALL] "__init__"
-                       - args:   [<pipeline.pipeline.Pipeline object at 0x0000021AC14DC590>, SetupConfig(name='pipeline', input_dir='data/test', output_dir='outputs/pipeline', log_dir='logs', log_file='pipeline', debug_mode=False, display_mode=False, save_mode=False)]
-                       - kwargs: { None }
+2025-07-17 11:29:35 - [DEBUG]: - [CALL] "frangi"
+                       - args:   [<pipeline.enhancer.Enhancer object at 0x000001C50D2664E0>, ndarray(shape=(18, 18, 18), dtype=float32)]
+                       - kwargs: { alpha=0.5, beta=0.5, gamma=15, scales=ndarray(shape=(1,), dtype=int32), scales_number=None, scales_range=None, black_ridges=False, hessian_function=<bound method Derivator.default of <pipeline.derivator.Derivator object at 0x000001C50D326630>>, skimage=False, hessian_params=dict(keys=['mode', 'cval']) }
+2025-07-17 11:29:36 - [DEBUG]: - [CALL] "frangi"
+                       - args:   [<pipeline.enhancer.Enhancer object at 0x000001C50D2664E0>, ndarray(shape=(18, 18, 18), dtype=float32)]
+                       - kwargs: { alpha=0.5, beta=0.5, gamma=15, scales=ndarray(shape=(1,), dtype=int32), scales_number=None, scales_range=None, black_ridges=False, hessian_function=<bound method Derivator.default of <pipeline.derivator.Derivator object at 0x000001C50D326630>>, skimage=False, hessian_params=dict(keys=['mode', 'cval']) }
+2025-07-17 11:29:36 - [DEBUG]: - [CALL] "frangi"
+                       - args:   [<pipeline.enhancer.Enhancer object at 0x000001C50D2664E0>, ndarray(shape=(18, 18, 18), dtype=float32)]
+                       - kwargs: { alpha=0.5, beta=0.5, gamma=15, scales=ndarray(shape=(1,), dtype=int32), scales_number=None, scales_range=None, black_ridges=False, hessian_function=<bound method Derivator.default of <pipeline.derivator.Derivator object at 0x000001C50D326630>>, skimage=False, hessian_params=dict(keys=['mode', 'cval']) }
+2025-07-17 11:29:36 - [DEBUG]: - [CALL] "frangi"
+                       - args:   [<pipeline.enhancer.Enhancer object at 0x000001C50D2664E0>, ndarray(shape=(18, 18, 18), dtype=float32)]
+                       - kwargs: { alpha=0.5, beta=0.5, gamma=15, scales=ndarray(shape=(1,), dtype=int32), scales_number=None, scales_range=None, black_ridges=False, hessian_function=<bound method Derivator.default of <pipeline.derivator.Derivator object at 0x000001C50D326630>>, skimage=False, hessian_params=dict(keys=['mode', 'cval']) }
+2025-07-17 11:29:36 - [DEBUG]: - [CALL] "frangi"
+                       - args:   [<pipeline.enhancer.Enhancer object at 0x000001C50D2664E0>, ndarray(shape=(18, 18, 18), dtype=float32)]
+                       - kwargs: { alpha=0.5, beta=0.5, gamma=15, scales=ndarray(shape=(1,), dtype=int32), scales_number=None, scales_range=None, black_ridges=False, hessian_function=<bound method Derivator.default of <pipeline.derivator.Derivator object at 0x000001C50D326630>>, skimage=False, hessian_params=dict(keys=['mode', 'cval']) }
+2025-07-17 11:29:36 - [DEBUG]: - [CALL] "frangi"
+                       - args:   [<pipeline.enhancer.Enhancer object at 0x000001C50D2664E0>, ndarray(shape=(18, 18, 18), dtype=float32)]
+                       - kwargs: { alpha=0.5, beta=0.5, gamma=15, scales=ndarray(shape=(1,), dtype=int32), scales_number=None, scales_range=None, black_ridges=False, hessian_function=<bound method Derivator.default of <pipeline.derivator.Derivator object at 0x000001C50D326630>>, skimage=False, hessian_params=dict(keys=['mode', 'cval']) }

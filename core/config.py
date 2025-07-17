@@ -132,7 +132,6 @@ class MethodsConfig(Config):
 class HessianConfig(Config):
     mode: Literal['reflect', 'constant', 'nearest', 'mirror', 'wrap']
     cval: float
-    use_gaussian_derivatives: bool
     
 @dataclass
 class EnhancementConfig(Config):
@@ -155,7 +154,7 @@ class ProcessingConfig(Config):
 
 @dataclass
 class SegmentationConfig(Config):
-    threshold: int
+    threshold: float
    
 @dataclass
 class ExperimentConfig(Config):
@@ -193,7 +192,45 @@ class BenchmarkConfig(Config):
 class BenchmarkData(Config):
     raw_data: ndarray
     ground_truth: ndarray
-    experiments: list[ExperimentData]
+    experiments: list[ExperimentData] 
+
+
+### ENGINE
+
+
+@dataclass
+class SSIConfig(Config):
+    volume_size: int
+    scales_range: tuple[int]
+    scales_numbers: list
+    output_file: str
+    
+@dataclass
+class VSIConfig(Config):
+    volume_sizes: list[int]
+    chunk_number: int
+    output_file: str
+    
+    
+@dataclass
+class CNIConfig(Config):
+    volume_sizes: list[int]
+    chunk_numbers: list[int]
+    output_file: str
+    
+@dataclass
+class PACConfig(Config):
+    input_file: str
+    output_file: str
+    
+    
+@dataclass
+class EngineConfig(Config):
+    ssi: SSIConfig
+    vsi: VSIConfig
+    cni: CNIConfig
+    pac: PACConfig
+    
 
 ### MAIN
 
@@ -201,4 +238,4 @@ class BenchmarkData(Config):
 class MainConfig(Config):
     setup: SetupConfig
     experiment: ExperimentConfig
-    benchmark: BenchmarkConfig
+    runner: Optional[Union[BenchmarkConfig, EngineConfig]]

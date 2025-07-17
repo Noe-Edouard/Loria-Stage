@@ -86,7 +86,7 @@ class Enhancer:
                 overlap_size = scales_range[1]
             else:
                 scales = enhancement_params.get('scales', None)
-                if scales:
+                if scales is not None:
                     overlap_size = int(np.max(scales))
                 else:
                     overlap_size = 10  # default value
@@ -119,8 +119,8 @@ class Enhancer:
             dask_data = da.from_array(data, chunks=chunk_size)
 
             processed_chunks = da.map_overlap(
-                dask_data,
                 enhancement_function,
+                dask_data,
                 depth=overlap_size,
                 boundary='reflect',
                 dtype=np.float32,
@@ -154,7 +154,7 @@ class Enhancer:
         beta: float = 0.5,
         gamma: Optional[float] = None,
         black_ridges: Optional[bool] = False,
-        hessian_params: dict = {'mode': 'reflect', 'cval': 0, 'use_gaussian_derivatives': False},
+        hessian_params: dict = {'mode': 'reflect', 'cval': 0},
         skimage = False,
     ) -> np.ndarray:
                 

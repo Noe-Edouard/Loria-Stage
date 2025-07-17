@@ -18,7 +18,6 @@ methods:
 hessian:
   mode: reflect
   cval: 0.0
-  use_gaussian_derivatives: true
 
 processing:
   normalize: true

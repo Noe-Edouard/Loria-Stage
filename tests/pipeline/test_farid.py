@@ -36,9 +36,9 @@ def test_farid():
     image_3d = loader.load_data('test.nii', crop=True)
     
     # result_3d_default = normalize_data(enhancer.frangi(image=image_3d, hessian_function=hessian_default, gamma=15))
-    result_3d_farid_true = normalize_data(enhancer.frangi(image=image_3d, hessian_function=hessian_farid, gamma=15, hessian_params={'mode': 'reflect', 'cval': 0, 'use_gaussian_derivatives': True}))
-    result_3d_farid_false = normalize_data(enhancer.frangi(image=image_3d, hessian_function=hessian_farid, gamma=15, hessian_params={'mode': 'reflect', 'cval': 0, 'use_gaussian_derivatives': False}))
-    result_3d_farid_none = normalize_data(enhancer.frangi(image=image_3d, hessian_function=hessian_farid, gamma=15, hessian_params={'mode': 'reflect', 'cval': 0, 'use_gaussian_derivatives': None}))
+    result_3d_farid_true = normalize_data(enhancer.frangi(image=image_3d, hessian_function=hessian_farid, gamma=15, hessian_params={'mode': 'reflect', 'cval': 0}))
+    result_3d_farid_false = normalize_data(enhancer.frangi(image=image_3d, hessian_function=hessian_farid, gamma=15, hessian_params={'mode': 'reflect', 'cval': 0}))
+    result_3d_farid_none = normalize_data(enhancer.frangi(image=image_3d, hessian_function=hessian_farid, gamma=15, hessian_params={'mode': 'reflect', 'cval': 0}))
     
     figure_3d = viewer.display_slices([result_3d_farid_true, result_3d_farid_false, result_3d_farid_none], ['True', 'False', 'None'])
     

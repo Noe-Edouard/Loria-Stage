@@ -84,48 +84,10 @@ Pourrait-on calculer la dérivée dans la direction la plus pertinente (le long 
 
 https://www.mdpi.com/2079-9292/12/19/4159
 
-### Notes
-
-- [x] Ne pas normaliser
-- [x] Regarder le résultat de la dérivée avant de passer à la suite
-- [x] Regarder l'implémentation de Hast (notamment pour farid)
-- [x] Vérifier l'implémentation de la double convolution 1d en 3d
-- [x] Ralentir les animations
-- [~] Récupérer la ground truth du fichier test.nii
-- [~] Mettre en place un benchmark sur L'ENSEMBLE DES PARAMETRES
-- [ ] Voir comment prendre en compte l'échelle dans la hessiennes perosnalisées (hast, farid)
-
-- plot image de référence + display min max
-- plot image référence + bruit (gaussien)
-- Dérivées 1 + display min max
-- Dérivées 2 + display min max
-
-- Erreur absolue par rapport à la référence + display min max
-- Erreur quadratique par rapport à la référence + display min max
-- Regarder d'autre images qu'une gaussienne
-- Normaliser en entrée
-
-- Regarder l'energie ddes filtres par rapport au facteur
-- Evolution du min, max en fonction de l'échelle
-- N dépende de l'ordre de la convolution
-
-- Reagreder la doc de skimage pour le calcul de la dérviée
-
-- Regarder différentes types de fonction (sinc, sinus grating, ...)
-- MSE
-
----
-
-afficher meilleur score pour chaque grid search
-Afficher le temps de chaque grid search
-Afficher le temps du benchmark
-Afficher le temps du pipeline
-Ajouter skimage default et gaussian à la place de default.
-supprimer les critical
-Afficher le threshold à la fin du grid search
-Ajouter une ligne best methods dans le tableau
-Enlever les normalisation (test)
-supprimer et résoudre les test.log.log
-
 - Regarder le bruit
-- Ajouter un filtre gaussien
+
+- tester les benchmark
+- lancer les tests sur le super ordi
+- Lire l'article de jonas sur le benchmark
+- Gérer le retour des différentes fonctions (notament engine qui ne retourne rien)
+- Implémenter Sato

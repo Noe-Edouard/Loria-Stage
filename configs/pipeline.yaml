@@ -24,7 +24,6 @@ experiment:
   hessian:
     mode: reflect
     cval: 0.0
-    use_gaussian_derivatives: false
 
   processing:
     normalize: true
@@ -44,12 +43,3 @@ experiment:
 
   segmentation:
     threshold: null
-
-benchmark:
-  params_grid:
-    alpha: [0.5, 1.0]
-    beta: [0.5, 1.0]
-    gamma: [15]
-  methods: ["default", "cubic", "farid"]
-  raw_file: test_raw.nii
-  gt_file: test_gt.nii
