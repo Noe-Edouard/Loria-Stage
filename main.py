@@ -9,15 +9,15 @@ from pipeline.pipeline import Pipeline
 
 RUN_PIPELINE: bool = False
 RUN_TEST: bool = False
-RUN_ENGINE: bool = True 
-RUN_BENCHMARK: bool = False
+RUN_ENGINE: bool = False
+RUN_BENCHMARK: bool = True
 
 SRC_PIPELINE = 'configs/pipeline.yaml'
 SRC_TEST = 'configs/test.yaml'
 SRC_ENGINE = 'configs/engine.yaml'
 SRC_BENCHMARK = 'configs/benchmark.yaml'
 
-FULL_BENCHMARK: bool = True
+FULL_BENCHMARK: bool = False
 
 
 def main():

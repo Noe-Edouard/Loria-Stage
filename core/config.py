@@ -222,14 +222,23 @@ class CNIConfig(Config):
 class PACConfig(Config):
     input_file: str
     output_file: str
-    
-    
+
+@dataclass
+class SACConfig(Config):
+    input_file: str
+    output_file: str
+    ground_truth: str 
+    scales_numbers: list
+    scales_range: tuple
+
+
 @dataclass
 class EngineConfig(Config):
     ssi: SSIConfig
     vsi: VSIConfig
     cni: CNIConfig
     pac: PACConfig
+    sac: SACConfig
     
 
 ### MAIN

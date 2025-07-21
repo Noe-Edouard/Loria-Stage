@@ -10,9 +10,10 @@ from core.logger import setup_logger
 from core.loader import Loader
 from core.saver import Saver
 from view.viewer import Viewer 
-from core.config import SetupConfig, PACConfig, ExperimentConfig, SSIConfig, VSIConfig, CNIConfig, EngineConfig
+from core.config import SetupConfig, PACConfig, SACConfig, ExperimentConfig, SSIConfig, VSIConfig, CNIConfig, EngineConfig
 from pipeline.enhancer import Enhancer
 from pipeline.derivator import Derivator
+from benchmark.metrics import mcc
 
 logger = setup_logger(name='benchmark', debug_mode=True)
 
@@ -65,14 +66,17 @@ class Engine:
         times_sequential = []
         times_parallel = []
         
-        volume = np.ones((config.volume_size, config.volume_size, config.volume_size), np.float32) * 0.5
-        
         processing_params = deepcopy(experiment_config.processing)
         enhancement_params = deepcopy(experiment_config.enhancement)
         hessian_params = deepcopy(experiment_config.hessian)
         
-        for n in config.scales_numbers:
-            scales = np.linspace(config.scales_range[0], config.scales_range[1], n, dtype=int)
+        volume = np.ones((config.volume_size, config.volume_size, config.volume_size), np.float32) * 0.5
+        size = config.volume_size
+        chunk_size = (size // 2, size //2, size // 2)
+        processing_params.chunk_size = chunk_size
+        
+        for n_scale in config.scales_numbers:
+            scales = np.linspace(config.scales_range[0], config.scales_range[1], n_scale, dtype=int)
             enhancement_params.scales = scales
             
             # Sequential processing
@@ -117,7 +121,7 @@ class Engine:
         plt.plot(config.scales_numbers, times_parallel, '+-',  label="Parallèle", color='dodgerblue')
         plt.xlabel("Nombre d'échelles")
         plt.ylabel("Temps (secondes)")
-        plt.title("Influence du nombre d'échelle sur le temps d'exécution du réhaussement")
+        plt.title("Influence du nombre d'échelle sur le temps d'exécution")
         plt.legend()
         plt.grid(True)
         
@@ -148,7 +152,9 @@ class Engine:
         for size in config.volume_sizes:
             
             volume = np.ones((size, size, size), np.float32) * 0.5
-                        
+            chunk_size = (size // 2, size // 2, size // 2)
+            processing_params.chunk_size = chunk_size
+            
             # Sequential processing
             processing_params.parallelize = False
             times_sequential.append(self.compute_time(
@@ -170,7 +176,6 @@ class Engine:
                 enhancement_params=enhancement_params,
                 hessian_params=hessian_params,
             ))
-        
         
         # logger.info times
         logger.info('='*30+' RESUME '+'='*30+'\n')
@@ -195,7 +200,7 @@ class Engine:
         plt.plot(volume_sizes, times_parallel, '+-',  label="Parallèle", color='dodgerblue')
         plt.xlabel("Taille du volume (voxels)")
         plt.ylabel("Temps (secondes)")
-        plt.title("Influence de la taille du volume sur le temps d'exécution du réhaussement")
+        plt.title("Influence de la taille du volume sur le temps d'exécution")
         plt.legend()
         plt.grid(True)
         
@@ -247,6 +252,7 @@ class Engine:
             times = []
             chunk_sizes = []
             for chunk_number in chunk_numbers:
+                
                 chunk_size = (int(volume_size//chunk_number), int(volume_size//chunk_number), int(volume_size//chunk_number))
                 chunk_sizes.append(chunk_size[0])
                 processing_params.chunk_size = chunk_size
@@ -263,7 +269,6 @@ class Engine:
                 
             all_times.append(times)
             all_chunk_sizes.append(chunk_sizes)
-        
         
             # logger.info times
             logger.info('='*30+' RESUME '+'='*30+'\n')
@@ -291,7 +296,7 @@ class Engine:
         plt.subplot(1, 2, 1)
         for i, volume_size in enumerate(volume_sizes):
             plt.plot(chunk_numbers, all_times[i], '-+', color=colors[i], label=f"volume size: {volume_size}")
-        plt.title(f"Influence du nombre de chunk sur le temps d'éxécution du réhaussement")
+        plt.title(f"Influence du nombre de chunk sur le temps d'éxécution")
         plt.xlabel("Nombre de chunk")
         plt.ylabel("Temps d'exécution (s)")
         plt.legend()
@@ -300,7 +305,7 @@ class Engine:
         plt.subplot(1, 2, 2)
         for i, volume_size in enumerate(volume_sizes):
             plt.plot(chunk_numbers, all_chunk_sizes[i], '-+', color=colors[i], label=f"volume size: {volume_size}")
-        plt.title(f"Influence du nombre de chunk sur le temps d'éxécution du réhaussement")
+        plt.title(f"Taille des chunk en fonction de leur nombre par dimension")
         plt.xlabel("Nombre de chunk")
         plt.ylabel("Taille des chunks")
         plt.legend()
@@ -316,6 +321,7 @@ class Engine:
         self.logger.info('[END] Chunk number influence ended.')
         
         return volume_sizes, chunk_numbers, all_chunk_sizes, all_times
+
 
 
     def parallel_accuracy_check(self, config: PACConfig, experiment_config: ExperimentConfig):
@@ -359,14 +365,78 @@ class Engine:
         
         return sequential, parallel
     
+    
+    
+    def scale_accuracy_check(self, config: SACConfig, experiment_config: ExperimentConfig):
+        self.logger.info('[START] Scale accuracy check started.')
+        
+        volume = self.loader.load_data(config.input_file)   
+        ground_truth = self.loader.load_data(config.ground_truth)  
+        
+        processing_params = deepcopy(experiment_config.processing)
+        enhancement_params = deepcopy(experiment_config.enhancement)
+        hessian_params = deepcopy(experiment_config.hessian)
+        
+        mcc_scores = []
+        
+        for n_scale in config.scales_numbers:
+            scales = np.linspace(config.scales_range[0], config.scales_range[1], n_scale, dtype=int)
+            enhancement_params.scales = scales
+        
+            # Parallel processing
+            processing_params.parallelize = True
+            processed = self.enhancer.enhance_data( 
+                data=volume, 
+                method=experiment_config.methods.enhancer,
+                processing_params=processing_params,
+                enhancement_params=enhancement_params,
+                hessian_params=hessian_params,
+            )
+            
+            mcc_scores.append(mcc(processed, ground_truth))
+        
+
+        # Resume scores
+        logger.info('='*30+' RESUME '+'='*30+'\n')
+        logger.info(f'Scales number: {config.scales_numbers}')
+        logger.info(f'Scores (MCC):  {mcc_scores}')
+        
+        headers = ['Scales (num)', 'MCC Score']
+        rows = list(zip(config.scales_numbers, mcc_scores))
+        logger.info('\n' + tabulate(rows, headers, tablefmt='github', floatfmt='>.3f', intfmt='^'))
+        logger.info('='*68+'\n')
+
+
+        # Plot score
+        fig = plt.figure(figsize=(7, 5))
+        
+        plt.plot(config.scales_numbers, mcc_scores, '+-', color='dodgerblue')
+        plt.xlabel("Nombre d'échelle")
+        plt.ylabel("Score MCC")
+        plt.title("Influence du nombre d'échelle sur la précision du réhaussement")
+        plt.grid(True)
+        
+        if self.setup.display_mode:
+            plt.show()
+        if self.setup.display_mode:
+            self.saver.save_plot(fig, config.output_file)
+
+        self.logger.info('[END] Scale accuracy check ended.')
+        
+        return mcc_scores
+    
+    
     @log_time()
     def run(self, config: EngineConfig, experiment_config: ExperimentConfig):
         hessian_function = self.derivator.select_hessian_function(experiment_config.methods.derivator)
         experiment_config.enhancement.hessian_function = hessian_function
         
         self.logger.info('[START] Engine started.')
-        # self.chunk_number_influence(config.cni, experiment_config)
-        # self.volume_size_influence(config.vsi, experiment_config)
+        self.chunk_number_influence(config.cni, experiment_config)
+        self.volume_size_influence(config.vsi, experiment_config)
         self.scale_size_influence(config.ssi, experiment_config)
         self.parallel_accuracy_check(config.pac, experiment_config)
+        self.scale_accuracy_check(config.sac, experiment_config)
         self.logger.info('[START] Engine ended.')
+
+        
