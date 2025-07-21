@@ -13,6 +13,7 @@ from view.viewer import Viewer
 from core.config import SetupConfig, PACConfig, SACConfig, ExperimentConfig, SSIConfig, VSIConfig, CNIConfig, EngineConfig
 from pipeline.enhancer import Enhancer
 from pipeline.derivator import Derivator
+from pipeline.segmenter import Segmenter
 from benchmark.metrics import mcc
 
 logger = setup_logger(name='benchmark', debug_mode=True)
@@ -43,9 +44,13 @@ class Engine:
         
         # Enhancer
         self.enhancer = Enhancer()
+        
+        # Segmenter
+        self.segmenter = Segmenter()
 
         # Analytics
         self.viewer = Viewer(display_mode=self.setup.display_mode)
+        
         # Saver
         self.save_mode = self.setup.save_mode
         self.saver = Saver(experiment_name=self.setup.name, output_dir=self.output_dir, logger=self.logger)
@@ -127,7 +132,7 @@ class Engine:
         
         if self.setup.display_mode:
             plt.show()
-        if self.setup.display_mode:
+        if self.setup.save_mode:
             self.saver.save_plot(fig, config.output_file)
 
         self.logger.info('[END] Scale size influence ended.')
@@ -315,7 +320,7 @@ class Engine:
 
         if self.setup.display_mode:
             plt.show()
-        if self.setup.display_mode:
+        if self.setup.save_mode:
             self.saver.save_plot(fig, config.output_file)
         
         self.logger.info('[END] Chunk number influence ended.')
@@ -373,52 +378,92 @@ class Engine:
         volume = self.loader.load_data(config.input_file)   
         ground_truth = self.loader.load_data(config.ground_truth)  
         
+        hessian_params = deepcopy(experiment_config.hessian)
         processing_params = deepcopy(experiment_config.processing)
         enhancement_params = deepcopy(experiment_config.enhancement)
-        hessian_params = deepcopy(experiment_config.hessian)
+        segmentation_params = deepcopy(experiment_config.segmentation)
         
-        mcc_scores = []
-        
-        for n_scale in config.scales_numbers:
-            scales = np.linspace(config.scales_range[0], config.scales_range[1], n_scale, dtype=int)
-            enhancement_params.scales = scales
-        
-            # Parallel processing
-            processing_params.parallelize = True
-            processed = self.enhancer.enhance_data( 
-                data=volume, 
-                method=experiment_config.methods.enhancer,
-                processing_params=processing_params,
-                enhancement_params=enhancement_params,
-                hessian_params=hessian_params,
-            )
-            
-            mcc_scores.append(mcc(processed, ground_truth))
-        
-
-        # Resume scores
-        logger.info('='*30+' RESUME '+'='*30+'\n')
-        logger.info(f'Scales number: {config.scales_numbers}')
-        logger.info(f'Scores (MCC):  {mcc_scores}')
-        
-        headers = ['Scales (num)', 'MCC Score']
-        rows = list(zip(config.scales_numbers, mcc_scores))
-        logger.info('\n' + tabulate(rows, headers, tablefmt='github', floatfmt='>.3f', intfmt='^'))
-        logger.info('='*68+'\n')
-
-
-        # Plot score
         fig = plt.figure(figsize=(7, 5))
+        colors = [
+            "#022c7aff",
+            "#0743b1ff",
+            "#175ddfff",
+            "#407ff5ff",
+            "#6097fcff",
+        ]
         
-        plt.plot(config.scales_numbers, mcc_scores, '+-', color='dodgerblue')
-        plt.xlabel("Nombre d'échelle")
+        results = {'min': {}, 'max': {}}
+        
+        for i, mode in enumerate(['min', 'max']):
+            if mode == 'min':
+                ranges = [(min_range, 20) for min_range in config.min_ranges]
+            elif mode == 'max':
+                ranges = [(1, max_range) for max_range in config.max_ranges]
+            
+            for step in config.scales_steps:
+                mcc_scores = []
+                
+                for range  in ranges:
+                    scales = np.arange(range[0], range[1], step, dtype=int)
+                    enhancement_params.scales = scales
+                
+                    # Parallel processing
+                    processing_params.parallelize = True
+                    enhanced = self.enhancer.enhance_data( 
+                        data=volume, 
+                        method=experiment_config.methods.enhancer,
+                        processing_params=processing_params,
+                        enhancement_params=enhancement_params,
+                        hessian_params=hessian_params,
+                    )
+                    segmented, threshold = self.segmenter.segment_data(
+                        data=enhanced,
+                        method=experiment_config.methods.segmenter,
+                        segmentation_params=segmentation_params,
+                        ground_truth=ground_truth,
+                    )
+                    
+                    mcc_scores.append(mcc(segmented, ground_truth))
+                
+                results[mode][step] = {
+                    'scores': mcc_scores,
+                    'ranges': ranges
+                }
+
+                # Resume scores
+                logger.info('='*30+' RESUME '+'='*30+'\n')
+                logger.info(f'Step:   {step}')
+                logger.info(f'Ranges: {ranges}')
+                logger.info(f'Scores: {mcc_scores}')
+                
+                headers = ['Ranges', 'MCC Score']
+                rows = list(zip(ranges, mcc_scores))
+                logger.info('\n' + tabulate(rows, headers, tablefmt='github', floatfmt='>.3f', intfmt='^'))
+                logger.info('='*68+'\n')
+
+           
+        plt.subplot(1, 2, 1)
+        for i, (step, vals) in enumerate(results['min'].items()):
+            plt.plot(vals['ranges'][0], vals['scores'], '+-', color=colors[i], label=f'step={step}')     
+        plt.xlabel("Min range (max=20)")
         plt.ylabel("Score MCC")
-        plt.title("Influence du nombre d'échelle sur la précision du réhaussement")
+        plt.title("Influence de l'échelle min d'échelle sur la précision")
         plt.grid(True)
+        plt.legend()
+        
+        plt.subplot(1, 2, 2)  
+        for i, (step, vals) in enumerate(results['max'].items()):
+            plt.plot(vals['ranges'][1], vals['scores'], '+-', color=colors[i], label=f'step={step}')     
+        plt.xlabel("Max range (min=1)")
+        plt.ylabel("Score MCC")
+        plt.title("Influence de l'échelle max d'échelle sur la précision")
+        plt.grid(True)
+        plt.legend()
+        
         
         if self.setup.display_mode:
             plt.show()
-        if self.setup.display_mode:
+        if self.setup.save_mode:
             self.saver.save_plot(fig, config.output_file)
 
         self.logger.info('[END] Scale accuracy check ended.')
@@ -432,10 +477,10 @@ class Engine:
         experiment_config.enhancement.hessian_function = hessian_function
         
         self.logger.info('[START] Engine started.')
-        self.chunk_number_influence(config.cni, experiment_config)
-        self.volume_size_influence(config.vsi, experiment_config)
-        self.scale_size_influence(config.ssi, experiment_config)
-        self.parallel_accuracy_check(config.pac, experiment_config)
+        # self.chunk_number_influence(config.cni, experiment_config)
+        # self.volume_size_influence(config.vsi, experiment_config)
+        # self.scale_size_influence(config.ssi, experiment_config)
+        # self.parallel_accuracy_check(config.pac, experiment_config)
         self.scale_accuracy_check(config.sac, experiment_config)
         self.logger.info('[START] Engine ended.')
 

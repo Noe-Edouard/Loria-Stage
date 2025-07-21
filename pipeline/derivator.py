@@ -36,6 +36,7 @@ class Derivator:
             d1 = np.array(filters[1])  
             d2 = np.array(filters[2])
             
+            # Gaussian smoothing
             data = gaussian_filter(data, sigma=sigma)
                 
             if data.ndim == 2:

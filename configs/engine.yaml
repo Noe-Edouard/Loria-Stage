@@ -59,77 +59,15 @@ runner:
     volume_sizes: [32, 64, 128]
     chunk_numbers: [2, 4, 8]
     output_file: engine_chunk_number
+
   pac:
     input_file: test.nii
     output_file: engine_para_accuracy
-# setup:
-#   name: engine
-#   input_dir: data/test
-#   output_dir: outputs/engine
-#   log_dir: logs
-#   log_file: engine
-#   debug_mode: true
-#   display_mode: true
-#   save_mode: true
 
-# experiment:
-#   load:
-#     normalize: true
-#     crop: true
-#     target_shape: [64, 64, 64]
-#     input_file: test.nii
-#     output_file: null
-
-#   methods:
-#     derivator: default
-#     enhancer: frangi
-#     segmenter: thresholding
-
-#   hessian:
-#     mode: reflect
-#     cval: 0.0
-
-#   processing:
-#     normalize: true
-#     parallelize: true
-#     chunk_size: [32, 32, 32]
-#     overlap_size: null
-
-#   enhancement:
-#     alpha: 0.5
-#     beta: 0.5
-#     gamma: 15
-#     scales: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-#     scales_number: null
-#     scales_range: null
-#     black_ridges: false
-#     skimage: false
-
-#   segmentation:
-#     threshold: null
-
-# engine:
-#   ssi:
-#     volume_size: 256
-#     scales_range: [1, 10]
-#     scales_numbers: [1, 2, 6, 8, 10]
-#     output_file: "engine_scale_size"
-
-#   vsi:
-#     volume_sizes: [32, 64, 128, 256, 512, 1024]
-#     output_file: "benchmark_volume_size"
-
-#   cni:
-
-#   methods: [
-#       "default",
-#       "gaussian",
-#       "farid",
-#       # "cubic",
-#       # "trigonometric",
-#       # "catmull",
-#       # "bspline",
-#       # "bezier",
-#     ]
-#   raw_file: raw.png
-#   gt_file: gt.png
+  sac:
+    input_file: raw.png
+    ground_truth: gt.png
+    output_file: engine_scale_accuracy
+    scales_steps: [1] # 2, 3, 4, 5]
+    max_ranges: [2, 4] # 6, 8, 10, 12, 14, 16, 18, 20]
+    min_ranges: [1, 2] # 3, 4, 5, 6, 7, 8, 9, 10]

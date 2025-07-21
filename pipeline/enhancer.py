@@ -179,9 +179,7 @@ class Enhancer:
                 
                 eigvals = hessian_matrix_eigvals(hessian)
                 eigvals = np.take_along_axis(eigvals, np.abs(eigvals).argsort(0), axis=0)
-                # eigvals = np.sort(np.abs(eigvals), axis=0)
                 
-                # eigvals[eigvals <= 0] = 1e-10
                 if image.ndim == 2:
                     lambda1, lambda2 = np.maximum(eigvals, 1e-10)
                     r_a = np.inf

@@ -14,7 +14,6 @@
 
 ### Config
 
-- Ajouter la possibilité de changer la config avec typer
 - Comment choisir le gamma quand on parallelize ?
 
 ### Autre
@@ -25,7 +24,7 @@
 
 ---
 
-### QUESTIONS
+### Notes
 
 #### Farid
 
@@ -40,5 +39,26 @@ Pourrait-on calculer la dérivée dans la direction la plus pertinente (le long 
 
 https://www.mdpi.com/2079-9292/12/19/4159
 
-- Ecrire rapport de stage
--
+### QUESTION
+
+- Accès article de Sato
+- Pas possible de faire la vérification des données 2D avec Jonas
+- Code Jonas en C
+- Parallelisation ok
+- Pipeline ok (check empirique)
+- Ajout d'un lisseur gaussiens -> résultats plus cohérents
+- Parallelisation du benchmark
+- Pas possible de tester le cerveau de souris (trop volumineux)
+- Est-ce qu'il ne vaudrait mieux pas ne pas ajouter le filtrage gaussien et implémenter diff finies et gaussian moi même ?
+- Quel est le plan pour un article ?
+
+---
+
+But : lancer le benchmark sur toutes les images 2D possibles
+lancer le benchmark pour les images 3D
+
+- Ajouter un check sur la plage d'échelle utilisée pour différents nombre d'échelle
+- Tester les paramètres alpha, beta, gamma
+- Faire les tests sur différentes image (en moyennant ?)
+- Résoudre le problème de log benchmark alors que engine
+- Automatiser le lancement du benchmark pour plusieurs images en même temps (ok dans mais mais à tester et lancer)

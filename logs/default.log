@@ -1917,3 +1917,71 @@
 2025-07-17 13:47:21 - [DEBUG]: - [CALL] "__init__"
                        - args:   [<pipeline.pipeline.Pipeline object at 0x00000282B67D8440>, SetupConfig(name='pipeline', input_dir='data/test', output_dir='outputs/pipeline', log_dir='logs', log_file='pipeline', debug_mode=False, display_mode=False, save_mode=False)]
                        - kwargs: { None }
+2025-07-21 14:58:53 - [DEBUG]: - [CALL] "enhance_data"
+                       - args:   [<pipeline.enhancer.Enhancer object at 0x0000029B8E44BE60>]
+                       - kwargs: { data=ndarray(shape=(800, 800), dtype=float32), method='frangi', processing_params=ProcessingConfig(normalize=True, parallelize=True, chunk_size=[16, 16, 16], overlap_size=None), enhancement_params=EnhancementConfig(alpha=0.5, beta=0.5, gamma=15, scales=array([ 1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17,
+       18, 19]), scales_number=None, scales_range=None, black_ridges=False, hessian_function=<bound method Derivator.default of <pipeline.derivator.Derivator object at 0x0000029B8CB6E900>>, skimage=False), hessian_params=HessianConfig(mode='reflect', cval=0.0) }
+2025-07-21 14:58:53 - [INFO]: - Sequential processing in progress...
+2025-07-21 14:58:53 - [DEBUG]: - [CALL] "frangi"
+                       - args:   [<pipeline.enhancer.Enhancer object at 0x0000029B8E44BE60>, ndarray(shape=(800, 800), dtype=float32)]
+                       - kwargs: { alpha=0.5, beta=0.5, gamma=15, scales=ndarray(shape=(19,), dtype=int32), scales_number=None, scales_range=None, black_ridges=False, hessian_function=<bound method Derivator.default of <pipeline.derivator.Derivator object at 0x0000029B8E8E9FA0>>, skimage=False, hessian_params=dict(keys=['mode', 'cval']) }
+2025-07-21 14:58:59 - [DEBUG]: - [CALL] "segment_data"
+                       - args:   [<pipeline.segmenter.Segmenter object at 0x0000029B8E4482C0>]
+                       - kwargs: { data=ndarray(shape=(800, 800), dtype=float32), method='thresholding', segmentation_params=SegmentationConfig(threshold=None), ground_truth=ndarray(shape=(800, 800), dtype=float32) }
+2025-07-21 14:58:59 - [DEBUG]: - [CALL] "thresholding"
+                       - args:   [<pipeline.segmenter.Segmenter object at 0x0000029B8E4482C0>, ndarray(shape=(800, 800), dtype=float32)]
+                       - kwargs: { ground_truth=ndarray(shape=(800, 800), dtype=float32), threshold=None }
+2025-07-21 15:00:37 - [DEBUG]: - [CALL] "enhance_data"
+                       - args:   [<pipeline.enhancer.Enhancer object at 0x000002AAA429F320>]
+                       - kwargs: { data=ndarray(shape=(800, 800), dtype=float32), method='frangi', processing_params=ProcessingConfig(normalize=True, parallelize=True, chunk_size=[16, 16, 16], overlap_size=None), enhancement_params=EnhancementConfig(alpha=0.5, beta=0.5, gamma=15, scales=array([ 1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17,
+       18, 19]), scales_number=None, scales_range=None, black_ridges=False, hessian_function=<bound method Derivator.default of <pipeline.derivator.Derivator object at 0x000002AAA40D37A0>>, skimage=False), hessian_params=HessianConfig(mode='reflect', cval=0.0) }
+2025-07-21 15:00:37 - [INFO]: - Sequential processing in progress...
+2025-07-21 15:00:37 - [DEBUG]: - [CALL] "frangi"
+                       - args:   [<pipeline.enhancer.Enhancer object at 0x000002AAA429F320>, ndarray(shape=(800, 800), dtype=float32)]
+                       - kwargs: { alpha=0.5, beta=0.5, gamma=15, scales=ndarray(shape=(19,), dtype=int32), scales_number=None, scales_range=None, black_ridges=False, hessian_function=<bound method Derivator.default of <pipeline.derivator.Derivator object at 0x000002AAA4535F40>>, skimage=False, hessian_params=dict(keys=['mode', 'cval']) }
+2025-07-21 15:00:43 - [DEBUG]: - [CALL] "segment_data"
+                       - args:   [<pipeline.segmenter.Segmenter object at 0x000002AAA429FF20>]
+                       - kwargs: { data=ndarray(shape=(800, 800), dtype=float32), method='thresholding', segmentation_params=SegmentationConfig(threshold=None), ground_truth=ndarray(shape=(800, 800), dtype=float32) }
+2025-07-21 15:00:43 - [DEBUG]: - [CALL] "thresholding"
+                       - args:   [<pipeline.segmenter.Segmenter object at 0x000002AAA429FF20>, ndarray(shape=(800, 800), dtype=float32)]
+                       - kwargs: { ground_truth=ndarray(shape=(800, 800), dtype=float32), threshold=None }
+2025-07-21 15:00:43 - [DEBUG]: - [CALL] "enhance_data"
+                       - args:   [<pipeline.enhancer.Enhancer object at 0x000002AAA429F320>]
+                       - kwargs: { data=ndarray(shape=(800, 800), dtype=float32), method='frangi', processing_params=ProcessingConfig(normalize=True, parallelize=True, chunk_size=[16, 16, 16], overlap_size=None), enhancement_params=EnhancementConfig(alpha=0.5, beta=0.5, gamma=15, scales=array([ 2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
+       19]), scales_number=None, scales_range=None, black_ridges=False, hessian_function=<bound method Derivator.default of <pipeline.derivator.Derivator object at 0x000002AAA40D37A0>>, skimage=False), hessian_params=HessianConfig(mode='reflect', cval=0.0) }
+2025-07-21 15:00:43 - [INFO]: - Sequential processing in progress...
+2025-07-21 15:00:43 - [DEBUG]: - [CALL] "frangi"
+                       - args:   [<pipeline.enhancer.Enhancer object at 0x000002AAA429F320>, ndarray(shape=(800, 800), dtype=float32)]
+                       - kwargs: { alpha=0.5, beta=0.5, gamma=15, scales=ndarray(shape=(18,), dtype=int32), scales_number=None, scales_range=None, black_ridges=False, hessian_function=<bound method Derivator.default of <pipeline.derivator.Derivator object at 0x000002AAA401E8A0>>, skimage=False, hessian_params=dict(keys=['mode', 'cval']) }
+2025-07-21 15:00:48 - [DEBUG]: - [CALL] "segment_data"
+                       - args:   [<pipeline.segmenter.Segmenter object at 0x000002AAA429FF20>]
+                       - kwargs: { data=ndarray(shape=(800, 800), dtype=float32), method='thresholding', segmentation_params=SegmentationConfig(threshold=None), ground_truth=ndarray(shape=(800, 800), dtype=float32) }
+2025-07-21 15:00:48 - [DEBUG]: - [CALL] "thresholding"
+                       - args:   [<pipeline.segmenter.Segmenter object at 0x000002AAA429FF20>, ndarray(shape=(800, 800), dtype=float32)]
+                       - kwargs: { ground_truth=ndarray(shape=(800, 800), dtype=float32), threshold=None }
+2025-07-21 15:00:48 - [DEBUG]: - [CALL] "enhance_data"
+                       - args:   [<pipeline.enhancer.Enhancer object at 0x000002AAA429F320>]
+                       - kwargs: { data=ndarray(shape=(800, 800), dtype=float32), method='frangi', processing_params=ProcessingConfig(normalize=True, parallelize=True, chunk_size=[16, 16, 16], overlap_size=None), enhancement_params=EnhancementConfig(alpha=0.5, beta=0.5, gamma=15, scales=array([1]), scales_number=None, scales_range=None, black_ridges=False, hessian_function=<bound method Derivator.default of <pipeline.derivator.Derivator object at 0x000002AAA40D37A0>>, skimage=False), hessian_params=HessianConfig(mode='reflect', cval=0.0) }
+2025-07-21 15:00:48 - [INFO]: - Sequential processing in progress...
+2025-07-21 15:00:48 - [DEBUG]: - [CALL] "frangi"
+                       - args:   [<pipeline.enhancer.Enhancer object at 0x000002AAA429F320>, ndarray(shape=(800, 800), dtype=float32)]
+                       - kwargs: { alpha=0.5, beta=0.5, gamma=15, scales=ndarray(shape=(1,), dtype=int32), scales_number=None, scales_range=None, black_ridges=False, hessian_function=<bound method Derivator.default of <pipeline.derivator.Derivator object at 0x000002AAA401DEB0>>, skimage=False, hessian_params=dict(keys=['mode', 'cval']) }
+2025-07-21 15:00:49 - [DEBUG]: - [CALL] "segment_data"
+                       - args:   [<pipeline.segmenter.Segmenter object at 0x000002AAA429FF20>]
+                       - kwargs: { data=ndarray(shape=(800, 800), dtype=float32), method='thresholding', segmentation_params=SegmentationConfig(threshold=None), ground_truth=ndarray(shape=(800, 800), dtype=float32) }
+2025-07-21 15:00:49 - [DEBUG]: - [CALL] "thresholding"
+                       - args:   [<pipeline.segmenter.Segmenter object at 0x000002AAA429FF20>, ndarray(shape=(800, 800), dtype=float32)]
+                       - kwargs: { ground_truth=ndarray(shape=(800, 800), dtype=float32), threshold=None }
+2025-07-21 15:00:49 - [DEBUG]: - [CALL] "enhance_data"
+                       - args:   [<pipeline.enhancer.Enhancer object at 0x000002AAA429F320>]
+                       - kwargs: { data=ndarray(shape=(800, 800), dtype=float32), method='frangi', processing_params=ProcessingConfig(normalize=True, parallelize=True, chunk_size=[16, 16, 16], overlap_size=None), enhancement_params=EnhancementConfig(alpha=0.5, beta=0.5, gamma=15, scales=array([1, 2, 3]), scales_number=None, scales_range=None, black_ridges=False, hessian_function=<bound method Derivator.default of <pipeline.derivator.Derivator object at 0x000002AAA40D37A0>>, skimage=False), hessian_params=HessianConfig(mode='reflect', cval=0.0) }
+2025-07-21 15:00:49 - [INFO]: - Sequential processing in progress...
+2025-07-21 15:00:49 - [DEBUG]: - [CALL] "frangi"
+                       - args:   [<pipeline.enhancer.Enhancer object at 0x000002AAA429F320>, ndarray(shape=(800, 800), dtype=float32)]
+                       - kwargs: { alpha=0.5, beta=0.5, gamma=15, scales=ndarray(shape=(3,), dtype=int32), scales_number=None, scales_range=None, black_ridges=False, hessian_function=<bound method Derivator.default of <pipeline.derivator.Derivator object at 0x000002AAA3F66E10>>, skimage=False, hessian_params=dict(keys=['mode', 'cval']) }
+2025-07-21 15:00:50 - [DEBUG]: - [CALL] "segment_data"
+                       - args:   [<pipeline.segmenter.Segmenter object at 0x000002AAA429FF20>]
+                       - kwargs: { data=ndarray(shape=(800, 800), dtype=float32), method='thresholding', segmentation_params=SegmentationConfig(threshold=None), ground_truth=ndarray(shape=(800, 800), dtype=float32) }
+2025-07-21 15:00:50 - [DEBUG]: - [CALL] "thresholding"
+                       - args:   [<pipeline.segmenter.Segmenter object at 0x000002AAA429FF20>, ndarray(shape=(800, 800), dtype=float32)]
+                       - kwargs: { ground_truth=ndarray(shape=(800, 800), dtype=float32), threshold=None }

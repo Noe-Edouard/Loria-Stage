@@ -9,8 +9,8 @@ from pipeline.pipeline import Pipeline
 
 RUN_PIPELINE: bool = False
 RUN_TEST: bool = False
-RUN_ENGINE: bool = False
-RUN_BENCHMARK: bool = True
+RUN_ENGINE: bool = True
+RUN_BENCHMARK: bool = False
 
 SRC_PIPELINE = 'configs/pipeline.yaml'
 SRC_TEST = 'configs/test.yaml'
@@ -41,7 +41,6 @@ def main():
         benchmark = Benchmark(setup_config)
         benchmark.run(benchmark_config, experiment_config)
     
-    
     if RUN_ENGINE:
         
         config: MainConfig = ConfigBuilder(SRC_ENGINE, MainConfig)
@@ -62,11 +61,14 @@ def main():
         benchmark_config: BenchmarkConfig = ConfigBuilder(config.runner, BenchmarkConfig)
         
         if FULL_BENCHMARK:
-            data_dir = Path(setup_config.input_dir)
-            for file in data_dir.iterdir():
-                experiment_config.load.input_file = file.name
-                benchmark = Benchmark(setup_config)
-                benchmark.run(benchmark_config, experiment_config)
+            pass
+        #     raw_dir = Path(setup_config.input_dir) / 'raw'
+        #     gt_dir = Path(setup_config.input_dir) / 'gt'
+        #     for raw_file, gt_file in zip(raw_dir.iterdir(), gt_dir.iterdir()):
+        #         experiment_config.load.input_file = raw_file.name
+        #         # experiment_config.load. = gt_file.name
+        #         benchmark = Benchmark(setup_config)
+        #         benchmark.run(benchmark_config, experiment_config)
             
         else:
             benchmark = Benchmark(setup_config)

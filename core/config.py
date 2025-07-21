@@ -228,8 +228,9 @@ class SACConfig(Config):
     input_file: str
     output_file: str
     ground_truth: str 
-    scales_numbers: list
-    scales_range: tuple
+    scales_steps: list
+    max_ranges: list[int]
+    min_ranges: list[int]
 
 
 @dataclass
