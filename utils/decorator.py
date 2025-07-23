@@ -57,3 +57,17 @@ def log_call() -> Callable[[Callable[P, R]], Callable[P, R]]:
             return function(*args, **kwargs)
         return wrapper
     return decorator
+
+
+def log_section(message: str):
+    """Décorateur pour logger [START] et [END] autour d'une fonction avec un message personnalisé."""
+    def decorator(function):
+        @wraps(function)
+        def wrapper(*args, **kwargs):
+            logger = getattr(args[0], 'logger', default_logger)
+            logger.info(f"[START] {message}")
+            result = function(*args, **kwargs)
+            logger.info(f"[END] {message}")
+            return result
+        return wrapper
+    return decorator

@@ -1,0 +1,62 @@
+setup:
+  name: "optimizer_experiment"
+  input_dir: "data/test"
+  output_dir: "outputs/optimizer"
+  log_dir: "logs"
+  log_file: "optimizer.log"
+  debug_mode: true
+  display_mode: false
+  save_mode: true
+
+experiment:
+  load:
+    normalize: true
+    crop: true
+    target_shape: [64, 64, 64]
+    input_file: test.nii
+    output_file: null
+
+  methods:
+    derivator: default
+    enhancer: frangi
+    segmenter: thresholding
+
+  hessian:
+    mode: reflect
+    cval: 0.0
+
+  processing:
+    normalize: true
+    parallelize: true
+    chunk_size: [16, 16, 16]
+    overlap_size: null
+
+  enhancement:
+    alpha: 0.5
+    beta: 0.5
+    gamma: 15
+    scales: [2, 4, 6, 8]
+    scales_number: null
+    scales_range: null
+    black_ridges: true
+    skimage: false
+
+  segmentation:
+    threshold: null
+
+runner:
+  csi:
+    output_file: "csi"
+    scales_steps: [1, 2, 3]
+    max_ranges: [10, 15, 20]
+    min_ranges: [1, 2, 3]
+  cai:
+    output_file: "cai"
+    alpha_values: [0.1, 0.5]
+  cbi:
+    output_file: "cbi"
+    beta_values: [0.1, 0.5]
+
+  cgi:
+    output_file: "cgi"
+    gamma_values: [0.1, 0.5]

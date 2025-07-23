@@ -1,5 +1,14 @@
+
+from time import perf_counter
 import numpy as np
 from typing import Optional, Tuple
+
+
+def compute_time(function, *args, **kargs):
+    start = perf_counter()
+    function(*args, **kargs)
+    end = perf_counter()
+    return end - start
 
 
 def normalize_data(data: np.ndarray):

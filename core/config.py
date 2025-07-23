@@ -7,9 +7,6 @@ from typing import Any, Union, Literal, Callable, Sequence, Tuple, Optional, Typ
 
 ### GENERAL
 
-from dataclasses import dataclass, asdict, is_dataclass
-from typing import Any
-
 @dataclass
 class Config:
     def __getattr__(self, key: str) -> Any:
@@ -38,7 +35,6 @@ class Config:
     
     def values(self):
         return self.to_dict().values()
-
 
 C = TypeVar("C", bound=Config)
  
@@ -96,8 +92,6 @@ class ConfigBuilder:
 
         return dataclass_type(**kwargs)
 
-
- 
 
     
 ### PIPELINE
@@ -175,6 +169,14 @@ class ExperimentData(Config):
 ### BENCHMARK 
 
 @dataclass
+class MetricsConfig(Config):
+    method: Literal['default', 'gaussian', 'farid', 'cubic', 'trigonometric', 'catmull', 'bspline', 'bezier']
+    dice: float
+    mcc: float
+    roc: float
+    pr: float
+    
+@dataclass
 class GridConfig(Config):
     alpha: list[float]
     beta: list[float]
@@ -184,7 +186,6 @@ class GridConfig(Config):
 class BenchmarkConfig(Config): 
     params_grid: GridConfig
     methods: list[str] 
-    #search_type: Literal['full', 'same', 'constant', 'gradient']
     raw_file: str
     gt_file: str
        
@@ -193,10 +194,11 @@ class BenchmarkData(Config):
     raw_data: ndarray
     ground_truth: ndarray
     experiments: list[ExperimentData] 
+    metrics: list[MetricsConfig]
+    
 
 
 ### ENGINE
-
 
 @dataclass
 class SSIConfig(Config):
@@ -223,15 +225,6 @@ class PACConfig(Config):
     input_file: str
     output_file: str
 
-@dataclass
-class SACConfig(Config):
-    input_file: str
-    output_file: str
-    ground_truth: str 
-    scales_steps: list
-    max_ranges: list[int]
-    min_ranges: list[int]
-
 
 @dataclass
 class EngineConfig(Config):
@@ -239,8 +232,43 @@ class EngineConfig(Config):
     vsi: VSIConfig
     cni: CNIConfig
     pac: PACConfig
-    sac: SACConfig
     
+
+### OPTIMIZER
+
+@dataclass
+class CSIConfig(Config):
+    output_file: str
+    scales_steps: list
+    max_ranges: list[int]
+    min_ranges: list[int]
+    
+
+@dataclass
+class CAIConfig(Config):
+    output_file: str
+    alpha_values: list[float]
+    
+@dataclass
+class CBIConfig(Config):
+    output_file: str
+    beta_values: list[float]
+    
+@dataclass
+class CGIConfig(Config):
+    output_file: str
+    gamma_values: list[float]
+    
+
+@dataclass
+class OptimizerConfig(Config):
+    csi: CSIConfig
+    cai: CAIConfig
+    cbi: CBIConfig
+    cgi: CGIConfig
+
+
+
 
 ### MAIN
 

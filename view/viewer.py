@@ -8,9 +8,24 @@ from matplotlib.patches import Patch
 
 
 class Viewer():
+
+    
     def __init__(self, display_mode: bool = True):
         self.display_mode = display_mode
 
+    def _get_error_legend(self, is_binary: bool = False):
+        if is_binary:
+            return [
+                Patch(facecolor='white', edgecolor='black', label='Vessels'),
+                Patch(facecolor='black', edgecolor='black', label='Background'),
+            ]
+        else:
+            return [
+                Patch(facecolor='white', edgecolor='black', label='True Positive'),
+                Patch(facecolor='black', edgecolor='black', label='True Negative'),
+                Patch(facecolor=(100/255, 100/255, 1.0), edgecolor='black', label='False Positive'),
+                Patch(facecolor=(1.0, 100/255, 100/255), edgecolor='black', label='False Negative'),
+            ]
 
     def _normalize_inputs(self, images, titles):
         if isinstance(images, np.ndarray):
@@ -32,20 +47,19 @@ class Viewer():
 
 
 
-    def display_images(self, images: Union[list[np.ndarray], np.ndarray],
-                    titles: Union[list[str], str] = None,
-                    cmap='gray', error_mode=False):
-
+    def display_images(self, 
+        images: Union[list[np.ndarray], np.ndarray],
+        titles: Union[list[str], str] = None,
+        cmap='gray', 
+        error_mode=False
+    ):
         images, titles, num_images = self._normalize_inputs(images, titles)
-
         max_cols = 5
         ncols = max_cols
         nrows = math.ceil((num_images + (1 if error_mode else 0)) / max_cols)
-
         fig_width = 2.2 * ncols
         fig_height = 2.0 * nrows
         fig, axs = plt.subplots(nrows=nrows, ncols=ncols, figsize=(fig_width, fig_height))
-
         axs = np.atleast_2d(axs)
         axs_flat = axs.flatten()
 
@@ -55,7 +69,6 @@ class Viewer():
             im = ax.imshow(img, cmap=used_cmap)
             ax.set_title(titles[i], fontsize=9)
             ax.axis('off')
-
             if not error_mode:
                 cbar = fig.colorbar(im, ax=ax, shrink=0.9)
                 cbar.ax.tick_params(labelsize=6)
@@ -64,12 +77,7 @@ class Viewer():
         if error_mode:
             ax = axs_flat[num_images]
             ax.axis('off')
-            legend_elements = [
-                Patch(facecolor='white', edgecolor='black', label='True Positive'),
-                Patch(facecolor='black', edgecolor='black', label='True Negative'),
-                Patch(facecolor=(100/255, 100/255, 1.0), edgecolor='black', label='False Positive'),
-                Patch(facecolor=(1.0, 100/255, 100/255), edgecolor='black', label='False Negative'),
-            ]
+            legend_elements = self._get_error_legend(is_binary=self.is_binary_image(images[0]))
             ax.legend(handles=legend_elements, loc='center', fontsize=10)
 
         # Hide unused axes
@@ -191,9 +199,13 @@ class Viewer():
 
 
 
-    def display_slices(self, volumes: Union[list[np.ndarray], np.ndarray],
-                    titles: Union[list[str], str] = None,
-                    interval=10, cmap='gray', error_mode: bool=False):
+    def display_slices(self, 
+        volumes: Union[list[np.ndarray], np.ndarray],
+        titles: Union[list[str], str] = None,
+        interval=10, 
+        cmap='gray', 
+        error_mode: bool=False
+    ):
 
         volumes, titles, num_volumes = self._normalize_inputs(volumes, titles)
         directions = [0, 1, 2]
@@ -227,7 +239,7 @@ class Viewer():
 
             ax_title = axs[row_idx, base_col]
             ax_title.text(0.5, 0.5, titles[idx], rotation=90, fontsize=10, fontweight='bold',
-                        verticalalignment='center', horizontalalignment='center')
+                          verticalalignment='center', horizontalalignment='center')
             ax_title.axis('off')
 
             volume_plots = []
@@ -253,18 +265,7 @@ class Viewer():
             if error_mode:
                 ax_legend = axs[row_idx, base_col + 4]
                 ax_legend.axis('off')
-                if is_binary:
-                    legend_elements = [
-                        Patch(facecolor='white', edgecolor='black', label='Vessels'),
-                        Patch(facecolor='black', edgecolor='black', label='Background'),
-                    ]
-                else:
-                    legend_elements = [
-                        Patch(facecolor='white', edgecolor='black', label='True Positive'),
-                        Patch(facecolor='black', edgecolor='black', label='True Negative'),
-                        Patch(facecolor=(100/255, 100/255, 1.0), edgecolor='black', label='False Positive'),
-                        Patch(facecolor=(1.0, 100/255, 100/255), edgecolor='black', label='False Negative'),
-                    ]
+                legend_elements = self._get_error_legend(is_binary=is_binary)
                 ax_legend.legend(handles=legend_elements, loc='center left', fontsize=10)
 
         # Update animation

@@ -1,6 +1,6 @@
 # Benchmark
 
-## 1. Benchmark efficacité du traitement
+## 1. Engine : efficacité du traitement
 
 ### 1.1 Objectif
 
@@ -15,7 +15,7 @@ On effectue chacune des expériences suivantes pour le réhaussement, pour la he
 - Comparer les temps de calcul en fonction de la taille des chunk
 - Comparer les résultats obtenus avec et sans parallelisation pour vérifier que ce sont les mêmes
 
-## 2. Benchmark précision du réhaussement
+## 2. Benchmark : précision du réhaussement
 
 ### 2.1 Objectif
 

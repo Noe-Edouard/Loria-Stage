@@ -1,0 +1,276 @@
+2025-07-22 16:56:41 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 16:56:41 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 16:56:41 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 16:56:41 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 16:56:41 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 16:56:41 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 16:56:41 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 16:56:41 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 16:56:41 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 16:56:41 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 16:56:41 - [INFO]: - [START] Check alpha influence
+2025-07-22 16:56:41 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 16:56:41 - [INFO]: - [START] Check beta influence
+2025-07-22 16:56:41 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 16:56:41 - [INFO]: - [START] Check gamma influence
+2025-07-22 17:01:19 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 17:01:19 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 17:01:19 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 17:01:19 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 17:01:19 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 17:01:19 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 17:01:19 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 17:01:19 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 17:01:20 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 17:01:20 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 17:01:20 - [INFO]: - [START] Check alpha influence
+2025-07-22 17:01:20 - [INFO]: - ============================== RESUME ==============================
+
+2025-07-22 17:01:20 - [INFO]: - Alpha values: [0.1, 0.2]
+2025-07-22 17:01:20 - [INFO]: - Scores: [0.0, 0.0]
+2025-07-22 17:01:20 - [INFO]: - 
+|   Alpha |   MCC Score |
+|---------|-------------|
+|   0.100 |       0.000 |
+|   0.200 |       0.000 |
+2025-07-22 17:01:20 - [INFO]: - ====================================================================
+
+2025-07-22 17:01:23 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 17:01:23 - [INFO]: - [START] Check beta influence
+2025-07-22 17:01:23 - [INFO]: - ============================== RESUME ==============================
+
+2025-07-22 17:01:23 - [INFO]: - Beta values: [0.1, 0.2]
+2025-07-22 17:01:23 - [INFO]: - Scores: [0.0, 0.0]
+2025-07-22 17:01:23 - [INFO]: - 
+|   Beta |   MCC Score |
+|--------|-------------|
+|  0.100 |       0.000 |
+|  0.200 |       0.000 |
+2025-07-22 17:01:23 - [INFO]: - ====================================================================
+
+2025-07-22 17:01:23 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 17:01:23 - [INFO]: - [START] Check gamma influence
+2025-07-22 17:01:23 - [INFO]: - ============================== RESUME ==============================
+
+2025-07-22 17:01:23 - [INFO]: - Gamma values: [0.1, 0.2]
+2025-07-22 17:01:23 - [INFO]: - Scores: [0.0, 0.0]
+2025-07-22 17:01:23 - [INFO]: - 
+|   Gamma |   MCC Score |
+|---------|-------------|
+|   0.100 |       0.000 |
+|   0.200 |       0.000 |
+2025-07-22 17:01:23 - [INFO]: - ====================================================================
+
+2025-07-22 17:09:48 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 17:09:48 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 17:09:48 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 17:09:48 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 17:09:48 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 17:09:48 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 17:09:48 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 17:09:48 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 17:09:48 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 17:09:48 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 17:09:48 - [INFO]: - [START] Check alpha influence
+2025-07-22 17:09:48 - [INFO]: - ============================== RESUME ==============================
+
+2025-07-22 17:09:48 - [INFO]: - Alpha values: [0.1, 0.2]
+2025-07-22 17:09:48 - [INFO]: - Scores: [0.0, 0.0]
+2025-07-22 17:09:48 - [INFO]: - 
+|   Alpha |   MCC Score |
+|---------|-------------|
+|   0.100 |       0.000 |
+|   0.200 |       0.000 |
+2025-07-22 17:09:48 - [INFO]: - ====================================================================
+
+2025-07-22 17:09:49 - [INFO]: - [END] Alpha accuracy check ended.
+2025-07-22 17:09:49 - [INFO]: - [END] Check alpha influence
+2025-07-22 17:09:49 - [DEBUG]: - [TIMER] "check_alpha_influence" executed in 0.6205 seconds
+2025-07-22 17:09:49 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 17:09:49 - [INFO]: - [START] Check beta influence
+2025-07-22 17:09:49 - [INFO]: - ============================== RESUME ==============================
+
+2025-07-22 17:09:49 - [INFO]: - Beta values: [0.1, 0.2]
+2025-07-22 17:09:49 - [INFO]: - Scores: [0.0, 0.0]
+2025-07-22 17:09:49 - [INFO]: - 
+|   Beta |   MCC Score |
+|--------|-------------|
+|  0.100 |       0.000 |
+|  0.200 |       0.000 |
+2025-07-22 17:09:49 - [INFO]: - ====================================================================
+
+2025-07-22 17:09:49 - [INFO]: - [END] Beta accuracy check ended.
+2025-07-22 17:09:49 - [INFO]: - [END] Check beta influence
+2025-07-22 17:09:49 - [DEBUG]: - [TIMER] "check_beta_influence" executed in 0.0385 seconds
+2025-07-22 17:09:49 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 17:09:49 - [INFO]: - [START] Check gamma influence
+2025-07-22 17:09:49 - [INFO]: - ============================== RESUME ==============================
+
+2025-07-22 17:09:49 - [INFO]: - Gamma values: [0.1, 0.2]
+2025-07-22 17:09:49 - [INFO]: - Scores: [0.0, 0.0]
+2025-07-22 17:09:49 - [INFO]: - 
+|   Gamma |   MCC Score |
+|---------|-------------|
+|   0.100 |       0.000 |
+|   0.200 |       0.000 |
+2025-07-22 17:09:49 - [INFO]: - ====================================================================
+
+2025-07-22 17:09:49 - [INFO]: - [END] Gamma accuracy check ended.
+2025-07-22 17:09:49 - [INFO]: - [END] Check gamma influence
+2025-07-22 17:09:49 - [DEBUG]: - [TIMER] "check_gamma_influence" executed in 0.0382 seconds
+2025-07-22 17:12:00 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 17:12:00 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 17:12:00 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 17:12:00 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 17:12:00 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 17:12:00 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 17:12:00 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 17:12:00 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 17:12:00 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 17:12:03 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 17:12:03 - [INFO]: - [START] Check alpha influence
+2025-07-22 17:12:03 - [INFO]: - ============================== RESUME ==============================
+
+2025-07-22 17:12:03 - [INFO]: - Alpha values: [0.1, 0.2]
+2025-07-22 17:12:03 - [INFO]: - Scores: [0.0, 0.0]
+2025-07-22 17:12:03 - [INFO]: - 
+|   Alpha |   MCC Score |
+|---------|-------------|
+|   0.100 |       0.000 |
+|   0.200 |       0.000 |
+2025-07-22 17:12:03 - [INFO]: - ====================================================================
+
+2025-07-22 17:12:06 - [INFO]: - [END] Alpha accuracy check ended.
+2025-07-22 17:12:06 - [INFO]: - [END] Check alpha influence
+2025-07-22 17:12:06 - [DEBUG]: - [TIMER] "check_alpha_influence" executed in 3.0717 seconds
+2025-07-22 17:12:06 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 17:12:06 - [INFO]: - [START] Check beta influence
+2025-07-22 17:12:06 - [INFO]: - ============================== RESUME ==============================
+
+2025-07-22 17:12:06 - [INFO]: - Beta values: [0.1, 0.2]
+2025-07-22 17:12:06 - [INFO]: - Scores: [0.0, 0.0]
+2025-07-22 17:12:06 - [INFO]: - 
+|   Beta |   MCC Score |
+|--------|-------------|
+|  0.100 |       0.000 |
+|  0.200 |       0.000 |
+2025-07-22 17:12:06 - [INFO]: - ====================================================================
+
+2025-07-22 17:12:06 - [INFO]: - [END] Beta accuracy check ended.
+2025-07-22 17:12:06 - [INFO]: - [END] Check beta influence
+2025-07-22 17:12:06 - [DEBUG]: - [TIMER] "check_beta_influence" executed in 0.0252 seconds
+2025-07-22 17:12:06 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 17:12:06 - [INFO]: - [START] Check gamma influence
+2025-07-22 17:12:06 - [INFO]: - ============================== RESUME ==============================
+
+2025-07-22 17:12:06 - [INFO]: - Gamma values: [0.1, 0.2]
+2025-07-22 17:12:06 - [INFO]: - Scores: [0.0, 0.0]
+2025-07-22 17:12:06 - [INFO]: - 
+|   Gamma |   MCC Score |
+|---------|-------------|
+|   0.100 |       0.000 |
+|   0.200 |       0.000 |
+2025-07-22 17:12:06 - [INFO]: - ====================================================================
+
+2025-07-22 17:12:06 - [INFO]: - [END] Gamma accuracy check ended.
+2025-07-22 17:12:06 - [INFO]: - [END] Check gamma influence
+2025-07-22 17:12:06 - [DEBUG]: - [TIMER] "check_gamma_influence" executed in 0.0247 seconds
+2025-07-22 17:13:08 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 17:13:08 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 17:13:08 - [INFO]: - [START] Check alpha influence
+2025-07-22 17:13:08 - [INFO]: - ============================== RESUME ==============================
+
+2025-07-22 17:13:08 - [INFO]: - Alpha values: [0.1, 0.2]
+2025-07-22 17:13:08 - [INFO]: - Scores: [0.0, 0.0]
+2025-07-22 17:13:08 - [INFO]: - 
+|   Alpha |   MCC Score |
+|---------|-------------|
+|   0.100 |       0.000 |
+|   0.200 |       0.000 |
+2025-07-22 17:13:08 - [INFO]: - ====================================================================
+
+2025-07-22 17:13:11 - [INFO]: - [END] Alpha accuracy check ended.
+2025-07-22 17:13:11 - [INFO]: - [END] Check alpha influence
+2025-07-22 17:13:11 - [DEBUG]: - [TIMER] "check_alpha_influence" executed in 2.7355 seconds
+2025-07-22 17:13:11 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 17:13:11 - [INFO]: - [START] Check beta influence
+2025-07-22 17:13:11 - [INFO]: - ============================== RESUME ==============================
+
+2025-07-22 17:13:11 - [INFO]: - Beta values: [0.1, 0.2]
+2025-07-22 17:13:11 - [INFO]: - Scores: [0.0, 0.0]
+2025-07-22 17:13:11 - [INFO]: - 
+|   Beta |   MCC Score |
+|--------|-------------|
+|  0.100 |       0.000 |
+|  0.200 |       0.000 |
+2025-07-22 17:13:11 - [INFO]: - ====================================================================
+
+2025-07-22 17:13:11 - [INFO]: - [END] Beta accuracy check ended.
+2025-07-22 17:13:11 - [INFO]: - [END] Check beta influence
+2025-07-22 17:13:11 - [DEBUG]: - [TIMER] "check_beta_influence" executed in 0.0305 seconds
+2025-07-22 17:13:11 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 17:13:11 - [INFO]: - [START] Check gamma influence
+2025-07-22 17:13:11 - [INFO]: - ============================== RESUME ==============================
+
+2025-07-22 17:13:11 - [INFO]: - Gamma values: [0.1, 0.2]
+2025-07-22 17:13:11 - [INFO]: - Scores: [0.0, 0.0]
+2025-07-22 17:13:11 - [INFO]: - 
+|   Gamma |   MCC Score |
+|---------|-------------|
+|   0.100 |       0.000 |
+|   0.200 |       0.000 |
+2025-07-22 17:13:11 - [INFO]: - ====================================================================
+
+2025-07-22 17:13:11 - [INFO]: - [END] Gamma accuracy check ended.
+2025-07-22 17:13:11 - [INFO]: - [END] Check gamma influence
+2025-07-22 17:13:11 - [DEBUG]: - [TIMER] "check_gamma_influence" executed in 0.0294 seconds
+2025-07-22 17:14:57 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 17:14:57 - [INFO]: - [START] Check scales influence
+2025-07-22 17:14:57 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 17:14:57 - [INFO]: - [START] Check alpha influence
+2025-07-22 17:14:57 - [INFO]: - ============================== RESUME ==============================
+
+2025-07-22 17:14:57 - [INFO]: - Alpha values: [0.1, 0.2]
+2025-07-22 17:14:57 - [INFO]: - Scores: [0.0, 0.0]
+2025-07-22 17:14:57 - [INFO]: - 
+|   Alpha |   MCC Score |
+|---------|-------------|
+|   0.100 |       0.000 |
+|   0.200 |       0.000 |
+2025-07-22 17:14:57 - [INFO]: - ====================================================================
+
+2025-07-22 17:14:57 - [INFO]: - [END] Alpha accuracy check ended.
+2025-07-22 17:14:57 - [INFO]: - [END] Check alpha influence
+2025-07-22 17:14:57 - [DEBUG]: - [TIMER] "check_alpha_influence" executed in 0.3943 seconds
+2025-07-22 17:14:57 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 17:14:57 - [INFO]: - [START] Check beta influence
+2025-07-22 17:14:57 - [INFO]: - ============================== RESUME ==============================
+
+2025-07-22 17:14:57 - [INFO]: - Beta values: [0.1, 0.2]
+2025-07-22 17:14:57 - [INFO]: - Scores: [0.0, 0.0]
+2025-07-22 17:14:57 - [INFO]: - 
+|   Beta |   MCC Score |
+|--------|-------------|
+|  0.100 |       0.000 |
+|  0.200 |       0.000 |
+2025-07-22 17:14:57 - [INFO]: - ====================================================================
+
+2025-07-22 17:14:57 - [INFO]: - [END] Beta accuracy check ended.
+2025-07-22 17:14:57 - [INFO]: - [END] Check beta influence
+2025-07-22 17:14:57 - [DEBUG]: - [TIMER] "check_beta_influence" executed in 0.0264 seconds
+2025-07-22 17:14:57 - [INFO]: - [INIT] Engine initialized - Experiment test
+2025-07-22 17:14:57 - [INFO]: - [START] Check gamma influence
+2025-07-22 17:14:57 - [INFO]: - ============================== RESUME ==============================
+
+2025-07-22 17:14:57 - [INFO]: - Gamma values: [0.1, 0.2]
+2025-07-22 17:14:57 - [INFO]: - Scores: [0.0, 0.0]
+2025-07-22 17:14:57 - [INFO]: - 
+|   Gamma |   MCC Score |
+|---------|-------------|
+|   0.100 |       0.000 |
+|   0.200 |       0.000 |
+2025-07-22 17:14:57 - [INFO]: - ====================================================================
+
+2025-07-22 17:14:58 - [INFO]: - [END] Gamma accuracy check ended.
+2025-07-22 17:14:58 - [INFO]: - [END] Check gamma influence
+2025-07-22 17:14:58 - [DEBUG]: - [TIMER] "check_gamma_influence" executed in 0.0318 seconds

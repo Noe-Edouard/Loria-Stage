@@ -1985,3 +1985,85 @@
 2025-07-21 15:00:50 - [DEBUG]: - [CALL] "thresholding"
                        - args:   [<pipeline.segmenter.Segmenter object at 0x000002AAA429FF20>, ndarray(shape=(800, 800), dtype=float32)]
                        - kwargs: { ground_truth=ndarray(shape=(800, 800), dtype=float32), threshold=None }
+2025-07-21 16:43:30 - [INFO]: - [LOAD] Data mouse_brain.nii loaded with shape (544, 326, 500) and normalized.
+2025-07-21 16:45:25 - [INFO]: - [LOAD] Data mouse_brain.nii loaded with shape (200, 200, 200) and normalized.
+2025-07-21 16:45:25 - [INFO]: - [SAVE] Data file .nii.npz saved at results\2025-07-21_16-45-25_default\data_.nii.
+2025-07-21 16:48:32 - [INFO]: - [LOAD] Data mouse_brain.nii loaded with shape (300, 300, 300) and normalized.
+2025-07-21 16:48:34 - [INFO]: - [SAVE] Data file .nii.npz saved at results\2025-07-21_16-48-33_default\data_.nii.
+2025-07-21 16:49:12 - [INFO]: - [LOAD] Data mouse_brain.nii loaded with shape (300, 300, 300) and normalized.
+2025-07-21 16:49:13 - [INFO]: - [SAVE] Data file mouse_brain_crop.nii saved at results\2025-07-21_16-49-12_default\data_mouse_brain_crop.
+2025-07-21 16:50:09 - [INFO]: - [LOAD] Data mouse_brain.nii loaded with shape (250, 250, 250) and normalized.
+2025-07-21 16:50:09 - [INFO]: - [SAVE] Data file mouse_brain_crop.nii saved at results\2025-07-21_16-50-09_default\data_mouse_brain_crop.
+2025-07-21 16:51:41 - [INFO]: - [LOAD] Data mouse_brain.nii loaded with shape (220, 220, 220) and normalized.
+2025-07-21 16:51:41 - [INFO]: - [SAVE] Data file mouse_brain_crop.nii saved at results\2025-07-21_16-51-41_default\data_mouse_brain_crop.
+2025-07-21 16:52:43 - [INFO]: - [LOAD] Data mouse_brain.nii loaded with shape (200, 200, 200) and normalized.
+2025-07-21 16:52:43 - [INFO]: - [SAVE] Data file mouse_brain_crop.nii saved at results\2025-07-21_16-52-43_default\data_mouse_brain_crop.
+2025-07-21 16:54:41 - [INFO]: - [LOAD] Data mouse_brain.nii loaded with shape (150, 150, 150) and normalized.
+2025-07-21 16:54:41 - [INFO]: - [SAVE] Data file mouse_brain_crop.nii saved at results\2025-07-21_16-54-41_default\data_mouse_brain_crop.
+2025-07-21 16:59:18 - [INFO]: - [LOAD] Data mouse_brain.nii loaded with shape (150, 150, 150) and normalized.
+2025-07-22 11:12:50 - [DEBUG]: - [CALL] "__init__"
+                       - args:   [<pipeline.pipeline.Pipeline object at 0x000002393AB60320>, SetupConfig(name='test_pipeline', input_dir='data/test', output_dir='outputs/test', log_dir='logs', log_file='pipeline.log', debug_mode=False, display_mode=False, save_mode=False)]
+                       - kwargs: { None }
+2025-07-22 11:14:38 - [DEBUG]: - [CALL] "__init__"
+                       - args:   [<pipeline.pipeline.Pipeline object at 0x0000016E5216CAD0>, SetupConfig(name='test_pipeline', input_dir='data/test', output_dir='outputs/test', log_dir='logs', log_file='pipeline.log', debug_mode=True, display_mode=True, save_mode=False)]
+                       - kwargs: { None }
+2025-07-22 11:19:40 - [DEBUG]: - [CALL] "__init__"
+                       - args:   [<pipeline.pipeline.Pipeline object at 0x000002709F61B4A0>, SetupConfig(name='pipeline', input_dir='data/test', output_dir='outputs/pipeline', log_dir='logs', log_file='pipeline', debug_mode=False, display_mode=False, save_mode=False)]
+                       - kwargs: { None }
+2025-07-22 11:21:02 - [DEBUG]: - [CALL] "__init__"
+                       - args:   [<pipeline.pipeline.Pipeline object at 0x00000222B4194230>, SetupConfig(name='pipeline', input_dir='data/test', output_dir='outputs/pipeline', log_dir='logs', log_file='pipeline', debug_mode=False, display_mode=False, save_mode=False)]
+                       - kwargs: { None }
+2025-07-23 14:05:59 - [DEBUG]: - [CALL] "enhance_data"
+                       - args:   [<pipeline.enhancer.Enhancer object at 0x00000248745D8710>]
+                       - kwargs: { data=ndarray(shape=(800, 800), dtype=float32), method='frangi', processing_params=ProcessingConfig(normalize=True, parallelize=True, chunk_size=[16, 16, 16], overlap_size=None), enhancement_params=EnhancementConfig(alpha=0.5, beta=0.5, gamma=15, scales=array([ 1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17,
+       18, 19]), scales_number=None, scales_range=None, black_ridges=True, hessian_function=None, skimage=False), hessian_params=HessianConfig(mode='reflect', cval=0.0) }
+2025-07-23 14:05:59 - [INFO]: - Sequential processing in progress...
+2025-07-23 14:05:59 - [DEBUG]: - [CALL] "frangi"
+                       - args:   [<pipeline.enhancer.Enhancer object at 0x00000248745D8710>, ndarray(shape=(800, 800), dtype=float32)]
+                       - kwargs: { alpha=0.5, beta=0.5, gamma=15, scales=ndarray(shape=(19,), dtype=int32), scales_number=None, scales_range=None, black_ridges=True, hessian_function=None, skimage=False, hessian_params=dict(keys=['mode', 'cval']) }
+2025-07-23 14:09:09 - [DEBUG]: - [CALL] "enhance_data"
+                       - args:   [<pipeline.enhancer.Enhancer object at 0x00000208254F50A0>]
+                       - kwargs: { data=ndarray(shape=(800, 800), dtype=float32), method='frangi', processing_params=ProcessingConfig(normalize=True, parallelize=True, chunk_size=[16, 16, 16], overlap_size=None), enhancement_params=EnhancementConfig(alpha=0.5, beta=0.5, gamma=15, scales=array([ 1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17,
+       18, 19]), scales_number=None, scales_range=None, black_ridges=True, hessian_function=None, skimage=False), hessian_params=HessianConfig(mode='reflect', cval=0.0) }
+2025-07-23 14:09:09 - [INFO]: - Sequential processing in progress...
+2025-07-23 14:09:09 - [DEBUG]: - [CALL] "frangi"
+                       - args:   [<pipeline.enhancer.Enhancer object at 0x00000208254F50A0>, ndarray(shape=(800, 800), dtype=float32)]
+                       - kwargs: { alpha=0.5, beta=0.5, gamma=15, scales=ndarray(shape=(19,), dtype=int32), scales_number=None, scales_range=None, black_ridges=True, hessian_function=None, skimage=False, hessian_params=dict(keys=['mode', 'cval']) }
+2025-07-23 14:11:16 - [DEBUG]: - [CALL] "enhance_data"
+                       - args:   [<pipeline.enhancer.Enhancer object at 0x000001ED29C24290>]
+                       - kwargs: { data=ndarray(shape=(800, 800), dtype=float32), method='frangi', processing_params=ProcessingConfig(normalize=True, parallelize=True, chunk_size=[16, 16, 16], overlap_size=None), enhancement_params=EnhancementConfig(alpha=0.5, beta=0.5, gamma=15, scales=array([ 1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17,
+       18, 19]), scales_number=None, scales_range=None, black_ridges=True, hessian_function=None, skimage=False), hessian_params=HessianConfig(mode='reflect', cval=0.0) }
+2025-07-23 14:11:16 - [INFO]: - Sequential processing in progress...
+2025-07-23 14:11:16 - [DEBUG]: - [CALL] "frangi"
+                       - args:   [<pipeline.enhancer.Enhancer object at 0x000001ED29C24290>, ndarray(shape=(800, 800), dtype=float32)]
+                       - kwargs: { alpha=0.5, beta=0.5, gamma=15, scales=ndarray(shape=(19,), dtype=int32), scales_number=None, scales_range=None, black_ridges=True, hessian_function=None, skimage=False, hessian_params=dict(keys=['mode', 'cval']) }
+2025-07-23 14:26:15 - [DEBUG]: - [CALL] "__init__"
+                       - args:   [<pipeline.pipeline.Pipeline object at 0x00000198FF181FD0>, SetupConfig(name='pipeline', input_dir='data/test', output_dir='outputs/pipeline', log_dir='logs', log_file='pipeline', debug_mode=False, display_mode=False, save_mode=False)]
+                       - kwargs: { None }
+2025-07-23 14:27:44 - [DEBUG]: - [CALL] "__init__"
+                       - args:   [<pipeline.pipeline.Pipeline object at 0x00000240539BBB60>, SetupConfig(name='pipeline', input_dir='data/test', output_dir='outputs/pipeline', log_dir='logs', log_file='pipeline', debug_mode=False, display_mode=False, save_mode=False)]
+                       - kwargs: { None }
+2025-07-23 14:34:24 - [DEBUG]: - [CALL] "__init__"
+                       - args:   [<pipeline.pipeline.Pipeline object at 0x000002495275A510>, SetupConfig(name='pipeline', input_dir='data/test', output_dir='outputs/pipeline', log_dir='logs', log_file='pipeline', debug_mode=False, display_mode=False, save_mode=False)]
+                       - kwargs: { None }
+2025-07-23 14:39:51 - [DEBUG]: - [CALL] "__init__"
+                       - args:   [<pipeline.pipeline.Pipeline object at 0x000002433C2557C0>, SetupConfig(name='pipeline', input_dir='data/test', output_dir='outputs/pipeline', log_dir='logs', log_file='pipeline', debug_mode=False, display_mode=False, save_mode=False)]
+                       - kwargs: { None }
+2025-07-23 14:45:00 - [DEBUG]: - [CALL] "__init__"
+                       - args:   [<pipeline.pipeline.Pipeline object at 0x000002465CCF6630>, SetupConfig(name='pipeline', input_dir='data/test', output_dir='outputs/pipeline', log_dir='logs', log_file='pipeline', debug_mode=False, display_mode=False, save_mode=False)]
+                       - kwargs: { None }
+2025-07-23 14:47:41 - [DEBUG]: - [CALL] "__init__"
+                       - args:   [<pipeline.pipeline.Pipeline object at 0x00000232EAEA6330>, SetupConfig(name='pipeline', input_dir='data/test', output_dir='outputs/pipeline', log_dir='logs', log_file='pipeline', debug_mode=False, display_mode=False, save_mode=False)]
+                       - kwargs: { None }
+2025-07-23 15:13:08 - [DEBUG]: - [CALL] "__init__"
+                       - args:   [<pipeline.pipeline.Pipeline object at 0x000002CE49C68830>, SetupConfig(name='pipeline', input_dir='data/test', output_dir='outputs/pipeline', log_dir='logs', log_file='pipeline', debug_mode=False, display_mode=False, save_mode=False)]
+                       - kwargs: { None }
+2025-07-23 15:14:53 - [DEBUG]: - [CALL] "__init__"
+                       - args:   [<pipeline.pipeline.Pipeline object at 0x0000025E9FC39010>, SetupConfig(name='pipeline', input_dir='data/test', output_dir='outputs/pipeline', log_dir='logs', log_file='pipeline', debug_mode=False, display_mode=False, save_mode=False)]
+                       - kwargs: { None }
+2025-07-23 15:17:57 - [DEBUG]: - [CALL] "__init__"
+                       - args:   [<pipeline.pipeline.Pipeline object at 0x0000012E28F6DC10>, SetupConfig(name='pipeline', input_dir='data/test', output_dir='outputs/pipeline', log_dir='logs', log_file='pipeline', debug_mode=False, display_mode=False, save_mode=False)]
+                       - kwargs: { None }
+2025-07-23 15:21:10 - [DEBUG]: - [CALL] "__init__"
+                       - args:   [<pipeline.pipeline.Pipeline object at 0x000001D4CFE8F0E0>, SetupConfig(name='pipeline', input_dir='data/test', output_dir='outputs/pipeline', log_dir='logs', log_file='pipeline', debug_mode=False, display_mode=False, save_mode=False)]
+                       - kwargs: { None }

@@ -5,20 +5,21 @@ from tabulate import tabulate
 from time import perf_counter
 from copy import deepcopy
 
-from utils.decorator import log_time
+from utils.helpers import compute_time
+from utils.decorator import log_time, log_section
 from core.logger import setup_logger
 from core.loader import Loader
 from core.saver import Saver
 from view.viewer import Viewer 
-from core.config import SetupConfig, PACConfig, SACConfig, ExperimentConfig, SSIConfig, VSIConfig, CNIConfig, EngineConfig
+from core.config import SetupConfig, PACConfig, ExperimentConfig, SSIConfig, VSIConfig, CNIConfig, EngineConfig
 from pipeline.enhancer import Enhancer
 from pipeline.derivator import Derivator
 from pipeline.segmenter import Segmenter
-from benchmark.metrics import mcc
 
 logger = setup_logger(name='benchmark', debug_mode=True)
 
 class Engine:
+    
     def __init__(self, setup: SetupConfig):
         self.setup = setup
         
@@ -58,15 +59,9 @@ class Engine:
         self.logger.info(f'[INIT] Engine initialized - Experiment {self.setup.name}')
 
 
-    def compute_time(self, function, *args, **kargs):
-        start = perf_counter()
-        function(*args, **kargs)
-        end = perf_counter()
-        return end - start
-
-
+    @log_time()
+    @log_section("Scale size influence")
     def scale_size_influence(self, config: SSIConfig, experiment_config: ExperimentConfig):
-        self.logger.info('[START] Scale size influence started.')
 
         times_sequential = []
         times_parallel = []
@@ -86,7 +81,7 @@ class Engine:
             
             # Sequential processing
             processing_params.parallelize = False
-            times_sequential.append(self.compute_time(
+            times_sequential.append(compute_time(
                 self.enhancer.enhance_data, 
                 data=volume, 
                 method=experiment_config.methods.enhancer,
@@ -97,7 +92,7 @@ class Engine:
             
             # Parallel processing
             processing_params.parallelize = True
-            times_parallel.append(self.compute_time(
+            times_parallel.append(compute_time(
                 self.enhancer.enhance_data, 
                 data=volume, 
                 method=experiment_config.methods.enhancer,
@@ -134,15 +129,13 @@ class Engine:
             plt.show()
         if self.setup.save_mode:
             self.saver.save_plot(fig, config.output_file)
-
-        self.logger.info('[END] Scale size influence ended.')
-
+            
         return config.scales_numbers, times_sequential, times_parallel
 
 
-
+    @log_time()
+    @log_section("Volume size influence")
     def volume_size_influence(self, config: VSIConfig, experiment_config: ExperimentConfig):
-        self.logger.info('[START] Volume size influence started.')
         
         times_sequential = []
         times_parallel = []
@@ -162,7 +155,7 @@ class Engine:
             
             # Sequential processing
             processing_params.parallelize = False
-            times_sequential.append(self.compute_time(
+            times_sequential.append(compute_time(
                 self.enhancer.enhance_data, 
                 data=volume, 
                 method=experiment_config.methods.enhancer,
@@ -173,7 +166,7 @@ class Engine:
             
             # Parallel processing
             processing_params.parallelize = True
-            times_parallel.append(self.compute_time(
+            times_parallel.append(compute_time(
                 self.enhancer.enhance_data, 
                 data=volume, 
                 method=experiment_config.methods.enhancer,
@@ -231,15 +224,13 @@ class Engine:
             plt.show()
         if self.setup.save_mode:
             self.saver.save_plot(fig, config.output_file)
-
-        self.logger.info('[END] Volume size influence ended.')
-        
+                    
         return volume_sizes, times_sequential, times_parallel
 
 
-
+    @log_time()
+    @log_section("Chunk number influence")
     def chunk_number_influence(self, config: CNIConfig, experiment_config: ExperimentConfig):
-        self.logger.info('[START] Chunk number influence started.')
         all_times = []
         all_chunk_sizes = []
         
@@ -263,7 +254,7 @@ class Engine:
                 processing_params.chunk_size = chunk_size
                 
                 # Parallel processing
-                times.append(self.compute_time(
+                times.append(compute_time(
                     self.enhancer.enhance_data, 
                     data=volume, 
                     method=experiment_config.methods.enhancer,
@@ -323,14 +314,12 @@ class Engine:
         if self.setup.save_mode:
             self.saver.save_plot(fig, config.output_file)
         
-        self.logger.info('[END] Chunk number influence ended.')
-        
         return volume_sizes, chunk_numbers, all_chunk_sizes, all_times
 
 
-
-    def parallel_accuracy_check(self, config: PACConfig, experiment_config: ExperimentConfig):
-        self.logger.info('[START] Parallelization accuracy check started.')
+    @log_time()
+    @log_section("Parallelization accuracy influence")
+    def parallel_accuracy_influence(self, config: PACConfig, experiment_config: ExperimentConfig):
         
         volume = self.loader.load_data(config.input_file)   
              
@@ -366,85 +355,16 @@ class Engine:
         mae = np.abs(sequential - parallel).max()
         logger.info(f"MAE (sequential vs parallel): {mae:.4e}")
 
-        self.logger.info('[END] Parallelization accuracy check ended.')
         
         return sequential, parallel
     
     
     
-    def scale_accuracy_check(self, config: SACConfig, experiment_config: ExperimentConfig):
-        self.logger.info('[START] Scale accuracy check started.')
-        
-        volume = self.loader.load_data(config.input_file)   
-        ground_truth = self.loader.load_data(config.ground_truth)  
-        
-        hessian_params = deepcopy(experiment_config.hessian)
-        processing_params = deepcopy(experiment_config.processing)
-        enhancement_params = deepcopy(experiment_config.enhancement)
-        segmentation_params = deepcopy(experiment_config.segmentation)
-        
-        fig = plt.figure(figsize=(7, 5))
-        colors = [
-            "#022c7aff",
-            "#0743b1ff",
-            "#175ddfff",
-            "#407ff5ff",
-            "#6097fcff",
-        ]
-        
-        results = {'min': {}, 'max': {}}
-        
-        for i, mode in enumerate(['min', 'max']):
-            if mode == 'min':
-                ranges = [(min_range, 20) for min_range in config.min_ranges]
-            elif mode == 'max':
-                ranges = [(1, max_range) for max_range in config.max_ranges]
-            
-            for step in config.scales_steps:
-                mcc_scores = []
-                
-                for range  in ranges:
-                    scales = np.arange(range[0], range[1], step, dtype=int)
-                    enhancement_params.scales = scales
-                
-                    # Parallel processing
-                    processing_params.parallelize = True
-                    enhanced = self.enhancer.enhance_data( 
-                        data=volume, 
-                        method=experiment_config.methods.enhancer,
-                        processing_params=processing_params,
-                        enhancement_params=enhancement_params,
-                        hessian_params=hessian_params,
-                    )
-                    segmented, threshold = self.segmenter.segment_data(
-                        data=enhanced,
-                        method=experiment_config.methods.segmenter,
-                        segmentation_params=segmentation_params,
-                        ground_truth=ground_truth,
-                    )
-                    
-                    mcc_scores.append(mcc(segmented, ground_truth))
-                
-                results[mode][step] = {
-                    'scores': mcc_scores,
-                    'ranges': ranges
-                }
-
-                # Resume scores
-                logger.info('='*30+' RESUME '+'='*30+'\n')
-                logger.info(f'Step:   {step}')
-                logger.info(f'Ranges: {ranges}')
-                logger.info(f'Scores: {mcc_scores}')
-                
-                headers = ['Ranges', 'MCC Score']
-                rows = list(zip(ranges, mcc_scores))
-                logger.info('\n' + tabulate(rows, headers, tablefmt='github', floatfmt='>.3f', intfmt='^'))
-                logger.info('='*68+'\n')
 
            
         plt.subplot(1, 2, 1)
         for i, (step, vals) in enumerate(results['min'].items()):
-            plt.plot(vals['ranges'][0], vals['scores'], '+-', color=colors[i], label=f'step={step}')     
+            plt.plot([range[0] for range in vals['ranges']], vals['scores'], '+-', color=colors[i], label=f'step={step}')     
         plt.xlabel("Min range (max=20)")
         plt.ylabel("Score MCC")
         plt.title("Influence de l'échelle min d'échelle sur la précision")
@@ -453,7 +373,7 @@ class Engine:
         
         plt.subplot(1, 2, 2)  
         for i, (step, vals) in enumerate(results['max'].items()):
-            plt.plot(vals['ranges'][1], vals['scores'], '+-', color=colors[i], label=f'step={step}')     
+            plt.plot([range[1] for range in vals['ranges']], vals['scores'], '+-', color=colors[i], label=f'step={step}')     
         plt.xlabel("Max range (min=1)")
         plt.ylabel("Score MCC")
         plt.title("Influence de l'échelle max d'échelle sur la précision")
@@ -465,23 +385,20 @@ class Engine:
             plt.show()
         if self.setup.save_mode:
             self.saver.save_plot(fig, config.output_file)
-
-        self.logger.info('[END] Scale accuracy check ended.')
         
         return mcc_scores
     
     
     @log_time()
+    @log_section("Engine run")
     def run(self, config: EngineConfig, experiment_config: ExperimentConfig):
         hessian_function = self.derivator.select_hessian_function(experiment_config.methods.derivator)
         experiment_config.enhancement.hessian_function = hessian_function
         
-        self.logger.info('[START] Engine started.')
-        # self.chunk_number_influence(config.cni, experiment_config)
-        # self.volume_size_influence(config.vsi, experiment_config)
-        # self.scale_size_influence(config.ssi, experiment_config)
-        # self.parallel_accuracy_check(config.pac, experiment_config)
+        self.chunk_number_influence(config.cni, experiment_config)
+        self.volume_size_influence(config.vsi, experiment_config)
+        self.scale_size_influence(config.ssi, experiment_config)
+        self.parallel_accuracy_influence(config.pac, experiment_config)
         self.scale_accuracy_check(config.sac, experiment_config)
-        self.logger.info('[START] Engine ended.')
 
         

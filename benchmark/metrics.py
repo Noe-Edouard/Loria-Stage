@@ -15,17 +15,17 @@ def dice(y_pred: ndarray, y_true: ndarray) -> float:
 
     return dice_metric(y_pred_t, y_true_t).item()
 
-def mcc(y_pred: ndarray, y_true: ndarray):
+def mcc(y_pred: ndarray, y_true: ndarray) -> float:
     y_pred = y_pred.ravel()
     y_true = y_true.ravel()
     return matthews_corrcoef(y_true, y_pred)
 
-def roc(y_pred: ndarray, y_true: ndarray):
+def roc(y_pred: ndarray, y_true: ndarray) -> float:
     y_pred = y_pred.ravel()
     y_true = y_true.ravel()
     return roc_auc_score(y_true, y_pred)
 
-def pr(y_pred: ndarray, y_true: ndarray):
+def pr(y_pred: ndarray, y_true: ndarray) -> float:
     y_pred = y_pred.ravel()
     y_true = y_true.ravel()
     return average_precision_score(y_true, y_pred)

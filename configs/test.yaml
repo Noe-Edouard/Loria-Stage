@@ -1,40 +1,54 @@
-experiment:
-  name: test_experiment
-  debug_mode: true
-  normalize: true
-  crop: true
-  target_shape: [64, 64, 64]
-  input_file: test.nii
-  log_file: test
+setup:
+  name: test_benchmark
   input_dir: data/test
   output_dir: outputs/test
-  log_dir: logs/test
+  log_dir: logs
+  log_file: benchmark.log
+  debug_mode: true
+  display_mode: true
+  save_mode: false
 
-methods:
-  derivator: default
-  enhancer: frangi
-  segmenter: thresholding
+experiment:
+  load:
+    normalize: true
+    crop: false
+    target_shape: [64, 64, 1]
+    input_file: null
+    output_file: null
 
-hessian:
-  mode: reflect
-  cval: 0.0
+  methods:
+    derivator: default
+    enhancer: frangi
+    segmenter: thresholding
 
-processing:
-  normalize: true
-  parallelize: false
-  chunk_size: [32, 32, 32]
-  overlap_size: 8
+  hessian:
+    mode: reflect
+    cval: 0.0
 
-enhancement:
-  alpha: 0.5
-  beta: 0.5
-  gamma: 15
-  scales: [0, 2, 4, 6, 8]
-  scales_number: null
-  scales_range: null
-  black_ridges: false
-  skimage: false
+  processing:
+    normalize: true
+    parallelize: false
+    chunk_size: [32, 32, 1]
+    overlap_size: 0
 
-segmentation:
-  method: thresholding
-  threshold: 0.5
+  enhancement:
+    alpha: 0.5
+    beta: 0.5
+    gamma: 1
+    scales: [1]
+    scales_number: null
+    scales_range: null
+    black_ridges: true
+    skimage: false
+
+  segmentation:
+    threshold: 0.5
+
+runner:
+  params_grid:
+    alpha: [0.5]
+    beta: [0.5]
+    gamma: [1]
+  methods: ["default"]
+  raw_file: raw.png
+  gt_file: gt.png

@@ -61,7 +61,7 @@ class Loader:
         if normalize:
             data = normalize_data(data)
 
-        self.logger.info(f'[LOAD] Data {filename} loaded with shape {data.shape} and normalized.')
+        self.logger.info(f'[LOAD] Data {filename} loaded - shape={data.shape} - normalize={normalize}.')
         return data
         
 

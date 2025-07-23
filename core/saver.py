@@ -8,7 +8,7 @@ from typing import Literal
 from core.logger import Logger, setup_logger
 
 class Saver:
-    def __init__(self, experiment_name: str = "default", output_dir: str | Path = "results", logger: Logger = setup_logger()):
+    def __init__(self, experiment_name: str = "default", output_dir: str | Path = "outputs/results", logger: Logger = setup_logger()):
         self.logger = logger
         
         self.output_dir = Path(f'{output_dir}/{self._get_timestamp()}_{experiment_name}')
