@@ -1,12 +1,8 @@
 from numpy import ndarray
 from pathlib import Path
 from itertools import product
-from time import perf_counter
 from copy import deepcopy
-from tqdm import tqdm
 from typing import Tuple
-from concurrent.futures import ProcessPoolExecutor, as_completed
-import warnings
 import numpy as np
 from pipeline.pipeline import Pipeline
 from view.analytics import Analytics
@@ -20,123 +16,76 @@ from benchmark.grid_search import GridSearch
 from utils.decorator import log_time
 from utils.decorator import log_section
 
-    
-class Benchmark:
-    def __init__(self, setup: SetupConfig):
-        self.setup = setup
-        self.setup_pipeline = ConfigBuilder({
-            'name': 'pipeline',
-            'input_dir': self.setup.input_dir,
-            'output_dir': 'outputs/pipeline',
-            'log_dir': 'logs',
-            'log_file': 'pipeline',
-            'debug_mode': False,
-            'display_mode': False,
-            'save_mode': False,
-        }, SetupConfig)
-        
-        # Paths
-        self.log_dir = Path(self.setup.log_dir)
-        self.input_dir = Path(self.setup.input_dir)
-        self.output_dir = Path(self.setup.output_dir)
+from abc import ABC, abstractmethod
+import matplotlib.pyplot as plt
+from core.logger import Logger
+from utils.parallelizer import Parallelizer
+from pipeline.pipeline import Pipeline
+from core.saver import Saver
+from pipeline.enhancer import Enhancer
 
-        self.input_dir.mkdir(parents=True, exist_ok=True)
-        self.output_dir.mkdir(parents=True, exist_ok=True)
-        self.log_dir.mkdir(parents=True, exist_ok=True)
-        
-        # Logger
-        self.log_file = self.setup.log_file
-        self.debug_mode = self.setup.debug_mode
-        self.logger = setup_logger(self.log_file, log_dir=self.log_dir, debug_mode=self.debug_mode)
-        
-        # Loader
-        self.loader = Loader(self.input_dir, self.logger)
-        
-        # Pipeline
-        self.pipeline = Pipeline(self.setup_pipeline)
-        
-        # Analytics
-        self.display_mode = self.setup.display_mode
-        self.analytics = Analytics(logger=self.logger, display_mode=self.display_mode)
+class BenchmarkBase(ABC):
 
-        # Saver
-        self.save_mode = self.setup.save_mode
-        self.saver = Saver(experiment_name=self.setup.name, output_dir=self.output_dir, logger=self.logger)
+    def __init__(self, save_mode: bool, display_mode: bool, logger: Logger, parallelizer: Parallelizer, saver: Saver, pipeline: Pipeline = None, enhancer: Enhancer = None):
+        self.save_mode = save_mode
+        self.display_mode = display_mode
+        self.enhancer = enhancer
+        self.pipeline = pipeline
+        self.parallelizer = parallelizer
+        self.logger = logger
+        self.saver = saver
         
-        self.logger.info(f'[INIT] Benchmark initialized - Experiment {self.setup.name}')
-
-        # GridSearch
-        self.grid_searcher = GridSearch(self.pipeline, self.logger)
-    
-        
-    @log_time()
-    @log_section("Benchmark execution")
-    def run(self, benchmark_config: BenchmarkConfig, experiment_config: ExperimentConfig) -> BenchmarkData:
-        data_raw, ground_truth = self._load_data(benchmark_config)
-        benchmark_data = BenchmarkData(raw_data=data_raw, ground_truth=ground_truth, experiments=[], metrics=[])
-        experiment_config.load.input_file = benchmark_config.raw_file
-        results, scores, params = self._run_experiments(benchmark_config, experiment_config, data_raw, ground_truth)
-        benchmark_data.experiments = results
-        benchmark_data.metrics = self._compute_metrics(results, ground_truth)
-        artifacts = None
+    def _display_figure(self, figure: plt.Figure, filename: str):
         if self.display_mode:
-            artifacts = self._display_results(benchmark_data)
-        if self.save_mode and artifacts is not None:
-            self._save_results(artifacts)
-        return benchmark_data
+            plt.show()
+        if self.save_mode:
+            self.saver.save_plot(figure, filename)
 
-    def _load_data(self, benchmark_config: BenchmarkConfig) -> Tuple[ndarray, ndarray]:
-        data_raw = self.loader.load_data(benchmark_config.raw_file)
-        ground_truth = self.loader.load_data(benchmark_config.gt_file)
-        return data_raw, ground_truth
-
-    def _run_experiments(
-        self, 
-        benchmark_config: BenchmarkConfig, 
-        experiment_config: ExperimentConfig, 
-        data_raw, ground_truth
-    ) -> Tuple[list[ExperimentData], list[float], list[dict]]:
-        
-        results = []
-        scores = []
-        params = []
-        for method in benchmark_config.methods:
-            experiment_config.methods.derivator = method
-            best_params, best_score, best_result = self.grid_searcher.search(
-                data_raw=data_raw,
-                ground_truth=ground_truth,
-                params_grid=benchmark_config.params_grid,
-                config=experiment_config
-            )
-            results.append(deepcopy(best_result))
-            scores.append(best_score)
-            params.append(best_params)
-        return results, scores, params
-
-    def _compute_metrics(self, results: list[ExperimentData], ground_truth: ndarray) -> list[MetricsConfig]:
-        return self.analytics.get_metrics(results, ground_truth)
+    
+    @abstractmethod
+    def process_image(self, *args, **kargs):
+        pass
+    
+    @abstractmethod
+    def compute_scores(self, *args, **kargs):
+        pass
+    
+    @abstractmethod
+    def plot_scores(self, *args, **kargs):
+        pass
+    
+    @abstractmethod
+    def run(self, *args, **kargs):
+        pass
+    
+    
+class BenchmarkDerivator(BenchmarkBase):
+    
+    
+    def _compute_metrics(self, results: list[ExperimentData], data_gt: ndarray) -> list[MetricsConfig]:
+        return self.analytics.get_metrics(results, data_gt)
 
     def _display_results(self, benchmark_data: BenchmarkData):
         histograms = self.analytics.display_histograms(
             experiments=benchmark_data.experiments,
-            raw_data=benchmark_data.raw_data,
-            ground_truth=benchmark_data.ground_truth,
+            data_raw=benchmark_data.data_raw,
+            data_gt=benchmark_data.data_gt,
         )
         configs = self.analytics.display_configs(
             experiments=benchmark_data.experiments,
         )
         metrics = self.analytics.display_metrics(
             experiments=benchmark_data.experiments,
-            ground_truth=benchmark_data.ground_truth,
+            data_gt=benchmark_data.data_gt,
         )
         curves = self.analytics.display_curves(
             experiments=benchmark_data.experiments,
-            ground_truth=benchmark_data.ground_truth,
+            data_gt=benchmark_data.data_gt,
         )
         views, titles, modes = self.analytics.display_views(
             experiments=benchmark_data.experiments,
-            ground_truth=benchmark_data.ground_truth,
-            raw_data=benchmark_data.raw_data,
+            data_gt=benchmark_data.data_gt,
+            data_raw=benchmark_data.data_raw,
         )
         return {
             'histograms': histograms,
@@ -160,7 +109,119 @@ class Benchmark:
                 self.saver.save_animation(plot, title, fps=10)
             else:
                 raise ValueError(f'The mode {mode} is not valid.')
+    
+    def _process_results(self, data):
+        if self.display_mode:
+            artifacts = self._display_results(data)
+        if self.save_mode and artifacts is not None:
+            self._save_results(artifacts)
+    
+    def run_experiment(
+        self, 
+        data_raw: ndarray, 
+        data_gt: ndarray,
+        methods: list[str], 
+        params_grid: dict,
+        experiment_config: ExperimentConfig,
+    ) -> Tuple[list[ExperimentData], list[float], list[dict]]:
         
+        results = []
+        for method in methods:
+            experiment_config.methods.derivator = method
+            best_params, best_score, best_result = self.grid_searcher.search(
+                data_raw=data_raw,
+                data_gt=data_gt,
+                params_grid=params_grid,
+                config=experiment_config
+            )
+            # best_result.
+            results.append(deepcopy(best_result))
+
+        return results
+    
+    @log_time()
+    @log_section("Benchmark execution")
+    def run(self, 
+            benchmark_config: BenchmarkConfig, 
+            experiment_config: ExperimentConfig,
+            images_raw: list[ndarray],
+            images_gt: list[ndarray],
+        ) -> list[BenchmarkData]:
+        
+        # data_raw, data_gt = self._load_data(benchmark_config)
+        methods = benchmark_config.methods
+        params_grid = benchmark_config.params_grid
+        
+        results = self.parallelizer.run(
+            func=self.run_experiment,
+            iterable=(
+                (i, data_raw, data_gt, methods, params_grid, experiment_config) 
+                for i, (data_raw, data_gt) in enumerate(zip(images_raw, images_gt))
+            ),
+            show_progress=True,
+            unpack_args=True
+        )
+        
+        benchmark_data = BenchmarkData(data_raw=data_raw, data_gt=data_gt, experiments=[], metrics=[])
+
+        results, scores, params = self._run_experiments(benchmark_config, experiment_config, data_raw, data_gt)
+        benchmark_data.experiments = results
+        benchmark_data.metrics = self._compute_metrics(results, data_gt)
+        artifacts = None
+        
+        
+        if self.display_mode:
+            artifacts = self._display_results(benchmark_data)
+        if self.save_mode and artifacts is not None:
+            self._save_results(artifacts)
+        return benchmark_data
+    
+    
+    def __init__(self, setup: SetupConfig):
+        self.setup = setup
+        
+        # Logger
+        self.logger = setup_logger(log_file=self.setup.log_file, debug_mode=self.setup.debug_mode)
+        
+        # Loader
+        self.loader = Loader(self.setup.input_dir, self.logger)
+        
+        # Pipeline
+        self.setup_pipeline = ConfigBuilder({
+            'name': 'pipeline',
+            'input_dir': self.setup.input_dir,
+            'output_dir': 'outputs/pipeline',
+            'log_file': 'pipeline',
+            'debug_mode': False,
+            'display_mode': False,
+            'save_mode': False,
+        }, SetupConfig)
+        self.pipeline = Pipeline(self.setup_pipeline)
+        
+        # Analytics
+        self.display_mode = self.setup.display_mode
+        self.analytics = Analytics(logger=self.logger, display_mode=self.display_mode)
+
+        # Saver
+        self.save_mode = self.setup.save_mode
+        self.saver = Saver(experiment_name=self.setup.name, output_dir=self.output_dir, logger=self.logger)
+        
+        self.logger.info(f'[INIT] Benchmark initialized - Experiment {self.setup.name}')
+
+        # GridSearch
+        self.grid_searcher = GridSearch(self.pipeline, self.logger)
+    
+        
+    
+
+    def _load_data(self, benchmark_config: BenchmarkConfig) -> Tuple[ndarray, ndarray]:
+        data_raw = self.loader.load_data(benchmark_config.raw_file)
+        data_gt = self.loader.load_data(benchmark_config.gt_file)
+        return data_raw, data_gt
+
+    
+
+    
         
     @log_time()
     @log_section("Benchmark execution for all files")

@@ -2,7 +2,6 @@ setup:
   name: benchmark
   input_dir: data/test
   output_dir: outputs/test
-  log_dir: logs
   log_file: benchmark
   debug_mode: true
   display_mode: true
@@ -14,7 +13,6 @@ experiment:
     crop: false
     target_shape: [64, 64, 64]
     input_file: null
-    output_file: null
 
   methods:
     derivator: default

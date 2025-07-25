@@ -2067,3 +2067,36 @@
 2025-07-23 15:21:10 - [DEBUG]: - [CALL] "__init__"
                        - args:   [<pipeline.pipeline.Pipeline object at 0x000001D4CFE8F0E0>, SetupConfig(name='pipeline', input_dir='data/test', output_dir='outputs/pipeline', log_dir='logs', log_file='pipeline', debug_mode=False, display_mode=False, save_mode=False)]
                        - kwargs: { None }
+2025-07-24 13:29:53 - [DEBUG]: - [CALL] "__init__"
+                       - args:   [<pipeline.pipeline.Pipeline object at 0x000001E59D178D70>, SetupConfig(name='pipeline', input_dir='data/test', output_dir='outputs/pipeline', log_dir='logs', log_file='pipeline', debug_mode=False, display_mode=False, save_mode=False)]
+                       - kwargs: { None }
+2025-07-24 14:01:43 - [DEBUG]: - [CALL] "__init__"
+                       - args:   [<pipeline.pipeline.Pipeline object at 0x0000027B44E67AA0>, SetupConfig(name='pipeline', input_dir='data/test', output_dir='outputs/pipeline', log_dir='logs', log_file='pipeline', debug_mode=False, display_mode=False, save_mode=False)]
+                       - kwargs: { None }
+2025-07-24 14:03:13 - [DEBUG]: - [CALL] "__init__"
+                       - args:   [<pipeline.pipeline.Pipeline object at 0x0000025F45731CA0>, SetupConfig(name='pipeline', input_dir='data/test', output_dir='outputs/pipeline', log_dir='logs', log_file='pipeline', debug_mode=False, display_mode=False, save_mode=False)]
+                       - kwargs: { None }
+2025-07-24 14:05:14 - [DEBUG]: - [CALL] "__init__"
+                       - args:   [<pipeline.pipeline.Pipeline object at 0x000001CB3A31B290>, SetupConfig(name='pipeline', input_dir='data/test', output_dir='outputs/pipeline', log_dir='logs', log_file='pipeline', debug_mode=False, display_mode=False, save_mode=False)]
+                       - kwargs: { None }
+2025-07-24 14:06:20 - [DEBUG]: - [CALL] "__init__"
+                       - args:   [<pipeline.pipeline.Pipeline object at 0x000001F9A1C56D50>, SetupConfig(name='pipeline', input_dir='data/test', output_dir='outputs/pipeline', log_dir='logs', log_file='pipeline', debug_mode=False, display_mode=False, save_mode=False)]
+                       - kwargs: { None }
+2025-07-24 14:08:49 - [DEBUG]: - [CALL] "__init__"
+                       - args:   [<pipeline.pipeline.Pipeline object at 0x000001DEFD023F80>, SetupConfig(name='pipeline', input_dir='data/test', output_dir='outputs/pipeline', log_dir='logs', log_file='pipeline', debug_mode=False, display_mode=False, save_mode=False)]
+                       - kwargs: { None }
+2025-07-24 14:17:22 - [DEBUG]: - [CALL] "__init__"
+                       - args:   [<pipeline.pipeline.Pipeline object at 0x000001F98D9384A0>, SetupConfig(name='pipeline', input_dir='data/test', output_dir='outputs/pipeline', log_dir='logs', log_file='pipeline', debug_mode=False, display_mode=False, save_mode=False)]
+                       - kwargs: { None }
+2025-07-24 14:19:01 - [DEBUG]: - [CALL] "__init__"
+                       - args:   [<pipeline.pipeline.Pipeline object at 0x00000261E8ACD280>, SetupConfig(name='pipeline', input_dir='data/test', output_dir='outputs/pipeline', log_dir='logs', log_file='pipeline', debug_mode=False, display_mode=False, save_mode=False)]
+                       - kwargs: { None }
+2025-07-24 14:57:45 - [DEBUG]: - [CALL] "__init__"
+                       - args:   [<pipeline.pipeline.Pipeline object at 0x000001FCDB679FD0>, SetupConfig(name='pipeline', input_dir='data/test', output_dir='outputs/pipeline', log_dir='logs', log_file='pipeline', debug_mode=False, display_mode=False, save_mode=False)]
+                       - kwargs: { None }
+2025-07-24 14:58:26 - [DEBUG]: - [CALL] "__init__"
+                       - args:   [<pipeline.pipeline.Pipeline object at 0x000001FE2FAD8DA0>, SetupConfig(name='pipeline', input_dir='data/test', output_dir='outputs/pipeline', log_dir='logs', log_file='pipeline', debug_mode=False, display_mode=False, save_mode=False)]
+                       - kwargs: { None }
+2025-07-24 15:01:01 - [DEBUG]: - [CALL] "__init__"
+                       - args:   [<pipeline.pipeline.Pipeline object at 0x000002357C8EA2A0>, SetupConfig(name='pipeline', input_dir='data/test', output_dir='outputs/pipeline', log_dir='logs', log_file='pipeline', debug_mode=False, display_mode=False, save_mode=False)]
+                       - kwargs: { None }

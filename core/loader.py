@@ -13,8 +13,9 @@ from utils.helpers import normalize_data, crop_data
 class Loader:
     
     def __init__(self, input_dir: str = "data/raw", logger : Logger = setup_logger()) -> None:
-        self.input_dir = input_dir
         self.logger = logger
+        self.input_dir = input_dir
+        Path(self.input_dir).mkdir(parents=True, exist_ok=True)
 
     
     def load_data(self, filename: str, normalize: bool = True, crop: bool = False, target_shape: tuple = (64, 64, 64)) -> np.ndarray:

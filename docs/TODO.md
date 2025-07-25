@@ -65,14 +65,15 @@ Chercher comment sélectionner les paramètres du benchmark. Ensuite lancer le b
 Lancer le benchmark sur toutes les images 2D possibles
 lancer le benchmark pour les images 3D
 
+- [] Paralleliser l'analyzer
 - [] Résoudre le problème de log benchmark alors que engine
 - [] Tester les paramètres alpha, beta, gamma
 - [] Faire en sorte de pouvoir modifier les paramètres de main.py avec typer ou autre
 - [] Implémenter Sato
 - [] Refaire/Revalider les test unitaires pour les fonctions principales. Faire notamment une comparaison avec skimage (et garder les résultats de la comparaison.)
 - [] Faire en sorte de généraliser la classe Grid Search pour pouvoir l'utiliser dans d'autres fonction avec d'autres paramètres
-- [] Ajouter les cas 2D/3D dans optimizer
-- [] Ajouter n_colorsd dans \_get_colors de optimizer.py
+- [] Ajouter les cas 2D/3D dans analyzer
+- [] Ajouter n_colorsd dans \_get_colors de analyzer.py
 - [] Changer la structure du fichier data (raw, labels avec les même nom de fichier et aussi 2d/3d)
 
 Dans le cas 3d faire un crop pour obtenier les meilleurs paramètres plus rapidement

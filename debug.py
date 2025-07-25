@@ -1,6 +1,6 @@
 import numpy as np 
 from core.loader import Loader
-from benchmark.engine import chunk_number_influence
+from benchmark.analyzer_processing import chunk_number_influence
 
 import numpy as np
 from view.viewer import Viewer  # adapte le chemin si besoin
@@ -8,9 +8,9 @@ from view.viewer import Viewer  # adapte le chemin si besoin
 def debug():
 
     loader = Loader("data/test")
-    raw_data = loader.load_data('raw.png')
-    ground_truth = loader.load_data('gt.png')
-    Viewer().display_images([raw_data, ground_truth])
+    data_raw = loader.load_data('raw.png')
+    data_gt = loader.load_data('gt.png')
+    Viewer().display_images([data_raw, data_gt])
 
 DEBUG_MODE = False
 

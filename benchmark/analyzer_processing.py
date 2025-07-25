@@ -16,29 +16,18 @@ from pipeline.enhancer import Enhancer
 from pipeline.derivator import Derivator
 from pipeline.segmenter import Segmenter
 
-logger = setup_logger(name='benchmark', debug_mode=True)
+logger = setup_logger(log_file='benchmark', debug_mode=True)
 
 class Engine:
     
     def __init__(self, setup: SetupConfig):
         self.setup = setup
         
-        # Paths
-        self.log_dir = Path(self.setup.log_dir)
-        self.input_dir = Path(self.setup.input_dir)
-        self.output_dir = Path(self.setup.output_dir)
-
-        self.input_dir.mkdir(parents=True, exist_ok=True)
-        self.output_dir.mkdir(parents=True, exist_ok=True)
-        self.log_dir.mkdir(parents=True, exist_ok=True)
-        
         # Logger
-        self.log_file = self.setup.log_file
-        self.debug_mode = self.setup.debug_mode
-        self.logger = setup_logger(self.log_file, log_dir=self.log_dir, debug_mode=self.debug_mode)
+        self.logger = setup_logger(log_file=self.setup.log_file, debug_mode=self.setup.debug_mode)
         
         # Loader
-        self.loader = Loader(self.input_dir, self.logger)
+        self.loader = Loader(self.setup.input_dir, self.logger)
         
         # Derivator
         self.derivator = Derivator()
@@ -361,32 +350,7 @@ class Engine:
     
     
 
-           
-        plt.subplot(1, 2, 1)
-        for i, (step, vals) in enumerate(results['min'].items()):
-            plt.plot([range[0] for range in vals['ranges']], vals['scores'], '+-', color=colors[i], label=f'step={step}')     
-        plt.xlabel("Min range (max=20)")
-        plt.ylabel("Score MCC")
-        plt.title("Influence de l'échelle min d'échelle sur la précision")
-        plt.grid(True)
-        plt.legend()
-        
-        plt.subplot(1, 2, 2)  
-        for i, (step, vals) in enumerate(results['max'].items()):
-            plt.plot([range[1] for range in vals['ranges']], vals['scores'], '+-', color=colors[i], label=f'step={step}')     
-        plt.xlabel("Max range (min=1)")
-        plt.ylabel("Score MCC")
-        plt.title("Influence de l'échelle max d'échelle sur la précision")
-        plt.grid(True)
-        plt.legend()
-        
-        
-        if self.setup.display_mode:
-            plt.show()
-        if self.setup.save_mode:
-            self.saver.save_plot(fig, config.output_file)
-        
-        return mcc_scores
+      
     
     
     @log_time()

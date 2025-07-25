@@ -1,20 +1,22 @@
+from fileinput import filename
 import sys
 import colorlog
 import logging
 from logging.handlers import RotatingFileHandler
 from logging import Logger
 from pathlib import Path
+from configs.paths import LOG_DIR
 
 
-def setup_logger(name: str = "default", log_dir: str | Path = "logs", debug_mode: bool = False) -> Logger:
-    logger = logging.getLogger(name)
+def setup_logger(log_file: str = "default", debug_mode: bool = False) -> Logger:
+    logger = logging.getLogger(log_file)
     logger.setLevel(logging.DEBUG)
 
     if logger.hasHandlers():
         logger.handlers.clear()
 
-    Path(log_dir).mkdir(parents=True, exist_ok=True)
-    log_file = Path(log_dir) / f"{name}.log"
+    Path(LOG_DIR).mkdir(parents=True, exist_ok=True)
+    log_file = Path(LOG_DIR) / f"{log_file}.log"
 
     # File Handler
     file_handler = RotatingFileHandler(log_file, maxBytes=1_000_000, backupCount=3)

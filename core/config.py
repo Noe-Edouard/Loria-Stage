@@ -100,7 +100,6 @@ class SetupConfig(Config):
     name: str 
     input_dir: str
     output_dir: str
-    log_dir: str
     log_file: str
     debug_mode: bool
     display_mode: bool
@@ -113,8 +112,8 @@ class LoadConfig(Config):
     normalize: bool
     crop: bool
     target_shape: Sequence[int]
-    input_file: str
-    output_file: str
+    raw_file: str
+    gt_file: str
 
 @dataclass
 class MethodsConfig(Config):
@@ -191,8 +190,8 @@ class BenchmarkConfig(Config):
        
 @dataclass
 class BenchmarkData(Config):
-    raw_data: ndarray
-    ground_truth: ndarray
+    data_raw: ndarray
+    data_gt: ndarray
     experiments: list[ExperimentData] 
     metrics: list[MetricsConfig]
     
@@ -205,25 +204,21 @@ class SSIConfig(Config):
     volume_size: int
     scales_range: tuple[int]
     scales_numbers: list
-    output_file: str
     
 @dataclass
 class VSIConfig(Config):
     volume_sizes: list[int]
     chunk_number: int
-    output_file: str
     
     
 @dataclass
 class CNIConfig(Config):
     volume_sizes: list[int]
     chunk_numbers: list[int]
-    output_file: str
     
 @dataclass
 class PACConfig(Config):
     input_file: str
-    output_file: str
 
 
 @dataclass
@@ -238,36 +233,24 @@ class EngineConfig(Config):
 
 @dataclass
 class CSIConfig(Config):
-    output_file: str
     scales_steps: list
     max_ranges: list[int]
     min_ranges: list[int]
     
-
+    
 @dataclass
-class CAIConfig(Config):
-    output_file: str
+class CPIConfig(Config):
     alpha_values: list[float]
-    
-@dataclass
-class CBIConfig(Config):
-    output_file: str
     beta_values: list[float]
-    
-@dataclass
-class CGIConfig(Config):
-    output_file: str
     gamma_values: list[float]
     
 
 @dataclass
-class OptimizerConfig(Config):
+class AnalyzerConfig(Config):
+    images_dir: str
+    labels_dir: str
     csi: CSIConfig
-    cai: CAIConfig
-    cbi: CBIConfig
-    cgi: CGIConfig
-
-
+    cpi: CPIConfig
 
 
 ### MAIN

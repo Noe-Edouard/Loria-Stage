@@ -11,7 +11,7 @@ class Saver:
     def __init__(self, experiment_name: str = "default", output_dir: str | Path = "outputs/results", logger: Logger = setup_logger()):
         self.logger = logger
         
-        self.output_dir = Path(f'{output_dir}/{self._get_timestamp()}_{experiment_name}')
+        self.output_dir = Path(f'{output_dir}/{experiment_name}_{self._get_timestamp()}')
         self.output_dir.mkdir(parents=True, exist_ok=True)
         
 

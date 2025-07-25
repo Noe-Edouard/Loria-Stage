@@ -16,22 +16,28 @@ class GridSearch:
         self.pipeline = pipeline
         self.logger = logger
 
-    def evaluate_combination(self, combination: list, keys: list, config: ExperimentConfig, data_raw: ndarray, ground_truth: ndarray) -> Tuple[float, dict, object, float]:
+    def evaluate_combination(self, combination: list, keys: list, config: ExperimentConfig, data_raw: ndarray, data_gt: ndarray) -> Tuple[float, dict, object, float]:
         warnings.filterwarnings("ignore")
         start = perf_counter()
         params = {}
         for i, key in enumerate(keys):
             params[key] = combination[i]
             config.enhancement[key] = params[key]
-        result = self.pipeline.run(config=config, data_raw=data_raw, ground_truth=ground_truth)
-        score = mcc(result.segmented, ground_truth)
+        result = self.pipeline.run(config=config, data_raw=data_raw, data_gt=data_gt)
+        score = mcc(result.segmented, data_gt)
         end = perf_counter()
         time = end - start
         return score, params, result, time
 
     @log_time()
     @log_section("Grid Search")
-    def search(self, data_raw: ndarray, ground_truth: ndarray, params_grid: dict, config: ExperimentConfig) -> Tuple[dict, float, BenchmarkData]:
+    def search(self, 
+            data_raw: ndarray, 
+            data_gt: ndarray, 
+            params_grid: dict, 
+            config: ExperimentConfig
+        ) -> Tuple[dict, float, ExperimentData]:
+        
         start = perf_counter()
         self.logger.info(f'[START] Grid Search started for {config.methods.derivator}')
         keys = list(params_grid.keys())
@@ -42,7 +48,7 @@ class GridSearch:
         best_result: ExperimentData = None
         with ProcessPoolExecutor() as executor:
             futures = [
-                executor.submit(self.evaluate_combination, combination, keys, config, data_raw, ground_truth)
+                executor.submit(self.evaluate_combination, combination, keys, config, data_raw, data_gt)
                 for combination in combinations
             ]
             progress_bar = tqdm(as_completed(futures), total=len(futures), desc='Grid Search')

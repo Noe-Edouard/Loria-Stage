@@ -91,8 +91,8 @@ class Analytics():
     def display_histograms(
         self,
         experiments: list[ExperimentData],
-        raw_data: np.ndarray,
-        ground_truth: np.ndarray,
+        data_raw: np.ndarray,
+        data_gt: np.ndarray,
         bins: int = 50,
         density: bool = False,
         color: str = 'dodgerblue',
@@ -107,12 +107,12 @@ class Analytics():
 
         # Data and titles for each row
         row_data = [
-            [raw_data] + [exp.enhanced for exp in experiments],
-            [ground_truth] + [exp.segmented for exp in experiments],
+            [data_raw] + [exp.enhanced for exp in experiments],
+            [data_gt] + [exp.segmented for exp in experiments],
         ]
         row_titles = [
-            ['Raw Data'] + [exp.config.methods.derivator for exp in experiments],
-            ['Ground Truth'] + [exp.config.methods.derivator for exp in experiments],
+            ['raw data'] + [exp.config.methods.derivator for exp in experiments],
+            ['ground truth'] + [exp.config.methods.derivator for exp in experiments],
         ]
 
         for row in range(nrows):
@@ -179,13 +179,13 @@ class Analytics():
     def display_views(
         self,
         experiments: list[ExperimentData],
-        ground_truth: ndarray,
-        raw_data: ndarray
+        data_gt: ndarray,
+        data_raw: ndarray
     ):
-        dim = ground_truth.ndim
-        data_enhanced = [raw_data] + [exp.enhanced for exp in experiments]
-        data_segmented = [ground_truth] + [exp.segmented for exp in experiments]
-        error_maps = [ground_truth] + [create_error_map(ground_truth, exp.segmented) for exp in experiments]
+        dim = data_gt.ndim
+        data_enhanced = [data_raw] + [exp.enhanced for exp in experiments]
+        data_segmented = [data_gt] + [exp.segmented for exp in experiments]
+        error_maps = [data_gt] + [create_error_map(data_gt, exp.segmented) for exp in experiments]
         methods = [exp.config.methods.derivator for exp in experiments]
 
         titles_enhanced = ['raw data'] + methods

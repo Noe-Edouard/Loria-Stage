@@ -2,7 +2,7 @@
 import pytest
 import numpy as np
 from core.config import BenchmarkConfig
-from benchmark.optimizer import Optimizer
+from benchmark.analyzer_enhancement import Optimizer
 from tests.conftest import DummyEnhancer, DummySegmenter, dummy_config
 
 @pytest.fixture
