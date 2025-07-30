@@ -1,6 +1,6 @@
 import numpy as np
 import pytest
-from view.viewer import Viewer
+from core.viewer import Viewer
 
 
 @pytest.fixture

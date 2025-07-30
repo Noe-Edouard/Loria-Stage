@@ -1,0 +1,8 @@
+mode: "enhancement"
+
+params:
+  alpha: [0.1, 0.2, 0.3, 0.4, 0.5] # log scale
+  beta: [0.1, 0.2, 0.3, 0.4, 0.5] # log scale
+  gamma: [0.1, 1, 10, 20, 50] # log scale
+  scales_min: [1, 2, 3, 4] # lin scale
+  scales_max: [2, 4, 6, 8, 10] # lin scale

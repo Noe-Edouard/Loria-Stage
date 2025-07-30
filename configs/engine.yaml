@@ -8,7 +8,7 @@ setup:
   save_mode: true
 
 experiment:
-  load:
+  loading:
     normalize: true
     crop: true
     target_shape: [64, 64, 64]

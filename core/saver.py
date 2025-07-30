@@ -1,11 +1,15 @@
-from pathlib import Path
+import pickle
 import nibabel as nib
 import numpy as np
 import matplotlib.pyplot as plt
+from pathlib import Path
 from matplotlib.animation import FuncAnimation
 from datetime import datetime
 from typing import Literal
+
 from core.logger import Logger, setup_logger
+from core.config.figure import FigureData
+from core.config.benchmark import RunnerResults
 
 class Saver:
     def __init__(self, experiment_name: str = "default", output_dir: str | Path = "outputs/results", logger: Logger = setup_logger()):
@@ -20,18 +24,31 @@ class Saver:
         return timestamp
     
     
-    def save_text(self, content: str, filename: str):
-        path = self.output_dir / f'text_{filename}'
+    def save_results(self, results: RunnerResults, filename: str, dirname: str = None):
+        output_dir = self.output_dir / dirname if dirname is not None else self.output_dir
+        path = output_dir / f'results_{filename}'
+        path.parent.mkdir(parents=True, exist_ok=True)
+        
+        with open(path, 'wb') as f:
+            pickle.dump(results, f)
+        
+        self.logger.info(f'[SAVE] Results saved as {filename}.')
+        
+        return path
+    
+    
+    def save_text(self, content: str, filename: str, dirname: str = None):
+        output_dir = self.output_dir / dirname if dirname is not None else self.output_dir
+        path = output_dir / f'text_{filename}.txt'
         path.parent.mkdir(parents=True, exist_ok=True)
 
         with open(path, 'w', encoding='utf-8') as f:
             f.write(content)
 
-        self.logger.info(f'[SAVE] Text saved as {filename}.')
 
-
-    def save_data(self, data: np.ndarray, filename: str, extension: Literal['.nii', '.npz', '.npy', ] = '.npz'):
-        path = self.output_dir / f'data_{filename}'
+    def save_data(self, data: np.ndarray, filename: str, dirname: str = None, extension: Literal['.nii', '.npz', '.npy', ] = '.npz'):
+        output_dir = self.output_dir / dirname if dirname is not None else self.output_dir
+        path = output_dir / f'data_{filename}'
         path.parent.mkdir(parents=True, exist_ok=True)
 
         if extension == '.nii':
@@ -45,21 +62,28 @@ class Saver:
         else:
             raise ValueError('Extension extension invalid.')
 
-        self.logger.info(f'[SAVE] Data file {filename}{extension} saved at {path}.')
 
-
-    def save_plot(self, fig: plt.Figure, filename: str, dpi: int = 150):
-        path = self.output_dir / f'plot_{filename}'
+    def save_plot(self, fig: plt.Figure, filename: str, dirname: str = None, dpi: int = 150):
+        output_dir = self.output_dir / dirname if dirname is not None else self.output_dir
+        path = output_dir / f'plot_{filename}'
         path.parent.mkdir(parents=True, exist_ok=True)
         
         fig.savefig(path, dpi=dpi, bbox_inches='tight')
-        self.logger.info(f'[SAVE] Plot saved as {filename}.')
 
 
-    def save_animation(self, anim: FuncAnimation, filename: str, extension: Literal['.mp4', '.mov', '.avi', '.gif'] = '.gif', fps: int = 30, dpi: int = 150):
-        path = self.output_dir / f'animation_{filename}{extension}'
+    def save_anim(self, anim: FuncAnimation, filename: str, dirname: str = None, extension: Literal['.mp4', '.mov', '.avi', '.gif'] = '.gif', fps: int = 30, dpi: int = 150):
+        output_dir = self.output_dir / dirname if dirname is not None else self.output_dir
+        path = output_dir / f'anim_{filename}{extension}'
         path.parent.mkdir(parents=True, exist_ok=True)
 
         anim.save(str(path), fps=fps, dpi=dpi)
-        self.logger.info(f'[SAVE] Animation saved as {filename}{extension}.')
         
+
+    def save_figure(self, figure: FigureData, dirname: str = None):
+        match figure.mode:
+            case 'plot': self.save_plot(figure.figure, figure.name, dirname)
+            case 'text': self.save_text(figure.figure, figure.name, dirname)
+            case 'anim': self.save_anim(figure.figure, figure.name, dirname)
+            case 'data': self.save_data(figure.figure, figure.name, dirname)         
+        
+        self.logger.info(f'[SAVE] {figure.mode.capitalize()} saved as {figure.name}.')

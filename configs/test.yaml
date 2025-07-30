@@ -2,13 +2,13 @@ setup:
   name: test_benchmark
   input_dir: data/test
   output_dir: outputs/test
-  log_file: benchmark.log
+  log_file: test.log
   debug_mode: true
   display_mode: true
   save_mode: false
 
 experiment:
-  load:
+  loading:
     normalize: true
     crop: false
     target_shape: [64, 64, 1]

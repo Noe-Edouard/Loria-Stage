@@ -109,3 +109,164 @@ Très robuste même en cas de déséquilibre de classes.
 - MCC = 1 : prédiction parfaite
 - MCC = 0 : pas mieux que le hasard
 - MCC = -1 : totalement incorrect
+
+---
+
+EnhancementBenchmark:
+config:
+params:
+methods
+experiments: list[Experiment]
+results: list[Results]
+method
+mean
+std
+
+Experiment:
+data:
+raw
+gt
+enhanced
+segmented
+metrics:
+mcc
+dice
+roc
+pr
+config:
+
+    # Runner
+    Pour chaque fichier: (run)
+        Charge les données raw/gt (load data)
+        # Benhcmark:
+        Pour chaque valeurs du paramètre étudié: (run)
+            Met à jour le paramètre dans la config de l'experiment (update_param)
+            Process data (run_experiment)
+            Compute metrics (compute_metrics)
+            Ajoute metrics, config, data
+            Save experiment (save_experiment)
+
+        Display_metrics (display_metrics)
+        Save_metrics (Save metrics)
+
+    compute_mean et std (compute mean)
+    ajoute mean std
+
+Ajouter un setup runner ou config runner ?
+
+---
+
+## Objectif final
+
+- Sauvergarder les images
+
+## Benchmark global
+
+### Runner
+
+#### Run
+
+Lance les runs selon le benchmark sélectionné pour toute les images du dataset.
+
+- Récupère tout les chemin vers les images raw et gt du dataset.
+- Sélectionne le benchmark
+- Appelle la fonction run du benchmark pour chaque image du dataset en parallelisant les calculs.
+- Sauvergarde les résultats
+
+#### Analyse
+
+A partir des résultat du benchmark, affiche les visuel (tables, plot, chart, ...) utilent à l'analyse et la comparaison des différentes valeurs du paramètres étudié.
+
+- Charge les résultats
+- Remet en forme les résultats pour ne récupérer que les informations essentielles.
+- Affiche les plots spécifique au benchmark.
+
+### Benchmmark Base
+
+Classe de base qui permet de construire les différents benchmarks (hessian, enhancement, scales).
+
+#### Run
+
+- Charge l'image raw et la gt associée.
+- Met à jour le nom du fichier étudié dans la config
+- Pour chaque params :
+  - Pour chaque valeur du paramètre:
+    - Met à jour la config de l'expérience
+    - Lance \_run_experiement pour récupérer les résultats du pipeline voir de la grid search
+    - Calcule les métriques par rapport à la segmentation obtenus
+    - Crée une expérience
+- Crée les figures
+- Sauvergarde les figures
+- Retourne un dictionnaire {param: {value: Experiment}}
+
+#### Compute_metrics
+
+- Calcule les différentes métriques (dice, mcc, roc, pr) d'après les données réhaussée et segmentée et retourne un objet métrique.
+
+#### Save figures
+
+Donne un nom si la figure n'en a pas et appelle save_figure.
+
+#### Save figure
+
+Affiche la figure si display_mode et sauvergarde la figure selon le mode sélectionné.
+
+#### Update_config
+
+Met à jour la config selon le paramètre que l'on souhaite étudier.
+
+#### Run_experiment
+
+Lance l'expérience avec les paramètre de la config et lance une grid search si besoin.
+
+#### Create figures
+
+Construit les figures à partir des résultats du run de la forme {param: {value: Experiment}}.
+
+### Benchmark Hessian
+
+#### Init
+
+charge le grid searcher
+
+#### Update_config
+
+Met à jour la méthode du dérivator dans la config.
+
+#### Run_experiment
+
+- Lance un grid search sur les images d'entrée avec les paramètres sélectionnés dans la config.
+- Met à jour la config
+
+#### Create figure
+
+- Display Histogram
+- Display Configs
+- Display Curves (roc, pr)
+- Display Views
+
+### Benchmark Enhancement
+
+#### Init
+
+- charge le pipeline
+
+#### Update_config
+
+Met à jour la le paramètre alpha, beta ou gamma. Ou met à jour le paramètre scales en fonction de min/max.
+
+#### Run_experiment
+
+- Lance un pipeline sur les images d'entrée avec les paramètres sélectionnés dans la config.
+
+#### Create figure
+
+- Display mcc_score en fonction des valeurs de Alpha/Beta/Gamma sur 3 subplot d'un même plot.
+
+### Questions
+
+- Est-ce que l'on affiche les résultats intermédiaire au fur et à mesure.
+- Est-ce que l'on fait une classe analytics spécifique par benchmark ou on inclu dans la classe benchmark ?
+  | On ajoute les plot spécifique dans le run du benchmark et on fait un classe analytics séparée pour les résultats globaux.
+- Qu'est-ce que l'on doit sauvergarder exactement comme résultat.
+- Doit-on faire une classe de config pour le format des résultats (spécifique à chaque benchamrk ?)

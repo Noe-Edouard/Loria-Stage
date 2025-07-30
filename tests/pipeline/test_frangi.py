@@ -2,7 +2,7 @@ import numpy as np
 
 from pipeline.enhancer import Enhancer
 from core.loader import Loader
-from view.viewer import Viewer
+from core.viewer import Viewer
 from core.saver import Saver
 from core.logger import setup_logger
 from utils.helpers import normalize_data

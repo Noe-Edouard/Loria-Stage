@@ -1,6 +1,6 @@
 from pathlib import Path
 from pipeline.pipeline import Pipeline
-from core.config import Config
+from core.configs.config import ConfigBase
 import numpy as np
 
 
@@ -50,7 +50,7 @@ def test_pipeline():
     }
 
 
-    config = Config(config_dict)
+    config = ConfigBase(config_dict)
     pipeline = Pipeline(config)
     pipeline.run()
 

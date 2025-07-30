@@ -1,3 +1,4 @@
+import pickle
 import numpy as np
 import tifffile as tiff
 import nibabel as nib
@@ -5,10 +6,9 @@ import SimpleITK as sitk
 from skimage import io, color
 from pathlib import Path
 
-
+from core.config.benchmark import RunnerResults
 from core.logger import setup_logger, Logger
-from utils.helpers import normalize_data, crop_data
-
+from core.utils.helpers import normalize_data, crop_data
 
 class Loader:
     
@@ -16,6 +16,12 @@ class Loader:
         self.logger = logger
         self.input_dir = input_dir
         Path(self.input_dir).mkdir(parents=True, exist_ok=True)
+
+
+    def load_results(self, filename: str) -> RunnerResults:
+        with open(filename, 'rb') as f:
+            results: RunnerResults = pickle.load(f)
+        return results
 
     
     def load_data(self, filename: str, normalize: bool = True, crop: bool = False, target_shape: tuple = (64, 64, 64)) -> np.ndarray:
@@ -62,7 +68,7 @@ class Loader:
         if normalize:
             data = normalize_data(data)
 
-        self.logger.info(f'[LOAD] Data {filename} loaded - shape={data.shape} - normalize={normalize}.')
+        self.logger.info(f'[LOAD] Data {path.name} loaded | shape={data.shape}.')
         return data
         
 

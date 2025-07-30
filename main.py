@@ -1,78 +1,77 @@
 from pathlib import Path
+from typing import Literal
 
-from benchmark.analyzer_processing import Engine
-from benchmark.benchmark import BenchmarkDerivator
-from core.config import EngineConfig, BenchmarkConfig, BenchmarkData, ConfigBuilder, MainConfig, SetupConfig, ExperimentConfig, AnalyzerConfig
-from pipeline.pipeline import Pipeline
-from benchmark.analyzer_enhancement import EnhancementRunner 
+from configs.args import get_parser
+from benchmark.processing import Engine
+from core.pipeline.pipeline import Pipeline
+from benchmark.runner import BenchmarkRunner 
 
-
-
-RUN_PIPELINE: bool = False
-RUN_ENGINE: bool = False
-RUN_OPTIMIZER: bool = True
-RUN_BENCHMARK: bool = False
+from core.config.builder import ConfigBuilder
+from core.config.benchmark import RunnerConfig, BenchmarkConfig
+from core.config.experiment import ExperimentConfig
 
 
 SRC_PIPELINE = 'configs/pipeline.yaml'
 SRC_ENGINE = 'configs/engine.yaml'
-SRC_OPTIMIZER = 'configs/analyzer.yaml'
-SRC_BENCHMARK = 'configs/benchmark.yaml'
-SRC_TEST = 'configs/test.yaml'
 
-TEST: bool = False
-FULL_BENCHMARK: bool = False
+SRC_BENCHMARK_RUNNER = 'configs/benchmark/runner.yaml'
+SRC_BENCHMARK_HESSIAN = 'configs/benchmark/hessian.yaml'
+SRC_BENCHMARK_ENHANCEMENT = 'configs/benchmark/enhancement.yaml'
+SRC_BENCHMARK_EXPERIMENT = 'configs/benchmark/experiment.yaml'
+
+
+parser = get_parser()
+args = parser.parse_args()
+
+run_pipeline = args.run_pipeline
+run_engine = args.run_engine
+run_benchmark = args.run_benchmark
+benchmark_type = args.benchmark_type
 
 
 def main():
     
 
-    if RUN_PIPELINE:
-        config_file = SRC_TEST if TEST else SRC_PIPELINE
-        config: MainConfig = ConfigBuilder(config_file, MainConfig)
-        setup_config: SetupConfig = config.setup
-        experiment_config: ExperimentConfig = config.experiment
+    # if RUN_PIPELINE:
         
-        pipeline = Pipeline(setup_config)
-        pipeline.run(experiment_config)
+    #     config: MainConfig = ConfigBuilder(SRC_PIPELINE, MainConfig)
+    #     setup_config: SetupConfig = config.setup
+    #     experiment_config: ExperimentConfig = config.experiment
+        
+    #     pipeline = Pipeline(setup_config)
+    #     pipeline.run(experiment_config)
 
-    if RUN_ENGINE:
-        config_file = SRC_TEST if TEST else SRC_ENGINE
-        config: MainConfig = ConfigBuilder(config_file, MainConfig)
-        setup_config: SetupConfig = config.setup
-        experiment_config: ExperimentConfig = config.experiment
-        engine_config: EngineConfig = ConfigBuilder(config.runner, EngineConfig)
-        
-        engine = Engine(setup_config)
-        engine.run(engine_config, experiment_config)
-        
-            
-    if RUN_OPTIMIZER:
-        config_file = SRC_TEST if TEST else SRC_OPTIMIZER
-        config: MainConfig = ConfigBuilder(config_file, MainConfig)
-        setup_config: SetupConfig = config.setup
-        experiment_config: ExperimentConfig = config.experiment
-        analyzer_config: AnalyzerConfig = ConfigBuilder(config.runner, AnalyzerConfig)
 
-        analyzer = EnhancementRunner(setup_config)
-        analyzer.run(analyzer_config, experiment_config)
+    # if RUN_ENGINE:
+    #     config: MainConfig = ConfigBuilder(SRC_ENGINE, MainConfig)
+    #     setup_config: SetupConfig = config.setup
+    #     experiment_config: ExperimentConfig = config.experiment
+    #     engine_config: EngineConfig = ConfigBuilder(config.runner, EngineConfig)
         
+    #     engine = Engine(setup_config)
+    #     engine.run(engine_config, experiment_config)
 
-    if RUN_BENCHMARK:
-        config_file = SRC_TEST if TEST else SRC_BENCHMARK
-        config: MainConfig = ConfigBuilder(config_file, MainConfig)
-        setup_config: SetupConfig = config.setup
-        experiment_config: ExperimentConfig = config.experiment
-        benchmark_config: BenchmarkConfig = ConfigBuilder(config.runner, BenchmarkConfig)
+    if run_benchmark:
+        runner_config: RunnerConfig = ConfigBuilder(SRC_BENCHMARK_RUNNER, RunnerConfig)
+        experiment_config = ConfigBuilder(SRC_BENCHMARK_EXPERIMENT, ExperimentConfig)
         
-        benchmark = BenchmarkDerivator(setup_config)
+        if benchmark_type == "hessian":
+            benchmark_config: BenchmarkConfig = ConfigBuilder(SRC_BENCHMARK_HESSIAN, BenchmarkConfig)
+        elif benchmark_type == "enhancement":
+            benchmark_config: BenchmarkConfig = ConfigBuilder(SRC_BENCHMARK_ENHANCEMENT, BenchmarkConfig)
+        else:
+            raise ValueError(f'Benchmark type unknown: {benchmark_type}')
         
-        if FULL_BENCHMARK:
-            benchmark.run_all(benchmark_config, experiment_config)
-        elif benchmark_config:
-            benchmark.run(benchmark_config, experiment_config)
-                
-            
+        runner = BenchmarkRunner(runner_config.setup)
+        filename = runner.run(
+            images_dir=runner_config.images_dir, 
+            labels_dir=runner_config.labels_dir,
+            benchmark_config=benchmark_config,
+            experiment_config=experiment_config,
+        )     
+        
+        runner.analyse(benchmark_config=benchmark_config, results_file=filename)  
+        
 if __name__ == "__main__":
     main()
     

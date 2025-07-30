@@ -1,11 +1,10 @@
-from fileinput import filename
 import sys
 import colorlog
 import logging
 from logging.handlers import RotatingFileHandler
 from logging import Logger
 from pathlib import Path
-from configs.paths import LOG_DIR
+from configs.args import LOG_DIR
 
 
 def setup_logger(log_file: str = "default", debug_mode: bool = False) -> Logger:

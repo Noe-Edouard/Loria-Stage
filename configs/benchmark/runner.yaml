@@ -1,0 +1,11 @@
+setup:
+  name: "runner"
+  input_dir: "data/test"
+  output_dir: "outputs/benchmark"
+  log_file: "benchmark"
+  debug_mode: true
+  display_mode: false
+  save_mode: true
+
+images_dir: "images"
+labels_dir: "labels"

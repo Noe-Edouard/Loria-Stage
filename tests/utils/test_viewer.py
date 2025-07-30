@@ -1,5 +1,5 @@
 import numpy as np
-from view.viewer import Viewer
+from core.viewer import Viewer
 from utils.helpers import create_error_map
 def test_viewer():
     viewer = Viewer()
