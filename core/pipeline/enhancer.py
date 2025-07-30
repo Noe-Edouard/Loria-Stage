@@ -9,7 +9,7 @@ from typing import Callable, Optional, Sequence, Literal, Tuple
 from core.utils.decorator import log_call
 from core.utils.helpers import normalize_data
 from core.config.experiment import HessianConfig, EnhancementConfig, ProcessingConfig
-from core.logger import Logger, setup_logger
+from core.io.logger import Logger, setup_logger
 
 
 class Enhancer:

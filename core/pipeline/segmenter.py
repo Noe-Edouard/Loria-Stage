@@ -4,7 +4,7 @@ from typing import Literal, Callable, Optional, Tuple
 from sklearn.metrics import precision_recall_curve
 
 from core.config.experiment import SegmentationConfig
-from core.logger import Logger, setup_logger
+from core.io.logger import Logger, setup_logger
 from core.utils.helpers import normalize_data
 from core.utils.decorator import log_call
 

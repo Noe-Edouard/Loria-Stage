@@ -4,10 +4,10 @@ from typing import Optional
 from core.pipeline.derivator import Derivator
 from core.pipeline.enhancer import Enhancer 
 from core.pipeline.segmenter import Segmenter
-from core.viewer import Viewer
-from core.saver import Saver
-from core.loader import Loader
-from core.logger import setup_logger
+from core.io.viewer import Viewer
+from core.io.saver import Saver
+from core.io.loader import Loader
+from core.io.logger import setup_logger
 from core.utils.decorator import log_section, log_time, log_init
 
 from core.config.setup import SetupConfig
@@ -112,7 +112,7 @@ class Pipeline:
             self.saver.save_data(data_segmented, f'data_segmented', '.npz')
 
         # Display analytics
-        self.display_analytics(data_raw, data_enhanced, data_segmented, config)
+        # self.display_analytics(data_raw, data_enhanced, data_segmented, config)
                
         # Return results
         experiment_data = Experiment(

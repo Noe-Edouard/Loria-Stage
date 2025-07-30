@@ -5,16 +5,16 @@ from copy import deepcopy
 
 from core.utils.helpers import compute_time
 from core.utils.decorator import log_time, log_section, log_init
-from core.logger import setup_logger
-from core.loader import Loader
-from core.saver import Saver
+from core.io.logger import setup_logger
+from core.io.loader import Loader
+from core.io.saver import Saver
 from core.config.setup import SetupConfig
 from core.config.engine import PACConfig, SSIConfig, VSIConfig, CNIConfig, EngineConfig
 from core.config.experiment import ExperimentConfig
 from core.pipeline.enhancer import Enhancer
 from core.pipeline.derivator import Derivator
 from core.pipeline.segmenter import Segmenter
-from core.viewer import Viewer 
+from core.io.viewer import Viewer 
 
 logger = setup_logger(log_file='benchmark', debug_mode=True)
 

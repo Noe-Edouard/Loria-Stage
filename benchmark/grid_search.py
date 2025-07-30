@@ -5,7 +5,7 @@ from typing import Tuple
 import warnings
 
 from core.pipeline.pipeline import Pipeline
-from core.logger import setup_logger, Logger
+from core.io.logger import setup_logger, Logger
 from core.config.experiment import ExperimentConfig, Experiment
 from core.utils.decorator import log_time, log_section  
 from core.utils.parallelizer import Parallelizer

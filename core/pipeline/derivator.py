@@ -4,7 +4,7 @@ from skimage.feature import hessian_matrix
 from scipy.ndimage import gaussian_filter
 from scipy.ndimage import convolve1d
 
-from core.logger import Logger, setup_logger
+from core.io.logger import Logger, setup_logger
 
 
 class Derivator:

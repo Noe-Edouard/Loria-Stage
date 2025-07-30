@@ -1,7 +1,7 @@
 setup:
   name: test_benchmark
-  input_dir: data/test
-  output_dir: outputs/test
+  input_dir: test
+  output_dir: test
   log_file: test
   debug_mode: true
   display_mode: true

@@ -2,9 +2,9 @@
 import matplotlib.pyplot as plt
 from typing import Union
 
-from core.viewer import Viewer
+from core.io.viewer import Viewer
 from core.config.figure import FigureData, FigureMode
-from core.logger import setup_logger, Logger
+from core.io.logger import setup_logger, Logger
 
 
 class AnalyticsBase():

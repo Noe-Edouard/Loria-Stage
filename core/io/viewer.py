@@ -86,7 +86,6 @@ class Viewer:
 
         plt.tight_layout()
 
-
         return fig
 
 

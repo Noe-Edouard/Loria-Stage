@@ -32,8 +32,8 @@ class AnalyticsHessian(AnalyticsBase):
             config_str = pformat(config_dict, indent=4, sort_dicts=False)
             content += f"\n{method.upper()}:\n{config_str}\n"
 
-
         figure = self._create_figure(content, 'configs', 'text')
+        
         return figure
 
 
@@ -107,6 +107,7 @@ class AnalyticsHessian(AnalyticsBase):
         plt.subplots_adjust(left=0.06, right=0.98, bottom=0.08, top=0.95, wspace=0.15, hspace=0.2)
         
         figure = self._create_figure(fig, 'histograms', 'plot')
+        plt.close(fig)
         
         return figure
 
@@ -148,9 +149,9 @@ class AnalyticsHessian(AnalyticsBase):
 
         # Final display
         fig.tight_layout()
-        
         figure = self._create_figure(fig, 'curves', 'plot')
-
+        plt.close(fig)
+        
         return figure
 
     def get_views(self,
@@ -177,7 +178,8 @@ class AnalyticsHessian(AnalyticsBase):
             fig_segmented   = self._create_figure(plot_segmented, 'images_segmented', 'plot')
             fig_error_maps  = self._create_figure(plot_error_maps, 'error_maps', 'plot')
             
-            return [fig_enhanced, fig_segmented, fig_error_maps]
+            figures = [fig_enhanced, fig_segmented, fig_error_maps]
+
         
         else: # dim == 3
             mip_enhanced      = self.viewer.display_mip(data_enhanced, titles=titles_enhanced, cmap='viridis')
@@ -190,8 +192,11 @@ class AnalyticsHessian(AnalyticsBase):
             fig_slices_segmented  = self._create_figure(slices_segmented, 'slices_segmented', 'anim')
             fig_slices_error_maps = self._create_figure(slices_error_maps, 'slices_error_maps', 'anim')
             
-            return [fig_mip_enhanced, fig_slices_enhanced, fig_slices_segmented, fig_slices_error_maps]
+            figures = [fig_mip_enhanced, fig_slices_enhanced, fig_slices_segmented, fig_slices_error_maps]
 
+        plt.close('all')
+        
+        return figures
             
             
             

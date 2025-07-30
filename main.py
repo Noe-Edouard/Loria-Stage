@@ -2,23 +2,13 @@ from pathlib import Path
 from typing import Literal
 
 from configs.args import get_parser
-from benchmark.processing import Engine
+from benchmark.benchmarks.processing import Engine
 from core.pipeline.pipeline import Pipeline
-from benchmark.runner import BenchmarkRunner 
+from benchmark.benchmarks.runner import BenchmarkRunner 
 
 from core.config.builder import ConfigBuilder
 from core.config.benchmark import RunnerConfig, BenchmarkConfig
 from core.config.experiment import ExperimentConfig
-
-
-SRC_PIPELINE = 'configs/pipeline.yaml'
-SRC_ENGINE = 'configs/engine.yaml'
-
-SRC_BENCHMARK_RUNNER = 'configs/benchmark/runner.yaml'
-SRC_BENCHMARK_HESSIAN = 'configs/benchmark/hessian.yaml'
-SRC_BENCHMARK_ENHANCEMENT = 'configs/benchmark/enhancement.yaml'
-SRC_BENCHMARK_EXPERIMENT = 'configs/benchmark/experiment.yaml'
-
 
 parser = get_parser()
 args = parser.parse_args()
@@ -27,6 +17,20 @@ run_pipeline = args.run_pipeline
 run_engine = args.run_engine
 run_benchmark = args.run_benchmark
 benchmark_type = args.benchmark_type
+test = args.test
+
+ROOT = "tests/" if test else "" 
+
+SRC_PIPELINE = ROOT + 'configs/pipeline.yaml'
+SRC_ENGINE = ROOT + 'configs/engine.yaml'
+
+SRC_BENCHMARK_RUNNER = ROOT + 'configs/benchmark/runner.yaml'
+SRC_BENCHMARK_HESSIAN = ROOT + 'configs/benchmark/hessian.yaml'
+SRC_BENCHMARK_ENHANCEMENT = ROOT + 'configs/benchmark/enhancement.yaml'
+SRC_BENCHMARK_EXPERIMENT = ROOT + 'configs/benchmark/experiment.yaml'
+
+
+
 
 
 def main():

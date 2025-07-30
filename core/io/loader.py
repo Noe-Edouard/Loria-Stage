@@ -7,15 +7,16 @@ from skimage import io, color
 from pathlib import Path
 
 from core.config.benchmark import RunnerResults
-from core.logger import setup_logger, Logger
+from core.io.logger import setup_logger, Logger
 from core.utils.helpers import normalize_data, crop_data
+from configs.args import INPUT_DIR
 
 class Loader:
     
-    def __init__(self, input_dir: str = "data/raw", logger : Logger = setup_logger()) -> None:
+    def __init__(self, input_dir: str = "raw", logger : Logger = setup_logger()) -> None:
         self.logger = logger
-        self.input_dir = input_dir
-        Path(self.input_dir).mkdir(parents=True, exist_ok=True)
+        self.input_dir = Path(f"{INPUT_DIR}/{input_dir}")
+        self.input_dir.mkdir(parents=True, exist_ok=True)
 
 
     def load_results(self, filename: str) -> RunnerResults:

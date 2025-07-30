@@ -3,7 +3,7 @@ from functools import wraps
 from time import perf_counter
 from typing import Callable, Any, TypeVar, ParamSpec
 
-from core.logger import setup_logger
+from core.io.logger import setup_logger
 
 # Generic Typage
 P = ParamSpec("P")

@@ -27,8 +27,8 @@ class AnalyticsEnhancement(AnalyticsBase):
             plt.grid(True)
 
         plt.tight_layout()
-        
         figure = self._create_figure(fig, 'params', 'plot')
+        plt.close(fig)
         
         return figure
     
@@ -56,8 +56,8 @@ class AnalyticsEnhancement(AnalyticsBase):
                 plt.title(f"Influence de l'échelle max (min_scale=1)")
 
         plt.tight_layout()
-        
         figure = self._create_figure(fig, 'scales', 'plot')
+        plt.close(fig)
         
         return figure
     

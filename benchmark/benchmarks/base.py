@@ -6,10 +6,10 @@ from pathlib import Path
 
 
 from core.pipeline.pipeline import Pipeline
-from core.saver import Saver
-from core.loader import Loader
-from core.logger import Logger
-from core.saver import Saver
+from core.io.saver import Saver
+from core.io.loader import Loader
+from core.io.logger import Logger
+from core.io.saver import Saver
 from core.config.figure import FigureData
 from core.config.experiment import ExperimentConfig, Experiment
 from core.config.benchmark import BenchmarkConfig, BenchmarkResults, BenchmarkData
@@ -93,11 +93,9 @@ class BenchmarkBase(ABC):
             benchmark_config: BenchmarkConfig, 
             experiment_config: ExperimentConfig, 
         ) -> BenchmarkResults:
-        from core.loader import Loader
-        loader = Loader('data/test', self.logger)
         
         # Load data
-        data_raw = loader.load_data(
+        data_raw = self.loader.load_data(
             filename=file_raw,
             normalize=experiment_config.loading.normalize,
             crop=experiment_config.loading.crop,

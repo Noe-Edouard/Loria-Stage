@@ -4,11 +4,11 @@ from copy import deepcopy
 from typing import Any
 
 from core.pipeline.pipeline import Pipeline
-from benchmark.base import BenchmarkBase
+from benchmark.benchmarks.base import BenchmarkBase
 from benchmark.analytics.enhancement import AnalyticsEnhancement
-from core.saver import Saver
-from core.loader import Loader
-from core.logger import Logger
+from core.io.saver import Saver
+from core.io.loader import Loader
+from core.io.logger import Logger
 from core.config.figure import FigureData
 from core.config.benchmark import BenchmarkData
 from core.config.experiment import ExperimentConfig, Experiment

@@ -7,15 +7,16 @@ from matplotlib.animation import FuncAnimation
 from datetime import datetime
 from typing import Literal
 
-from core.logger import Logger, setup_logger
 from core.config.figure import FigureData
 from core.config.benchmark import RunnerResults
+from core.io.logger import Logger, setup_logger
+from configs.args import OUTPUT_DIR
 
 class Saver:
-    def __init__(self, experiment_name: str = "default", output_dir: str | Path = "outputs/results", logger: Logger = setup_logger()):
+    def __init__(self, experiment_name: str = "default", output_dir: str | Path = "results", logger: Logger = setup_logger()):
         self.logger = logger
         
-        self.output_dir = Path(f'{output_dir}/{experiment_name}_{self._get_timestamp()}')
+        self.output_dir = Path(f'{OUTPUT_DIR}/{output_dir}/{experiment_name}_{self._get_timestamp()}')
         self.output_dir.mkdir(parents=True, exist_ok=True)
         
 

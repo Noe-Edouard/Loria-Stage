@@ -6,22 +6,22 @@ from dataclasses import fields
 
 from core.pipeline.pipeline import Pipeline
 from benchmark.grid_search import GridSearcher
-from benchmark.hessian import BenchmarkHessian
-from benchmark.enhancement import BenchmarkEnhancement
+from benchmark.benchmarks.hessian import BenchmarkHessian
+from benchmark.benchmarks.enhancement import BenchmarkEnhancement
 from benchmark.analytics.runner import AnalyticsRunner
-from benchmark.base import BenchmarkBase
-from core.saver import Saver
-from core.loader import Loader
-from core.logger import setup_logger
+from benchmark.benchmarks.base import BenchmarkBase
+from core.io.saver import Saver
+from core.io.loader import Loader
+from core.io.logger import setup_logger
 from core.utils.decorator import log_time, log_section, log_init
 from core.utils.parallelizer import Parallelizer
-
 from core.config.benchmark import BenchmarkConfig, RunnerResults, BenchmarkResults, RunnerResultsParsed
 from core.config.experiment import ExperimentConfig, Experiment
 from core.config.builder import ConfigBuilder 
 from core.config.setup import SetupConfig
 from core.config.metrics import Metrics
 from core.config.figure import FigureData
+from configs.args import INPUT_DIR
 
 
 class BenchmarkRunner():
@@ -46,7 +46,7 @@ class BenchmarkRunner():
         setup_pipeline = ConfigBuilder({
                 'name': 'pipeline',
                 'input_dir': self.setup.input_dir,
-                'output_dir': 'outputs/pipeline',
+                'output_dir': 'pipeline',
                 'log_file': 'pipeline',
                 'debug_mode': False,
                 'display_mode': False,
@@ -81,14 +81,13 @@ class BenchmarkRunner():
         return benchmark
             
     def _get_files(self, images_dir: str = "images", labels_dir: str = "labels"):
-        images_dir = Path(self.setup.input_dir) / images_dir
-        labels_dir = Path(self.setup.input_dir) / labels_dir
+        images_dir = Path(f"{INPUT_DIR}/{self.setup.input_dir}") / images_dir
+        labels_dir = Path(f"{INPUT_DIR}/{self.setup.input_dir}") / labels_dir
         images_files = []
         labels_files = []
         
         if not images_dir.exists() or not labels_dir.exists():
-            self.logger.warning(f"The directories 'images' or 'labels' do not exist: {images_dir}, {labels_dir}")
-            return [], []
+            raise ValueError(f"The directories 'images' or 'labels' do not exist: {images_dir}, {labels_dir}")
         for image_name in os.listdir(images_dir):
             idx = image_name[len("image_"):]
             images_files.append(f"images/{image_name}")

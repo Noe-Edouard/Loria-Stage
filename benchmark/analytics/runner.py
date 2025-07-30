@@ -97,7 +97,8 @@ class AnalyticsRunner(AnalyticsBase):
             plt.grid(True, axis='y')
 
             figures.append(self._create_figure(fig, f'plot_box_{metric}', 'plot'))
-
+            plt.close(fig)
+            
 
 
 
@@ -121,7 +122,9 @@ class AnalyticsRunner(AnalyticsBase):
         plt.legend(loc='upper right', bbox_to_anchor=(1.1, 1.1))
 
         figures.append(self._create_figure(fig, 'radar', 'plot'))
-     
+        plt.close(fig)
+        
+        
         # Best/Worst (mcc)
 
         images_scores = []
@@ -143,7 +146,7 @@ class AnalyticsRunner(AnalyticsBase):
         content += f"Best image: {best_img_name} (mean={images_scores[best_idx]:.4f})\n"
         content += f"Worst image: {worst_img_name} (mean={images_scores[worst_idx]:.4f})\n"
         figures.append(self._create_figure(content, 'best_worst', 'text'))
-
+        
 
         return figures
     
