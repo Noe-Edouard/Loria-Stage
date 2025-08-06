@@ -1,6 +1,6 @@
 setup:
   name: "runner"
-  input_dir: "2d"
+  input_dir: "test"
   output_dir: "benchmark"
   log_file: "benchmark"
   debug_mode: true

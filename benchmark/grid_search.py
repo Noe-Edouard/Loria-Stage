@@ -9,6 +9,7 @@ from core.io.logger import setup_logger, Logger
 from core.config.experiment import ExperimentConfig, Experiment
 from core.utils.decorator import log_time, log_section  
 from core.utils.parallelizer import Parallelizer
+from core.utils.helpers import crop_data
 from benchmark.metrics import mcc
 
 
@@ -35,6 +36,9 @@ class GridSearcher:
             data_gt: ndarray, 
             config: ExperimentConfig
         ) -> Tuple[dict, float, Experiment]:
+        
+        if data_raw.ndim == 3:
+            data_raw = crop_data(data=data_raw, target_shape=(64, 64, 64))
         
         start = perf_counter()
         self.logger.info(f'[START] Grid Search started for {config.methods.derivator}')

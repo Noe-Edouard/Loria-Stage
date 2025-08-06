@@ -36,7 +36,7 @@ class BenchmarkEnhancement(BenchmarkBase):
             setattr(new_config.enhancement, 'scales', scales)
         else:    
             setattr(new_config.enhancement, param, value)
-            
+
         return new_config
     
     

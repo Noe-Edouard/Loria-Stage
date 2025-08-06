@@ -15,11 +15,10 @@ from core.io.loader import Loader
 from core.io.logger import setup_logger
 from core.utils.decorator import log_time, log_section, log_init
 from core.utils.parallelizer import Parallelizer
-from core.config.benchmark import BenchmarkConfig, RunnerResults, BenchmarkResults, RunnerResultsParsed
-from core.config.experiment import ExperimentConfig, Experiment
+from core.config.benchmark import BenchmarkConfig, RunnerResults
+from core.config.experiment import ExperimentConfig
 from core.config.builder import ConfigBuilder 
 from core.config.setup import SetupConfig
-from core.config.metrics import Metrics
 from core.config.figure import FigureData
 from configs.args import INPUT_DIR
 

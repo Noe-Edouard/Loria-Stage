@@ -13,12 +13,15 @@ from core.io.logger import Logger, setup_logger
 from configs.args import OUTPUT_DIR
 
 class Saver:
-    def __init__(self, experiment_name: str = "default", output_dir: str | Path = "results", logger: Logger = setup_logger()):
+    def __init__(self, 
+            experiment_name: str = "default", 
+            output_dir: str | Path = "results", 
+            logger: Logger = setup_logger()
+        ):
         self.logger = logger
         
         self.output_dir = Path(f'{OUTPUT_DIR}/{output_dir}/{experiment_name}_{self._get_timestamp()}')
         self.output_dir.mkdir(parents=True, exist_ok=True)
-        
 
     def _get_timestamp(self) -> str:
         timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
@@ -33,7 +36,7 @@ class Saver:
         with open(path, 'wb') as f:
             pickle.dump(results, f)
         
-        self.logger.info(f'[SAVE] Results saved as {filename}.')
+        self.logger.info(f'[SAVE] Results saved as {path.stem}.')
         
         return path
     

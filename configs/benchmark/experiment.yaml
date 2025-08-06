@@ -15,8 +15,8 @@ hessian:
 
 processing:
   normalize: true
-  parallelize: false
-  chunk_size: [32, 32, 32]
+  parallelize: true
+  chunk_size: [64, 64, 64]
   overlap_size: 8
 
 enhancement:

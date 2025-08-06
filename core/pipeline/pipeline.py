@@ -83,6 +83,7 @@ class Pipeline:
             else :
                 data_gt = None
             
+            
         # Select Derivator
         config.enhancement.hessian_function = (
             self.derivator.select_hessian_function(config.methods.derivator)

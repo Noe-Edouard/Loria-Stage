@@ -78,10 +78,10 @@ class BenchmarkBase(ABC):
     def _compute_metrics(self, data_segmented: ndarray, data_gt: ndarray) -> Metrics:
         
         metrics = Metrics(
-            dice=dice(data_gt, data_segmented),
-            mcc=mcc(data_gt, data_segmented),
-            roc=roc(data_gt, data_segmented),
-            pr=pr(data_gt, data_segmented),
+            dice=dice(data_segmented, data_gt),
+            mcc=mcc(data_segmented, data_gt),
+            roc=roc(data_segmented, data_gt),
+            pr=pr(data_segmented, data_gt),
         )
         
         return metrics
@@ -93,6 +93,7 @@ class BenchmarkBase(ABC):
             benchmark_config: BenchmarkConfig, 
             experiment_config: ExperimentConfig, 
         ) -> BenchmarkResults:
+        
         
         # Load data
         data_raw = self.loader.load_data(

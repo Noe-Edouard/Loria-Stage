@@ -6,7 +6,6 @@ from sklearn.metrics import precision_recall_curve
 from core.config.experiment import SegmentationConfig
 from core.io.logger import Logger, setup_logger
 from core.utils.helpers import normalize_data
-from core.utils.decorator import log_call
 
 class Segmenter:
     
@@ -16,7 +15,6 @@ class Segmenter:
             'thresholding': self.thresholding
         }
         
-    @log_call()
     def segment_data(
         self, 
         data: ndarray, 
@@ -31,7 +29,6 @@ class Segmenter:
             raise ValueError(f"Unknown segmentation method: {method}. Valid methods: {[key for key, value in self.selector.items()]}")
         return self.selector[method](data=data, ground_truth=ground_truth, **segmentation_params.to_dict())
 
-    @log_call ()
     def thresholding(
         self, 
         data: ndarray, 

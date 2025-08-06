@@ -30,7 +30,7 @@ class Loader:
         suffixes = path.suffixes
 
         # .JPG, .PNG
-        if suffixes[-1] in ['.jpg', '.png']:
+        if suffixes[-1] in ['.jpg', '.png', '.jp2']:
             data = io.imread(path).astype(np.float32)
             if data.ndim == 3:
                 data = color.rgb2gray(data)
@@ -78,7 +78,7 @@ class Loader:
         suffixes = path.suffixes
 
         # .JPG, .PNG
-        if suffixes[-1] in ['.jpg', '.png']:
+        if suffixes[-1] in ['.jpg', '.png', '.jp2']:
             name = path.stem
             extension = suffixes[-1]
             shape = io.imread(path).shape

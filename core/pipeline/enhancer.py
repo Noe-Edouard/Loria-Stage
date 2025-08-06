@@ -6,7 +6,6 @@ from skimage.feature import hessian_matrix, hessian_matrix_eigvals
 from skimage.filters import frangi as frangi_skimage
 from typing import Callable, Optional, Sequence, Literal, Tuple
 
-from core.utils.decorator import log_call
 from core.utils.helpers import normalize_data
 from core.config.experiment import HessianConfig, EnhancementConfig, ProcessingConfig
 from core.io.logger import Logger, setup_logger
@@ -20,7 +19,6 @@ class Enhancer:
             'frangi': self.frangi,
         }
 
-    @log_call()
     def enhance_data(
         self, 
         data: np.ndarray, 
@@ -143,7 +141,6 @@ class Enhancer:
         return result
     
     
-    @log_call()
     def frangi(
         self,
         image: np.ndarray,
@@ -154,7 +151,7 @@ class Enhancer:
         alpha: float = 0.5,
         beta: float = 0.5,
         gamma: Optional[float] = None,
-        black_ridges: Optional[bool] = False,
+        black_ridges: Optional[bool] = True,
         hessian_params: dict = {'mode': 'reflect', 'cval': 0},
         skimage = False,
     ) -> np.ndarray:

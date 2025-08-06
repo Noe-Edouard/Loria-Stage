@@ -200,6 +200,8 @@ class AnalyticsRunner(AnalyticsBase):
             plt.title(f'Influence (moyenne) du paramètre {param}')
             plt.legend()
             plt.grid(True)
+            if params in ['alpha', 'beta', 'gamma']:
+                plt.xscale('log')
 
             # Best values histogram
             plt.subplot(1, 2, 2)
