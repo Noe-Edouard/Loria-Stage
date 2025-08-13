@@ -5,8 +5,9 @@ import nibabel as nib
 import SimpleITK as sitk
 from skimage import io, color
 from pathlib import Path
-
-from core.config.benchmark import RunnerResults
+import json
+from core.config.benchmark import BenchmarkResults
+from core.config.base import Config, ConfigBase
 from core.io.logger import setup_logger, Logger
 from core.utils.helpers import normalize_data, crop_data
 from configs.args import INPUT_DIR
@@ -19,14 +20,24 @@ class Loader:
         self.input_dir.mkdir(parents=True, exist_ok=True)
 
 
-    def load_results(self, filename: str) -> RunnerResults:
+    def load_results(self, filename: str) -> BenchmarkResults:
         with open(filename, 'rb') as f:
-            results: RunnerResults = pickle.load(f)
+            results: BenchmarkResults = pickle.load(f)
         return results
+    
+    def load_config(self, filename: str, config_instance: Config) -> ConfigBase:
+        path = Path(self.input_dir) / filename
+        
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        
+        config_instance.from_dict(data)
+        
+        return config_instance
 
     
     def load_data(self, filename: str, normalize: bool = True, crop: bool = False, target_shape: tuple = (64, 64, 64)) -> np.ndarray:
-        path = path = Path(self.input_dir) / filename
+        path = Path(self.input_dir) / filename
         suffixes = path.suffixes
 
         # .JPG, .PNG

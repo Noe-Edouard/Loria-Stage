@@ -10,12 +10,12 @@ from core.config.setup import SetupConfig
 ### BENCHMARK 
 
 BenchmarkResults = dict[str, dict[str, Experiment]] # {param: {value: Experiment}}
-RunnerResults = list[BenchmarkResults]
 RunnerResultsParsed = dict[str, dict[str, dict[Any, list[float]]]] # {param: {value: {metric: [float for images]}}}
 
 @dataclass
 class BenchmarkConfig(ConfigBase): 
     mode: Literal['hessian', 'enhancement']
+    results_dir: str
     params: dict[str, list] 
     params_grid: Optional[dict[str, Any]]
    

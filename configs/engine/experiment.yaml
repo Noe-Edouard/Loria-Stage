@@ -1,0 +1,31 @@
+loading:
+  normalize: true
+  crop: true
+  target_shape: [128, 128, 128]
+  input_file: test.nii
+
+methods:
+  derivator: default
+  enhancer: frangi
+  segmenter: thresholding
+
+hessian:
+  mode: reflect
+  cval: 0.0
+
+processing:
+  normalize: true
+  parallelize: true
+  chunk_size: [64, 64, 64]
+  overlap_size: null
+
+enhancement:
+  alpha: 0.5
+  beta: 0.2
+  gamma: 20
+  scales: [2, 4, 6, 8]
+  black_ridges: false
+  skimage: false
+
+segmentation:
+  threshold: null

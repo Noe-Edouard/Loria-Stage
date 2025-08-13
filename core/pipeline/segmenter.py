@@ -9,25 +9,28 @@ from core.utils.helpers import normalize_data
 
 class Segmenter:
     
-    def __init__(self, logger : Logger = setup_logger()):
-        self.logger = logger
+    def __init__(self):
         self.selector = {
             'thresholding': self.thresholding
         }
-        
-    def segment_data(
-        self, 
-        data: ndarray, 
-        method: Literal['thresholding'], 
-        segmentation_params: SegmentationConfig, 
-        ground_truth: Optional[ndarray] = None
-    ) -> Callable[..., Tuple[ndarray, float]]:
-        
-        segmentation_params = segmentation_params or SegmentationConfig()
-        
+       
+    def select_segmentation_function(self, method: Literal['thresholding']):
         if method not in self.selector:
             raise ValueError(f"Unknown segmentation method: {method}. Valid methods: {[key for key, value in self.selector.items()]}")
-        return self.selector[method](data=data, ground_truth=ground_truth, **segmentation_params.to_dict())
+
+        return self.selector[method]
+    # def segment_data(
+    #     self, 
+    #     data: ndarray, 
+    #     method: Literal['thresholding'], 
+    #     segmentation_params: SegmentationConfig, 
+    #     ground_truth: Optional[ndarray] = None
+    # ) -> Callable[..., Tuple[ndarray, float]]:
+        
+    #     segmentation_params = segmentation_params or SegmentationConfig()
+        
+        
+    #     return (data=data, ground_truth=ground_truth, **segmentation_params.to_dict())
 
     def thresholding(
         self, 
@@ -44,7 +47,8 @@ class Segmenter:
             threshold = thresholds[np.argmax(f1_scores)]
         elif threshold is None:
             threshold = 0.5
-        return (data_normalized > threshold).astype(np.uint8), threshold
+        data_segmented = (data_normalized > threshold).astype(np.uint8)
+        return data_segmented, threshold
 
 
 

@@ -9,5 +9,5 @@ class SetupConfig(ConfigBase):
     output_dir: str
     log_file: str
     debug_mode: bool
-    display_mode: bool
+    plot_mode: bool
     save_mode: bool

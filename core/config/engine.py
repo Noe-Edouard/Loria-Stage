@@ -6,23 +6,27 @@ from core.config.base import ConfigBase
 
 @dataclass
 class SSIConfig(ConfigBase):
+    run: bool
     volume_size: int
     scales_range: tuple[int]
     scales_numbers: list
     
 @dataclass
 class VSIConfig(ConfigBase):
+    run: bool
     volume_sizes: list[int]
     chunk_number: int
     
     
 @dataclass
 class CNIConfig(ConfigBase):
+    run: bool
     volume_sizes: list[int]
     chunk_numbers: list[int]
     
 @dataclass
 class PACConfig(ConfigBase):
+    run: bool
     input_file: str
 
 

@@ -1,124 +1,120 @@
 from numpy import ndarray
 from typing import Optional 
 
-from core.pipeline.derivator import Derivator
-from core.pipeline.enhancer import Enhancer 
-from core.pipeline.segmenter import Segmenter
-from core.io.viewer import Viewer
+
+from core.utils.viewer import Viewer
 from core.io.saver import Saver
 from core.io.loader import Loader
 from core.io.logger import setup_logger
 from core.utils.decorator import log_section, log_time, log_init
 
 from core.config.setup import SetupConfig
-from core.config.experiment import Experiment, ExperimentConfig 
+from core.config.experiment import Experiment, ExperimentConfig, ProcessingConfig, LoadingConfig
+from core.pipeline.processor import Processor
 
 class Pipeline:
     
     @log_init()
-    def __init__(self, setup: SetupConfig):
+    def __init__(self, setup: SetupConfig, processing_config: ProcessingConfig):
         
-        # Setup
-        self.setup = setup
+        # Modes
+        self.save_mode = setup.save_mode
+        self.plot_mode = setup.plot_mode
 
         # Logger
-        self.logger = setup_logger(log_file=self.setup.log_file, debug_mode=self.setup.debug_mode)
+        self.logger = setup_logger(log_file=setup.log_file, debug_mode=setup.debug_mode)
 
         # Loader
-        self.loader = Loader(input_dir=self.setup.input_dir, logger=self.logger)
+        self.loader = Loader(input_dir=setup.input_dir, logger=self.logger) 
         
-        # Derivator
-        self.derivator = Derivator(logger=self.logger)
-        
-        # Enhancer
-        self.enhancer = Enhancer(logger=self.logger)
-        
-        # Segmenter
-        self.segmenter = Segmenter(logger=self.logger)
+        # Processor
+        self.processor = Processor(processing_config)
 
         # Viewer
-        self.viewer = Viewer(display_mode=self.setup.display_mode)
+        self.viewer = Viewer()
         
         # Saver
-        self.saver = Saver(experiment_name=self.setup.name, output_dir=self.setup.output_dir, logger=self.logger)
+        self.saver = Saver(experiment_name=setup.name, output_dir=setup.output_dir, logger=self.logger) if self.save_mode else None
+       
         
-    def display_analytics(self, data_raw: ndarray, data_enhanced: ndarray, data_segmented: ndarray, config: ExperimentConfig):
+    def load_data(self, loading_config: LoadingConfig):
+            data_raw = self.loader.load_data(
+                filename=loading_config.raw_file,
+                normalize=loading_config.normalize,
+                crop=loading_config.crop,
+                target_shape=loading_config.target_shape,
+            )
+            if loading_config.gt_file is not None:
+                data_gt = self.loader.load_data(
+                    filename=loading_config.gt_file,
+                    normalize=loading_config.normalize,
+                    crop=loading_config.crop,
+                    target_shape=loading_config.target_shape,
+                )
+            else :
+                data_gt = None
+                
+            return data_raw, data_gt
+        
+        
+    def plot_results(self, data_raw: ndarray, data_enhanced: ndarray, data_segmented: ndarray, threshold: float = None):
         if data_raw.ndim == 2:
             figure = self.viewer.display_images([data_raw, data_enhanced, data_segmented], ["RAW", "ENHANCED", "SEGMENTED"])
-            if self.setup.save_mode:
+            if self.save_mode:
                 self.saver.save_plot(figure, filename='results')
         else:
             histogram = self.viewer.display_histograms([data_raw, data_enhanced, data_segmented], ['RAW', 'ENHANCED', 'SEGMENTED'])
             slices = self.viewer.display_slices([data_raw, data_enhanced, data_segmented], ['RAW', 'ENHANCED', 'SEGMENTED'])
-            volume = self.viewer.display_volume(volume=data_enhanced, threshold=config.segmentation.threshold)
-            if self.setup.save_mode:
+            volume = self.viewer.display_volume(volume=data_enhanced, threshold=threshold)
+            if self.save_mode:
                 self.saver.save_plot(histogram, 'histogram')
                 self.saver.save_anim(slices, 'slices')
                 self.saver.save_plot(volume, 'volume')
-        
+           
+    def save_results(self, data_enhanced: ndarray, data_segmented: ndarray, experiment_config: ExperimentConfig):     
+        if self.save_mode:
+            self.saver.save_data(data_enhanced, f'data_enhanced')
+            self.saver.save_data(data_segmented, f'data_segmented')
+            self.saver.save_config(experiment_config, f'experiment_config')
+    
     @log_section("Pipeline execution")
     @log_time()
     def run(self, 
-            config: ExperimentConfig, 
-            data_raw: Optional[ndarray] = None, 
-            data_gt: Optional[ndarray] = None
+            experiment_config: ExperimentConfig, 
         ) -> Experiment:
         
+        # Parse config
+        loading_config = experiment_config.loading
+        hessian_config = experiment_config.hessian
+        enhancement_config = experiment_config.enhancement
+        segmentation_config = experiment_config.segmentation
+        methods = experiment_config.methods
+        
         # Load Data
-        if data_raw is None:
-            data_raw = self.loader.load_data(
-                filename=config.loading.raw_file,
-                normalize=config.loading.normalize,
-                crop=config.loading.crop,
-                target_shape=config.loading.target_shape,
-            )
-        if data_gt is None:
-            if config.loading.gt_file is not None:
-                data_gt = self.loader.load_data(
-                    filename=config.loading.gt_file,
-                    normalize=config.loading.normalize,
-                    crop=config.loading.crop,
-                    target_shape=config.loading.target_shape,
-                )
-            else :
-                data_gt = None
+        data_raw = self.load_data(loading_config)
             
-            
-        # Select Derivator
-        config.enhancement.hessian_function = (
-            self.derivator.select_hessian_function(config.methods.derivator)
-        )
-        
-        # Enhance Data
-        data_enhanced = self.enhancer.enhance_data(
+        # Process_data
+        data_enhanced, data_segmented, threshold = self.processor.process_data(
             data=data_raw,
-            method=config.methods.enhancer,
-            processing_params=config.processing,
-            enhancement_params=config.enhancement,
-            hessian_params=config.hessian
+            hessian_config=hessian_config,
+            enhancement_config=enhancement_config,
+            segmentation_config=segmentation_config,
+            methods=methods
         )
         
-        # Segment Data
-        data_segmented, threshold = self.segmenter.segment_data(
-            data=data_enhanced,
-            ground_truth=data_gt,
-            method=config.methods.segmenter,
-            segmentation_params=config.segmentation
-        )
-        config.segmentation.threshold = threshold
-        
-        # Save data
-        if self.setup.save_mode:
-            self.saver.save_data(data_enhanced, f'data_enhanced', '.npz')
-            self.saver.save_data(data_segmented, f'data_segmented', '.npz')
+        # Save results
+        if self.save_mode:
+            self.save_results(data_enhanced, data_segmented, experiment_config)
 
-        # Display analytics
-        # self.display_analytics(data_raw, data_enhanced, data_segmented, config)
-               
+        # Plot results
+        if self.plot_mode:
+            self.plot_results(data_raw, data_enhanced, data_segmented, threshold)
+        
         # Return results
         experiment_data = Experiment(
+            config=experiment_config,
             data_enhanced=data_enhanced,
             data_segmented=data_segmented,
-            config=config,
         )
+            
         return experiment_data

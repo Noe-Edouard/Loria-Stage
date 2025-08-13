@@ -1,16 +1,27 @@
+from typing import Literal, Callable, Tuple
+from numpy import ndarray
 import numpy as np
-from typing import Literal, Callable
 from skimage.feature import hessian_matrix
-from scipy.ndimage import gaussian_filter
-from scipy.ndimage import convolve1d
-
-from core.io.logger import Logger, setup_logger
-
+from scipy.ndimage import gaussian_filter as cpu_gaussian_filter
+from scipy.ndimage import convolve1d as cpu_convolve1d
+from core.utils.helpers import check_gpu_available
 
 class Derivator:
-    
-    def __init__(self, logger: Logger = setup_logger()):
-        self.logger = logger
+    def __init__(self, use_gpu: bool = True):
+        self.use_gpu = use_gpu and check_gpu_available()
+
+        if self.use_gpu:
+            import cupy as cp
+            from cupyx.scipy.ndimage import convolve1d as gpu_convolve1d
+            from cupyx.scipy.ndimage import gaussian_filter as gpu_gaussian_filter
+            self.cp = cp
+            self.convolve1d = gpu_convolve1d
+            self.gaussian_filter = gpu_gaussian_filter
+        else:
+            self.cp = None
+            self.convolve1d = cpu_convolve1d
+            self.gaussian_filter = cpu_gaussian_filter
+
         self.selector = {
             'default': self.default,
             'gaussian': self.gaussian,
@@ -22,41 +33,47 @@ class Derivator:
             'bezier': self.bezier,
         }
 
-    def select_hessian_function(self, method: Literal['default', 'gaussian', 'farid', 'cubic', 'trigonometric', 'catmull', 'bspline', 'bezier']) -> Callable[..., list[np.ndarray]]:
-
+    def select_hessian_function(
+        self,
+        method: Literal['default', 'gaussian', 'farid', 'cubic', 'trigonometric', 'catmull', 'bspline', 'bezier']
+    ) -> Callable[..., list[np.ndarray]]:
         if method not in self.selector:
-            raise ValueError(f"Unknown differentiation method: {method}. Valid methods: {[key for key, value in self.selector.items()]}")
-        
+            raise ValueError(f"Unknown differentiation method: {method}. Valid methods: {list(self.selector.keys())}")
         return self.selector[method]
-        
-    
-    def compute_hessian(self, data: np.ndarray, filters: list[list], sigma: float = 1.0, mode:str = 'reflect') -> list[np.ndarray]:
-            
-            p  = np.array(filters[0])
-            d1 = np.array(filters[1])  
-            d2 = np.array(filters[2])
-            
-            # Gaussian smoothing
-            data = gaussian_filter(data, sigma=sigma)
-                
-            if data.ndim == 2:
-                Hxx = convolve1d(convolve1d(data, d2, axis=1, mode=mode), p, axis=0, mode=mode)  # Dxx = f * d2_x * p_y
-                Hyy = convolve1d(convolve1d(data, p, axis=1, mode=mode), d2, axis=0, mode=mode)  # Dxx = f * d2_y * p_x
-                Hxy = convolve1d(convolve1d(data, d1, axis=1, mode=mode), d1, axis=0, mode=mode) # Dxy = f * d1_x * d1_y
-                
-                return Hxx, Hxy, Hyy
-            
 
-            elif data.ndim ==3:
-                Hxx = convolve1d(convolve1d(convolve1d(data, d2, axis=0, mode=mode),  p, axis=1, mode=mode),  p, axis=2, mode=mode)   # Dxx = f * d2_x * p_y  * p_z
-                Hyy = convolve1d(convolve1d(convolve1d(data, p,  axis=0, mode=mode), d2, axis=1, mode=mode),  p, axis=2, mode=mode)   # Dxx = f * p_x  * d2_y * p_z
-                Hzz = convolve1d(convolve1d(convolve1d(data, p, axis=0, mode=mode),   p, axis=1, mode=mode), d2, axis=2, mode=mode)   # Dxx = f * p_x  * p_y  * d2_z
+    def compute_hessian(self, data: ndarray, filters: list[list], sigma: float = 1.0, mode: str = 'reflect') -> Tuple[np.ndarray]:
+        xp = self.cp if self.use_gpu else np
 
-                Hxy = convolve1d(convolve1d(convolve1d(data, d1, axis=0, mode=mode), d1, axis=1, mode=mode),  p, axis=2, mode=mode)   # Dxx = f * d1_x * d1_y * p_z
-                Hyz = convolve1d(convolve1d(convolve1d(data, p,  axis=0, mode=mode), d1, axis=1, mode=mode), d1, axis=2, mode=mode)   # Dxx = f * p_x  * d1_y * d1_z
-                Hzx = convolve1d(convolve1d(convolve1d(data, d1, axis=0, mode=mode),  p, axis=1, mode=mode), d1, axis=2, mode=mode)   # Dxx = f * d1_x * p_y  * d1_z
-                
-            return  Hxx, Hxy, Hzx, Hyy, Hyz, Hzz
+        p  = xp.array(filters[0], dtype=xp.float32)
+        d1 = xp.array(filters[1], dtype=xp.float32)
+        d2 = xp.array(filters[2], dtype=xp.float32)
+        data = xp.array(data, dtype=xp.float32)
+
+        convolve1d = self.convolve1d
+        gaussian_filter = self.gaussian_filter
+
+        # Gaussian smoothing
+        data = gaussian_filter(data, sigma=sigma)
+
+        if data.ndim == 2:
+            Hxx = convolve1d(convolve1d(data, d2, axis=1, mode=mode), p, axis=0, mode=mode)
+            Hyy = convolve1d(convolve1d(data, p, axis=1, mode=mode), d2, axis=0, mode=mode)
+            Hxy = convolve1d(convolve1d(data, d1, axis=1, mode=mode), d1, axis=0, mode=mode)
+
+            return (xp.asnumpy(Hxx), xp.asnumpy(Hxy), xp.asnumpy(Hyy)) if self.use_gpu else (Hxx, Hxy, Hyy)
+
+        elif data.ndim == 3:
+            Hxx = convolve1d(convolve1d(convolve1d(data, d2, axis=0, mode=mode), p, axis=1, mode=mode), p, axis=2, mode=mode)
+            Hyy = convolve1d(convolve1d(convolve1d(data, p, axis=0, mode=mode), d2, axis=1, mode=mode), p, axis=2, mode=mode)
+            Hzz = convolve1d(convolve1d(convolve1d(data, p, axis=0, mode=mode), p, axis=1, mode=mode), d2, axis=2, mode=mode)
+
+            Hxy = convolve1d(convolve1d(convolve1d(data, d1, axis=0, mode=mode), d1, axis=1, mode=mode), p, axis=2, mode=mode)
+            Hyz = convolve1d(convolve1d(convolve1d(data, p, axis=0, mode=mode), d1, axis=1, mode=mode), d1, axis=2, mode=mode)
+            Hzx = convolve1d(convolve1d(convolve1d(data, d1, axis=0, mode=mode), p, axis=1, mode=mode), d1, axis=2, mode=mode)
+
+            return (xp.asnumpy(Hxx), xp.asnumpy(Hxy), xp.asnumpy(Hzx),
+                    xp.asnumpy(Hyy), xp.asnumpy(Hyz), xp.asnumpy(Hzz)) if self.use_gpu else \
+                   (Hxx, Hxy, Hzx, Hyy, Hyz, Hzz)
     
     
     def default(self, data: np.ndarray, sigma: int, mode: str = 'reflect', cval: float = 0.0, order: str = 'rc', **unused) -> list[np.ndarray]:

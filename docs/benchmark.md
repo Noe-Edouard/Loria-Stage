@@ -209,7 +209,7 @@ Donne un nom si la figure n'en a pas et appelle save_figure.
 
 #### Save figure
 
-Affiche la figure si display_mode et sauvergarde la figure selon le mode sélectionné.
+Affiche la figure si plot_mode et sauvergarde la figure selon le mode sélectionné.
 
 #### Update_config
 

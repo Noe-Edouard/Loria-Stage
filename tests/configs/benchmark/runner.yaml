@@ -1,0 +1,11 @@
+setup:
+  name: "hessian"
+  input_dir: "test"
+  output_dir: "test"
+  log_file: "test"
+  debug_mode: true
+  plot_mode: false
+  save_mode: true
+
+images_dir: "images"
+labels_dir: "labels"

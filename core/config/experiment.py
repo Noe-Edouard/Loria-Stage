@@ -29,22 +29,22 @@ class HessianConfig(ConfigBase):
    
 @dataclass
 class ProcessingConfig(ConfigBase):
-    normalize: bool
-    parallelize: bool
-    chunk_size: list[int]
-    overlap_size: int
+    use_gpu: bool = True,
+    normalize: bool = True,
+    parallelize: bool = False,
+    show_progress: bool = False,
+    overlap_size: Optional[int] = 10,
+    chunk_size: Optional[Sequence[int]] = None,
     
 @dataclass
 class EnhancementConfig(ConfigBase):
+    scales: Sequence[int]
     alpha: float
     beta: float
     gamma: Optional[float] = None
-    scales: Optional[Sequence[int]] = None
-    scales_number: Optional[int] = None
-    scales_range: Optional[Tuple[int, int]] = None
-    black_ridges: Optional[bool] = False
-    hessian_function: Optional[Callable[..., list[ndarray]]] = None
     skimage: Optional[bool] = False
+    hessian_function: Optional[Callable[..., list[ndarray]]] = None
+    hessian_params: Optional[dict] = None
 
 @dataclass
 class SegmentationConfig(ConfigBase):

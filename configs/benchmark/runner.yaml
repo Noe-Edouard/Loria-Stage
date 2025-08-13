@@ -4,7 +4,7 @@ setup:
   output_dir: "benchmark"
   log_file: "benchmark"
   debug_mode: true
-  display_mode: false
+  plot_mode: false
   save_mode: true
 
 images_dir: "images"

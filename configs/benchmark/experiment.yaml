@@ -2,7 +2,8 @@ loading:
   normalize: true
   crop: false
   target_shape: [64, 64, 64]
-  input_file: null
+  raw_file: null
+  gt_file: null
 
 methods:
   derivator: default
@@ -16,6 +17,8 @@ hessian:
 processing:
   normalize: true
   parallelize: true
+  use_gpu: true
+  show_progress: false
   chunk_size: [64, 64, 64]
   overlap_size: 8
 
@@ -24,8 +27,6 @@ enhancement:
   beta: 0.5
   gamma: 15
   scales: [2, 4, 6, 8, 10]
-  scales_number: null
-  scales_range: null
   black_ridges: true
   skimage: false
 

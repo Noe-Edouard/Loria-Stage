@@ -1,5 +1,5 @@
 from typing import Any, TypeVar
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass, asdict, fields
 
 
 @dataclass
@@ -21,6 +21,12 @@ class ConfigBase:
 
     def to_dict(self) -> dict:
         return asdict(self)
+    
+    def from_dict(self, data: dict) -> None:
+        field_names = {f.name for f in fields(self)}
+        for key, value in data.items():
+            if key in field_names:
+                setattr(self, key, value)
 
     def keys(self):
         return self.to_dict().keys()

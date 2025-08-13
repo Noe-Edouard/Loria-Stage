@@ -1,0 +1,34 @@
+loading:
+  normalize: true
+  crop: false
+  target_shape: [64, 64, 64]
+  raw_file: null
+  gt_file: null
+
+methods:
+  derivator: default
+  enhancer: frangi
+  segmenter: thresholding
+
+hessian:
+  mode: reflect
+  cval: 0.0
+
+processing:
+  use_gpu: true
+  normalize: true
+  parallelize: true
+  show_progress: false
+  chunk_size: [64, 64, 64]
+  overlap_size: 8
+
+enhancement:
+  alpha: 0.5
+  beta: 0.5
+  gamma: 15
+  scales: [2, 4, 6, 8, 10]
+  black_ridges: true
+  skimage: false
+
+segmentation:
+  threshold: null

@@ -8,6 +8,6 @@ FigureMode = Literal['text', 'plot', 'anim', 'data']
 class FigureData:
     figure: Union[plt.Figure, str] # figure or text
     mode: FigureMode # ['text', 'plot', 'anim', 'data']
-    name: Optional[str] = None
+    name: str 
     
     
