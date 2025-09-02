@@ -83,9 +83,9 @@ def hhv_split(name):
     input_path = f'data/3d/kidney_{name}s.npy'
     output_dir = f'data/3d/{name}s'
     os.makedirs(output_dir, exist_ok=True)
-    split_x = 4
-    split_y = 5
-    split_z = 10
+    split_x = 2
+    split_y = 2
+    split_z = 2
 
     image = np.load(input_path)
     if image.ndim != 3:
@@ -119,5 +119,5 @@ if __name__ == "__main__":
     # output_dir = 'data/datasets/DIAS/clean/images'  
     # dias_pre_processing(input_dir, output_dir)
     
-    hhv_pre_processing()
-    hhv_split("data/data")
+    # hhv_pre_processing()
+    hhv_split("label")

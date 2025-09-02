@@ -1,4 +1,4 @@
-from typing import Literal, Optional, Union
+from typing import Literal, Union
 import matplotlib.pyplot as plt
 from dataclasses import dataclass
 

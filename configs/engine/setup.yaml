@@ -1,7 +1,0 @@
-name: engine
-input_dir: test
-output_dir: engine
-log_file: engine
-debug_mode: true
-plot_mode: true
-save_mode: true

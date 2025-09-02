@@ -38,6 +38,7 @@ class ProcessingConfig(ConfigBase):
     
 @dataclass
 class EnhancementConfig(ConfigBase):
+    black_ridges: bool
     scales: Sequence[int]
     alpha: float
     beta: float

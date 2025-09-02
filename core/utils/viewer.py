@@ -63,11 +63,12 @@ class Viewer:
 
         for i, img in enumerate(images):
             ax = axs_flat[i]
-            used_cmap = None if (binary_mode or error_mode) else cmap
+            # used_cmap = None if ((not binary_mode or error_mode) else cmap
+            used_cmap = None if error_mode else cmap
             im = ax.imshow(img, cmap=used_cmap)
             ax.set_title(titles[i], fontsize=9)
             ax.axis('off')
-            if not error_mode:
+            if not error_mode or not binary_mode:
                 cbar = fig.colorbar(im, ax=ax, shrink=0.9)
                 cbar.ax.tick_params(labelsize=6)
 
@@ -186,12 +187,18 @@ class Viewer:
         return fig
 
 
-
     def _get_frame(self, img, d, idx):
-        return img[idx, :, :] if d == 0 else img[:, idx, :] if d == 1 else img[:, :, idx]
-
-
-
+        if img.ndim == 4:
+            if d == 0:
+                return img[idx, :, :, :]
+            elif d == 1:
+                return img[:, idx, :, :]
+            else:
+                return img[:, :, idx, :]
+        else:
+            return img[idx, :, :] if d == 0 else img[:, idx, :] if d == 1 else img[:, :, idx]
+    
+    
     def display_slices(self, 
         volumes: Union[list[np.ndarray], np.ndarray],
         titles: Union[list[str], str] = None,
@@ -200,7 +207,7 @@ class Viewer:
         error_mode: bool = False,
         binary_mode: bool = False,
     ):
-
+        
         volumes, titles, num_volumes = self._normalize_inputs(volumes, titles)
         directions = [0, 1, 2]
 
@@ -210,8 +217,9 @@ class Viewer:
             cols = 2
 
         rows = math.ceil(num_volumes / cols)
-        total_columns = 4 * cols if not error_mode else 5 * cols  # 1 titre + 3 axes + légende si needed
-
+        ncols_per_volume = 5 if error_mode or binary_mode else 4
+        total_columns = ncols_per_volume * cols
+        
         fig, axs = plt.subplots(nrows=rows, ncols=total_columns, figsize=(8 * cols, 1.8 * rows))
         axs = np.atleast_2d(axs)
 
@@ -222,17 +230,25 @@ class Viewer:
 
         for idx, volume in enumerate(volumes):
             
-            if volume.ndim != 3:
-                raise ValueError(f"Volume {idx} must be 3D. Got shape: {volume.shape}")
-            
+            if error_mode:
+                if volume.ndim == 4 and volume.shape[-1] == 3:
+                    is_rgb = True
+                elif volume.ndim == 3:
+                    is_rgb = False
+                else:
+                    raise ValueError(f"Volume {idx} must be 3D or 4D RGB. Got shape: {volume.shape}")
+            else:
+                if volume.ndim != 3:
+                    raise ValueError(f"Volume {idx} must be 3D. Got shape: {volume.shape}")
+                is_rgb = False
             vmin = np.min(volume)
             vmax = np.max(volume)
 
             col_idx = idx // rows
             row_idx = idx % rows
-            base_col = col_idx * (5 if error_mode else 4)
+            base_col = col_idx * ncols_per_volume
 
-            used_cmap = None if (binary_mode or error_mode) else cmap
+            used_cmap = None if is_rgb else cmap
 
             ax_title = axs[row_idx, base_col]
             ax_title.text(0.5, 0.5, titles[idx], rotation=90, fontsize=10, fontweight='bold',
@@ -245,10 +261,13 @@ class Viewer:
             for j, d in enumerate(directions):
                 ax = axs[row_idx, base_col + j + 1]
                 frame = self._get_frame(volume, d, 0)
-                im = ax.imshow(frame, cmap=used_cmap, vmin=vmin, vmax=vmax)
+                if is_rgb:
+                    im = ax.imshow(frame)
+                else:
+                    im = ax.imshow(frame, cmap=used_cmap, vmin=vmin, vmax=vmax)
                 ax.axis('off')
                 title = ax.set_title(f'Axis {d} - Slice 1/{volume.shape[d]}', fontsize=8)
-                if not error_mode:
+                if not error_mode or binary_mode:
                     cbar = fig.colorbar(im, ax=ax, shrink=0.9)
                     cbar.ax.tick_params(labelsize=6)
 

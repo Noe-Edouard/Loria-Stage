@@ -10,9 +10,9 @@ import json
 
 from core.config.figure import FigureData
 from core.config.benchmark import BenchmarkResults
+from core.config.base import ConfigBase
 from core.io.logger import Logger, setup_logger
 from configs.args import OUTPUT_DIR
-from core.config.base import ConfigBase
 
 class Saver:
     def __init__(self, 

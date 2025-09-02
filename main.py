@@ -1,32 +1,29 @@
-from configs.args import get_parser
-from core.benchmark.engine import Engine
-from core.pipeline.pipeline import Pipeline
-from core.benchmark.benchmarks.runner import BenchmarkRunner 
-
+from core.experiments.analyzer import Analyzer
+from core.experiments.benchmarks.runner import BenchmarkRunner 
+from core.processing.pipeline import Pipeline
 from core.config.builder import ConfigBuilder
 from core.config.setup import SetupConfig
 from core.config.benchmark import RunnerConfig, BenchmarkConfig
 from core.config.experiment import ExperimentConfig
-from core.config.engine import EngineConfig
+from configs.args import get_parser
 
 
 parser = get_parser()
 args = parser.parse_args()
 
 run_pipeline = args.run_pipeline
-run_engine = args.run_engine
+run_analyzer = args.run_analyzer
 run_benchmark = args.run_benchmark
 benchmark_type = args.benchmark_type
 test = args.test
 
+
 ROOT = "tests/" if test else "" 
 
-SRC_PIPELINE = ROOT + 'configs/pipeline.yaml'
+SRC_PIPELINE_SETUP = ROOT + 'configs/pipeline/setup.yaml'
+SRC_PIPELINE_EXPERIMENT = ROOT + 'configs/pipeline/experiment.yaml'
 
-
-SRC_ENGINE_SETUP = ROOT + 'configs/engine/setup.yaml'
-SRC_ENGINE_RUNNER = ROOT + 'configs/engine/runner.yaml'
-SRC_ENGINE_EXPERIMENT = ROOT + 'configs/engine/experiment.yaml'
+SRC_ANALYZER_SETUP = ROOT + 'configs/analyzer/setup.yaml'
 
 SRC_BENCHMARK_RUNNER = ROOT + 'configs/benchmark/runner.yaml'
 SRC_BENCHMARK_HESSIAN = ROOT + 'configs/benchmark/hessian.yaml'
@@ -38,23 +35,19 @@ SRC_BENCHMARK_EXPERIMENT = ROOT + 'configs/benchmark/experiment.yaml'
 def main():
     
 
-    # if RUN_PIPELINE:
+    if run_pipeline:
+        setup_config: SetupConfig = ConfigBuilder(SRC_PIPELINE_SETUP, SetupConfig)
+        experiment_config: SetupConfig = ConfigBuilder(SRC_PIPELINE_EXPERIMENT, ExperimentConfig)
         
-    #     config: MainConfig = ConfigBuilder(SRC_PIPELINE, MainConfig)
-    #     setup_config: SetupConfig = config.setup
-    #     experiment_config: ExperimentConfig = config.experiment
+        pipeline = Pipeline(setup_config)
+        pipeline.run(experiment_config)
+
+
+    if run_analyzer:
+        setup_config = ConfigBuilder(SRC_ANALYZER_SETUP, SetupConfig)
         
-    #     pipeline = Pipeline(setup_config)
-    #     pipeline.run(experiment_config)
-
-
-    if run_engine:
-        setup_config: SetupConfig = ConfigBuilder(SRC_ENGINE_SETUP, SetupConfig)
-        runner_config: EngineConfig = ConfigBuilder(SRC_ENGINE_RUNNER, EngineConfig)
-        experiment_config: ExperimentConfig = ConfigBuilder(SRC_ENGINE_EXPERIMENT, ExperimentConfig)
-
-        engine = Engine(setup_config)
-        engine.run(runner_config, experiment_config)
+        analyzer = Analyzer(setup_config)
+        analyzer.run()
 
     if run_benchmark:
         runner_config: RunnerConfig = ConfigBuilder(SRC_BENCHMARK_RUNNER, RunnerConfig)

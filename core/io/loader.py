@@ -3,14 +3,15 @@ import numpy as np
 import tifffile as tiff
 import nibabel as nib
 import SimpleITK as sitk
+import json
 from skimage import io, color
 from pathlib import Path
-import json
+
+from configs.args import INPUT_DIR
 from core.config.benchmark import BenchmarkResults
 from core.config.base import Config, ConfigBase
 from core.io.logger import setup_logger, Logger
 from core.utils.helpers import normalize_data, crop_data
-from configs.args import INPUT_DIR
 
 class Loader:
     

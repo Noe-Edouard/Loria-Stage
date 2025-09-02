@@ -3,12 +3,7 @@ from time import perf_counter
 import numpy as np
 from typing import Optional, Tuple
 
-def check_gpu_available():
-    import cupy as cp
-    try:
-        return cp.cuda.runtime.getDeviceCount() > 0
-    except Exception:
-        return False
+
 
 def compute_time(function, *args, **kargs):
     start = perf_counter()

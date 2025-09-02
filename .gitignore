@@ -1,5 +1,4 @@
 data/
-docs/
 logs/
 outputs/
-temp/
+tests/
